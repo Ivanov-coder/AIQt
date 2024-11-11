@@ -32,22 +32,22 @@ class Logger:
         logger = logging.getLogger(fileposition)
 
         # 设置日志颜色
-        # handler = logging.StreamHandler()
-        # formatter = colorlog.ColoredFormatter(
-        #     "%(log_color)s%(asctime)s | %(levelname)s | %(name)s | %(message)s",
-        #     datefmt=None,
-        #     reset=True,
-        #     log_colors={
-        #         'DEBUG': 'cyan',
-        #         'INFO': 'green',
-        #         'WARNING': 'yellow',
-        #         'ERROR': 'red',
-        #         'CRITICAL': 'red,bg_white',
-        #     },
-        #     secondary_log_colors={},
-        #     style='%')
-        # handler.setFormatter(formatter)
-        # logger.addHandler(handler)
+        handler = logging.StreamHandler()
+        formatter = colorlog.ColoredFormatter(
+            "%(log_color)s%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+            datefmt= None,
+            reset= True,
+            log_colors={
+                'DEBUG': 'cyan',
+                'INFO': 'green',
+                'WARNING': 'yellow',
+                'ERROR': 'red',
+                'CRITICAL': 'red,bg_white',
+            },
+            secondary_log_colors={},
+            style='%')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
 
         # 返回logger对象
         return logger
