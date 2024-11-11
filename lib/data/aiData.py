@@ -1,4 +1,5 @@
 import re
+import yaml
 import utils
 
 # 初始化日志 以备打印信息
@@ -6,10 +7,16 @@ logger = utils.logs.Logger.setup_logger(fileposition= __name__)
 
 
 @utils.dcl.dataclass
-class Spark:
+class _Spark:
     """"
-    Spark AI 数据类
-    目前 不可用 :/
+    Spark AI 数据类.
+    使用Spark API调用AI模型.
+    默认使用Spark Lite API，
+    请不要在外部调用该类。
+    由于可以被导出的函数为start，所以请使用下面的方法
+    例如：
+    >>> model = "pro" 
+    >>> start("2", model)    # 调用pro
     """
     model: str = "lite"
     link: str = "https://spark-api-open.xf-yun.com/v1/chat/completions"
@@ -20,14 +27,16 @@ class Spark:
 
 
 @utils.dcl.dataclass
-class OpenAI:
+class _OtherAI:
     """"
     ### 其他 AI 数据类。
-    默认 使用镜像网站[aihubmix](www.aihubmix.com)调用AI模型 。
+    使用镜像网站[aihubmix](www.aihubmix.com)调用AI模型 。
     默认使用GPT-3.5-turbo，
     传入名字以调用其他模型。
+    由于可以被导出的函数为start，所以请使用下面的方法
     例如：
-    >>> model = "gpt-4" # 调用GPT-4
+    >>> model = "qwen-long" 
+    >>> start("2", model)    # 调用qwen-long
     """
     model: str = utils.dcl.field(default="gpt-3.5-turbo")
     link: str = utils.dcl.field(default="https://aihubmix.com/v1/chat/completions")
@@ -41,12 +50,6 @@ class OpenAI:
         else:
             self.link = "https://aihubmix.com/v1/chat/completions"
 
-
-@utils.dcl.dataclass
-class QwenLong:
-    model: str = utils.dcl.field(default="qwen-long")
-    link: str = utils.dcl.field(default="https://api.qwenlong.com/v1")
-    apiKey: str = utils.dcl.field(default="", repr=False)
 
 
 def start(*choice: str) -> tuple[str, str]:
@@ -64,12 +67,12 @@ def start(*choice: str) -> tuple[str, str]:
 
         case ["1", str(model)]:  # 调用 Spark API
             logger.info(msg="Invoking Spark API...")
-            spark = Spark(model=model)
+            spark = _Spark(model=model)
             return spark.link, spark.apiKey
 
         case ["2", str(model)]:  # 调用 other API
             logger.info(f"Invoking {model} API...")
-            Other = OpenAI(model=model)
+            Other = _OtherAI(model=model)
             return Other.link, Other.apiKey
 
         case _:  # 如果传参错误，返回None

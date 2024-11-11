@@ -3,7 +3,7 @@ import colorlog
 import dataclasses as dcl
 
 
-# 定义日志格式
+# 定义与日志有关的类
 @dcl.dataclass
 class Logger:
     """
@@ -12,7 +12,8 @@ class Logger:
     - level: 日志级别
     - format_type: 日志格式
     """
-    level: int = dcl.field(default=logging.INFO)
+    level: int = dcl.field(
+        default=logging.DEBUG)  # 为保证DEBUG级别日志的输出，这里默认设置为DEBUG
     format_type: str = dcl.field(
         default='%(asctime)s | %(levelname)s | %(name)s | %(message)s')
 
@@ -28,26 +29,31 @@ class Logger:
         """
 
         # 设置日志等级和格式
-        logging.basicConfig(level=cls.level, format=cls.format_type)
         logger = logging.getLogger(fileposition)
 
         # 设置日志颜色
-        # handler = logging.StreamHandler()
-        # formatter = colorlog.ColoredFormatter(
-        #     "%(log_color)s%(asctime)s | %(levelname)s | %(name)s | %(message)s",
-        #     datefmt=None,
-        #     reset=True,
-        #     log_colors={
-        #         'DEBUG': 'cyan',
-        #         'INFO': 'green',
-        #         'WARNING': 'yellow',
-        #         'ERROR': 'red',
-        #         'CRITICAL': 'red,bg_white',
-        #     },
-        #     secondary_log_colors={},
-        #     style='%')
-        # handler.setFormatter(formatter)
-        # logger.addHandler(handler)
+        handler = logging.StreamHandler()  # 初始化handler 并且加入自己的设置
+        logger.setLevel(cls.level)  # 必须设置等级 否则不会输出日志信息
+        # 自定义格式
+        formatter = colorlog.ColoredFormatter(
+            "%(asctime)s | %(log_color)s%(levelname)s | %(name)s | %(message)s",
+            datefmt=None,
+            reset=True,
+            log_colors={
+                'DEBUG': 'cyan',
+                'INFO': 'green',
+                'WARNING': 'yellow',
+                'ERROR': 'red',
+                'CRITICAL': 'red, bg_white',
+            },
+            style='%')
+        handler.setFormatter(formatter)
+        # 去除原本的handler
+        for h in logger.handlers:
+            logger.removeHandler(h)
+
+        # 添加自己的handler
+        logger.addHandler(handler)
 
         # 返回logger对象
         return logger

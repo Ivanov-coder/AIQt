@@ -3,7 +3,8 @@ from callAI import *
 
 while True:
     try:
-        httpSocket.CallOherAI().callByhttpx()
+        # socket.CallOherAI().callByhttpx()
+        spark.callSparkAI()
     except KeyboardInterrupt:
         break
     

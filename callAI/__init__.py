@@ -1,4 +1,4 @@
 from .Spark import spark
-from .OtherAI import httpSocket
+from .OtherAI import socket
 
-__all__ = ["spark", "httpSocket"]
+__all__ = ["spark", "socket"]
