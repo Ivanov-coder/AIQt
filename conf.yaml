@@ -1,0 +1,12 @@
+# 暂时废弃。
+
+
+# Spark API
+spark:
+- Spark_Key: Bearer GpbCOeQkmowTpvxxyVcs:pdJpmahxnlZjysFDQBqS
+- Spark_Link: https://spark-api-open.xf-yun.com/v1/chat/completions
+
+# Other API
+other:
+- Other_Key: Bearer GpbCOeQkmowTpvxxyVcs:pdJpmahxnlZjysFDQBqS
+- Other_Link: https://other-api-open.xf-yun.com/v1/chat/completions

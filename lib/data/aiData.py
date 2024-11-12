@@ -6,6 +6,9 @@ import utils
 logger = utils.logs.Logger.setup_logger(fileposition= __name__)
 
 
+# TODO: 想个办法把API KEY啥的统一丢到一个配置文件里面
+# TODO: 现在有个大问题 BYD讯飞星火设置了好几个不同的API KEY 所以还得把它做出来给别人更改
+# 现在只有Lite是能用的...
 @utils.dcl.dataclass
 class _Spark:
     """"
@@ -17,6 +20,13 @@ class _Spark:
     例如：
     >>> model = "pro" 
     >>> start("2", model)    # 调用pro
+    支持调用的模型如下:
+    - lite
+    - generalv3
+    - pro-128k
+    - generalv3.5
+    - max-32k
+    - 4.0Ultra
     """
     model: str = "lite"
     link: str = "https://spark-api-open.xf-yun.com/v1/chat/completions"
@@ -26,6 +36,7 @@ class _Spark:
         default="Bearer GpbCOeQkmowTpvxxyVcs:pdJpmahxnlZjysFDQBqS", repr=False)
 
 
+# TODO: 这里的API KEY最好也得做出来
 @utils.dcl.dataclass
 class _OtherAI:
     """"

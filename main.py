@@ -4,7 +4,6 @@ from callAI import *
 while True:
     try:
         # socket.CallOherAI().callByhttpx()
-        spark.callSparkAI()
+        spark.CallSparkAI("lite").callByhttpx()
     except KeyboardInterrupt:
         break
-    

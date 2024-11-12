@@ -15,7 +15,7 @@ class Logger:
     level: int = dcl.field(
         default=logging.DEBUG)  # 为保证DEBUG级别日志的输出，这里默认设置为DEBUG
     format_type: str = dcl.field(
-        default='%(asctime)s | %(levelname)s | %(name)s | %(message)s')
+        default='%(asctime)s %(log_color)s| %(levelname)s | %(name)s | %(message)s')
 
     @classmethod
     def setup_logger(cls, fileposition: str = __name__) -> logging.Logger:
@@ -28,25 +28,26 @@ class Logger:
         返回logger对象。
         """
 
+        # 设置写入到文件data.log中
+        logging.basicConfig(filename="log/data.log")
         # 设置日志等级和格式
         logger = logging.getLogger(fileposition)
-
         # 设置日志颜色
         handler = logging.StreamHandler()  # 初始化handler 并且加入自己的设置
         logger.setLevel(cls.level)  # 必须设置等级 否则不会输出日志信息
         # 自定义格式
         formatter = colorlog.ColoredFormatter(
-            "%(asctime)s | %(log_color)s%(levelname)s | %(name)s | %(message)s",
-            datefmt=None,
-            reset=True,
-            log_colors={
+            fmt = cls.format_type,
+            datefmt = '%Y-%m-%d %w %H:%M:%S',
+            reset = True,
+            log_colors = {
                 'DEBUG': 'cyan',
                 'INFO': 'green',
                 'WARNING': 'yellow',
                 'ERROR': 'red',
-                'CRITICAL': 'red, bg_white',
+                'CRITICAL': 'bold_red',
             },
-            style='%')
+            style = '%')
         handler.setFormatter(formatter)
         # 去除原本的handler
         for h in logger.handlers:
