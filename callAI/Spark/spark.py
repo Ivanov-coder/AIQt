@@ -24,7 +24,7 @@ class CallSparkAI():
 
     def _write_cache(self, content: str, role: str = "user") -> None:
         """
-        写入缓存
+        写入缓存到.cache/chat.json文件中
         """
 
         log = {
@@ -61,7 +61,7 @@ class CallSparkAI():
     # TODO: 上传图片的计划只能先搁置了
     def _load_data(self) -> dict:
         """
-        选择数据 上传文字或图片。
+        加载文字或图片。
         图片请传入二进制数据
         ## 小尴尬 LLM不支持图片输入:/
         """
@@ -79,10 +79,11 @@ class CallSparkAI():
 
         return data
 
+    # 调用的内部逻辑
     async def _execute(self, *, url: str, header: dict, data: dict) -> str:
         """
         调用Spark AI.
-        [官方文档](https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html#_1-%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E)
+        
         """
 
         # 日志 确保只有执行函数时才被执行 而不是导包后就被执行
@@ -109,7 +110,8 @@ class CallSparkAI():
 
     async def callByhttpx(self) -> None:
         """
-        将对话缓存写入文件
+        调用Spark AI
+        [官方文档](https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html#_1-%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E)
         """
         # TODO: 需要把这个做出来到Qt中，成为滚动条去选择
         BASE_URL, API_KEY = AI.start("1", self.model)

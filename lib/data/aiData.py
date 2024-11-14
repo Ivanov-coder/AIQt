@@ -1,12 +1,12 @@
-import re
-import yaml
 import utils
 
 # 初始化日志 以备打印信息
 logger = utils.logs.Logger.setup_logger(fileposition= __name__)
 
+with open("./conf.yaml","r",encoding="utf-8") as f:
+    conf = utils.yaml.safe_load(f)
 
-# TODO: 想个办法把API KEY啥的统一丢到一个配置文件里面
+# DONE: 想个办法把API KEY啥的统一丢到一个配置文件里面 
 # TODO: 现在有个大问题 BYD讯飞星火设置了好几个不同的API KEY 所以还得把它做出来给别人更改
 # 现在只有Lite是能用的...
 @utils.dcl.dataclass
@@ -29,11 +29,11 @@ class _Spark:
     - 4.0Ultra
     """
     model: str = "lite"
-    link: str = "https://spark-api-open.xf-yun.com/v1/chat/completions"
+    link: str = conf["spark"][1]["Spark_Link"]
 
     # 这里的"Bearer "不可省略！ key的格式应为 "Bearer " + key
     apiKey: str = utils.dcl.field(
-        default="Bearer GpbCOeQkmowTpvxxyVcs:pdJpmahxnlZjysFDQBqS", repr=False)
+        default=conf["spark"][0]["Spark_Key"], repr=False)
 
 
 # TODO: 这里的API KEY最好也得做出来
@@ -50,17 +50,10 @@ class _OtherAI:
     >>> start("2", model)    # 调用qwen-long
     """
     model: str = utils.dcl.field(default="gpt-3.5-turbo")
-    link: str = utils.dcl.field(default="https://aihubmix.com/v1/chat/completions")
+    link: str = utils.dcl.field(default=conf["other"][1]["Other_Link"])
     apiKey: str = utils.dcl.field(
-        default="sk-F0DaRiRQsNmDEYA016903c9dAb854b009c1cE4A234B5A129",
+        default=conf["other"][0]["Other_Key"],
         repr=False)
-
-    def __post_init__(self) -> None:
-        if re.match(r"^(gpt){1}", self.model):
-            pass
-        else:
-            self.link = "https://aihubmix.com/v1/chat/completions"
-
 
 
 def start(*choice: str) -> tuple[str, str]:
