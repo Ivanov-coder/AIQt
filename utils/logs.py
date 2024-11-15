@@ -33,7 +33,6 @@ class Logger:
         # 设置日志等级和格式
         logger = logging.getLogger(fileposition)
         # 设置日志颜色
-<<<<<<< HEAD
         handler = logging.StreamHandler()  # 初始化handler 并且加入自己的设置
         logger.setLevel(cls.level)  # 必须设置等级 否则不会输出日志信息
         # 自定义格式
@@ -42,19 +41,10 @@ class Logger:
             datefmt = '%Y-%m-%d %w %H:%M:%S',
             reset = True,
             log_colors = {
-=======
-        handler = logging.StreamHandler()
-        formatter = colorlog.ColoredFormatter(
-            "%(log_color)s%(asctime)s | %(levelname)s | %(name)s | %(message)s",
-            datefmt= None,
-            reset= True,
-            log_colors={
->>>>>>> 3cdf440641fc8598ce7c6f13c5c42602e1a3a55c
                 'DEBUG': 'cyan',
                 'INFO': 'green',
                 'WARNING': 'yellow',
                 'ERROR': 'red',
-<<<<<<< HEAD
                 'CRITICAL': 'bold_red',
             },
             style = '%')
@@ -64,13 +54,6 @@ class Logger:
             logger.removeHandler(h)
 
         # 添加自己的handler
-=======
-                'CRITICAL': 'red,bg_white',
-            },
-            secondary_log_colors={},
-            style='%')
-        handler.setFormatter(formatter)
->>>>>>> 3cdf440641fc8598ce7c6f13c5c42602e1a3a55c
         logger.addHandler(handler)
 
         # 返回logger对象
