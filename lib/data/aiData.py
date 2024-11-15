@@ -39,7 +39,7 @@ class _Spark:
 # TODO: 这里的API KEY最好也得做出来
 @utils.dcl.dataclass
 class _OtherAI:
-    """"
+    """
     ### 其他 AI 数据类。
     使用镜像网站[aihubmix](www.aihubmix.com)调用AI模型 。
     默认使用GPT-3.5-turbo，

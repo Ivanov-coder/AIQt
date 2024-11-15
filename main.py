@@ -1,6 +1,7 @@
 import utils
 from callAI import *
 
+CACHE_PATH = "./cache/chat.json"
 logger = utils.logs.Logger.setup_logger(fileposition=__name__)
 
 
@@ -21,8 +22,8 @@ if __name__ == "__main__":
             utils.asyncio.run(main())
         except KeyboardInterrupt:
             logger.info("聊天记录已被删除")
-            if utils.os.path.exists("./cache/chat.json"):
-                utils.os.remove("./cache/chat.json")
+            if utils.os.path.exists(CACHE_PATH):
+                utils.os.remove(CACHE_PATH)
             break
         except Exception as e:
             logger.error(e)
