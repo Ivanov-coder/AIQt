@@ -4,8 +4,13 @@ from . import logs
 
 # 初始化日志
 logger = logs.Logger.setup_logger(fileposition=__name__)
+# 初始化cache文件夹
+if not os.path.exists("./cache"):
+    os.mkdir("./cache")
 
-class Settings:
+
+class SetYaml:
+
     def create_yaml(self):
         """
         如果没有配置文件，则创建一个
@@ -33,6 +38,9 @@ class Settings:
                     "pro-128k_Key": None
                 },
                 {
+                    "max-32_Key": None
+                },
+                {
                     "4.0Ultra_Key": None
                 },
                 {
@@ -56,13 +64,15 @@ class Settings:
             with open("./config/conf.yaml", "r", encoding="utf-8") as f:
                 conf = yaml.safe_load(f)
             return conf
-        
+
         else:
             self.create_yaml()
             return self.read_yaml()
 
-
-    def check_if_none(self, conf: str, choice: int, model: str = None) -> (str | tuple[str, str]):
+    def check_if_none(self,
+                      conf: str,
+                      choice: int,
+                      model: str = None) -> (str | tuple[str, str]):
         """
         **检查conf.yaml中是否含有API KEY.**
         如果有，直接返回，没有，写入文件后再返回。
@@ -89,11 +99,14 @@ class Settings:
                 common = f"{model}_Key"
                 idx = match_idx_dict.get(common)
                 if not conf["spark"][idx][common]:
-                    logger.warning(f"API KEY for {model} is not set in conf.yaml")
+                    logger.warning(
+                        f"API KEY for {model} is not set in conf.yaml")
                     # TODO: 在Qt中需要以输入框的形式存在
                     API_KEY = input("Please enter your API KEY here: ")
 
-                    with open("./config/conf.yaml", "w", encoding="utf-8") as f:
+                    with open("./config/conf.yaml", "w",
+                              encoding="utf-8") as f:
+                        # 判断是否输入了"Bearer "前缀 没有就补上
                         if "Bearer " not in API_KEY:
                             conf["spark"][idx][common] = "Bearer " + API_KEY
                         else:
@@ -106,18 +119,24 @@ class Settings:
             # 以下是为了其他AI设置的 由于不强行要求使用aihubmix网站，所以还需要判断是否存在接口网址
             case 2:
                 if not conf["other"][0]["Key"]:
-                    logger.warning(f"API KEY for {model} is not set in conf.yaml")
+                    logger.warning(
+                        f"API KEY for {model} is not set in conf.yaml")
+                    # TODO: 在Qt中需要以输入框的形式存在
                     API_KEY = input("Please enter your API KEY here: ")
 
-                    with open("./config/conf.yaml", "w", encoding="utf-8") as f:
+                    with open("./config/conf.yaml", "w",
+                              encoding="utf-8") as f:
                         conf["other"][0]["Key"] = API_KEY
                         yaml.safe_dump(conf, f)
-                
+
                 if not conf["other"][1]["Link"]:
-                    logger.warning(f"API LINK for {model} is not set in conf.yaml")
+                    logger.warning(
+                        f"API LINK for {model} is not set in conf.yaml")
+                    # TODO: 在Qt中需要以输入框的形式存在
                     API_LINK = input("Please enter your API LINK here: ")
 
-                    with open("./config/conf.yaml", "w", encoding="utf-8") as f:
+                    with open("./config/conf.yaml", "w",
+                              encoding="utf-8") as f:
                         conf["other"][1]["Link"] = API_LINK
                         yaml.safe_dump(conf, f)
 

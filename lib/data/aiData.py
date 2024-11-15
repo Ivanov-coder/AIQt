@@ -3,7 +3,7 @@ import utils
 # 初始化日志 以备打印信息
 logger = utils.logs.Logger.setup_logger(fileposition=__name__)
 
-conf = utils.settings.Settings().read_yaml()
+conf = utils.settings.SetYaml().read_yaml()
 
 # 现在只有Lite是能用的...
 @utils.dcl.dataclass
@@ -42,7 +42,7 @@ class _Spark:
 
         model = self.model.lower()
         if model in self.support:
-            self.apiKey = utils.settings.Settings().check_if_none(conf, 1, model)
+            self.apiKey = utils.settings.SetYaml().check_if_none(conf, 1, model)
         else:
             raise ValueError(f"Unsupported model: {self.model}")
 
@@ -74,10 +74,10 @@ class _OtherAI:
         """
         model = self.model.lower()
         # if model in self.support:
-        #     self.apiKey = utils.settings.Settings().check_if_none(conf, 2, model)
+        #     self.apiKey = utils.settings.SetYaml().check_if_none(conf, 2, model)
         # else:
         #     raise ValueError(f"Unsupported model: {self.model}")
-        self.apiKey, self.link = utils.settings.Settings().check_if_none(conf, 2, model)
+        self.apiKey, self.link = utils.settings.SetYaml().check_if_none(conf, 2, model)
 
 
 def start(*choice: str) -> tuple[str, str]:
