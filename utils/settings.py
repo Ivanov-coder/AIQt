@@ -10,6 +10,8 @@ class Settings:
         """
         如果没有配置文件，则创建一个
         """
+
+        # 写入yaml文件的标准格式
         fmt = {
             "other": [{
                 "Key": None
@@ -39,6 +41,7 @@ class Settings:
             ]
         }
 
+        # 不存在就创建目录并写入
         if not os.path.exists("./config/conf.yaml"):
             os.mkdir("./config")
             with open("./config/conf.yaml", "w", encoding="utf-8") as f:
@@ -48,6 +51,7 @@ class Settings:
         """
         读取配置问价
         """
+        # 存在直接开，不存在先写入再开
         if os.path.exists("./config/conf.yaml"):
             with open("./config/conf.yaml", "r", encoding="utf-8") as f:
                 conf = yaml.safe_load(f)
@@ -98,6 +102,7 @@ class Settings:
 
                 return conf["spark"][idx][common]
 
+            # 以下是为了其他AI设置的
             case 2:
                 if not conf["other"][0]["Key"]:
                     logger.warning(f"API KEY for {model} is not set in conf.yaml")
