@@ -29,11 +29,11 @@ class _Spark:
     - 4.0Ultra
     """
     model: str = "lite"
-    link: str = conf["spark"][1]["Spark_Link"]
+    link: str = conf["spark"][0]["lite"][1]["Spark_Link"]
 
     # 这里的"Bearer "不可省略！ key的格式应为 "Bearer " + key
     apiKey: str = utils.dcl.field(
-        default=conf["spark"][0]["Spark_Key"], repr=False)
+        default=conf["spark"][0]["lite"][0]["Spark_Key"], repr=False)
 
 
 # TODO: 这里的API KEY最好也得做出来
