@@ -53,6 +53,7 @@ class CallSparkAI():
                 # 将log添加到wrapper中
                 wrapper.append(log)
 
+        
         # 由于json_repair库的问题 我们这里只能直接指定编码格式为gbk 重写一遍
         with open("./cache/chat.json", "w", encoding="gbk") as jf:
             # 把wrapper写进去
