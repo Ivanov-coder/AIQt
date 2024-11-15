@@ -10,7 +10,7 @@ class CallOherAI:
     用于调用其他AI.
     使用时
     """
-    model: str = "qwen-long"  # 如果有需要 请自行修改参数 默认为qwen-long
+    model: str = "gpt-3.5-turbo"  # 如果有需要 请自行修改参数 默认为gpt-3.5-turbo
 
     def _get_logger(self) -> tuple[str, str, utils.logs.Logger]:
         """

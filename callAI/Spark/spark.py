@@ -98,7 +98,7 @@ class CallSparkAI():
                     answer = utils.json_repair.loads(
                         response.text)["choices"][0]["message"][
                             "content"]  # 获取回答 请自行查阅API文档
-                    print(f"{self.model}: {answer}")
+                    print(f"{self.model.upper()}: {answer}")
                     return answer
                 else:
                     logger.warning(
@@ -113,11 +113,12 @@ class CallSparkAI():
         调用Spark AI
         [官方文档](https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html#_1-%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E)
         """
-        # TODO: 需要把这个做出来到Qt中，成为滚动条去选择
-        BASE_URL, API_KEY = AI.start("1", self.model)
-        # 这里只支持调用Spark AI 请不要在这里调用其他AI
-
+        
         try:
+            # TODO: 需要把这个做出来到Qt中，成为滚动条去选择
+            BASE_URL, API_KEY = AI.start("1", self.model)
+            # 这里只支持调用Spark AI 请不要在这里调用其他AI
+
             # TODO: 需要把这个做出来到Qt中，成为输入框
             content = input("请输入您的问题：")
         except Exception:  # 由于Python多协程的特性，ctrl+c就直接不打印日志了
