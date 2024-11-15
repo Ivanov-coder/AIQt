@@ -62,7 +62,7 @@ class Settings:
             return self.read_yaml()
 
 
-    def check_if_none(self, conf: str, choice: int, model: str = None):
+    def check_if_none(self, conf: str, choice: int, model: str = None) -> (str | tuple[str, str]):
         """
         **检查conf.yaml中是否含有API KEY.**
         如果有，直接返回，没有，写入文件后再返回。
@@ -71,6 +71,7 @@ class Settings:
         >>>  _check_if_none(conf, 1, "lite") # 检查Spark AI的lite模型有没有API KEY
         >>>  _check_if_none(conf, 2, "qwen-long") # 检查qwen-long模型有没有API KEY
         如果choice是1 那么模型参数是必传的；如果是2，那就可以不传。
+        ## choice为1时只返回key， choice为2是返回key和link
         """
         # 这一部分是为了Spark AI设置的
         match choice:
@@ -102,7 +103,7 @@ class Settings:
 
                 return conf["spark"][idx][common]
 
-            # 以下是为了其他AI设置的
+            # 以下是为了其他AI设置的 由于不强行要求使用aihubmix网站，所以还需要判断是否存在接口网址
             case 2:
                 if not conf["other"][0]["Key"]:
                     logger.warning(f"API KEY for {model} is not set in conf.yaml")
@@ -111,5 +112,13 @@ class Settings:
                     with open("./config/conf.yaml", "w", encoding="utf-8") as f:
                         conf["other"][0]["Key"] = API_KEY
                         yaml.safe_dump(conf, f)
+                
+                if not conf["other"][1]["Link"]:
+                    logger.warning(f"API LINK for {model} is not set in conf.yaml")
+                    API_LINK = input("Please enter your API LINK here: ")
 
-                return conf["other"][0]["Key"]
+                    with open("./config/conf.yaml", "w", encoding="utf-8") as f:
+                        conf["other"][1]["Link"] = API_LINK
+                        yaml.safe_dump(conf, f)
+
+                return conf["other"][0]["Key"], conf["other"][1]["Link"]

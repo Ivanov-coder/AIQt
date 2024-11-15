@@ -77,7 +77,7 @@ class _OtherAI:
         #     self.apiKey = utils.settings.Settings().check_if_none(conf, 2, model)
         # else:
         #     raise ValueError(f"Unsupported model: {self.model}")
-        self.apiKey = utils.settings.Settings().check_if_none(conf, 2, model)
+        self.apiKey, self.link = utils.settings.Settings().check_if_none(conf, 2, model)
 
 
 def start(*choice: str) -> tuple[str, str]:
@@ -105,7 +105,7 @@ def start(*choice: str) -> tuple[str, str]:
 
             case _:  # 如果传参错误，返回None
                 logger.warning("Please enter the correct choice.")
-                return None, None
+                raise ValueError("Please enter the correct choice.")
 
     except Exception as e:
         logger.error(f"An error occurred while invoking AI: {e}")
