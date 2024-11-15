@@ -3,56 +3,7 @@ import utils
 # 初始化日志 以备打印信息
 logger = utils.logs.Logger.setup_logger(fileposition=__name__)
 
-with open("./conf.yaml", "r", encoding="utf-8") as f:
-    conf = utils.yaml.safe_load(f)
-
-
-def _check_if_none(choice: int, model: str = None):
-    """
-    **检查conf.yaml中是否含有API KEY.**
-    如果有，直接返回，没有，写入文件后再返回。
-    内置函数，不要在外部调用。
-    ## 1表示Spark AI，2表示其他AI
-    >>>  _check_if_none(1, "lite") # 检查Spark AI的lite模型有没有API KEY
-    >>>  _check_if_none(2, "qwen-long") # 检查qwen-long模型有没有API KEY
-    如果choice是1 那么模型参数是必传的；如果是2，那就可以不传。
-    """
-    # 这一部分是为了Spark AI设置的
-    match choice:
-        case 1:
-            # 将可能出现的情况建立字典映射 避免一堆if...elif...else...
-            match_idx_dict = {
-                "lite_Key": 1,
-                "generalv3_Key": 2,
-                "pro-128k_Key": 3,
-                "max-32k_Key": 4,
-                "4.0Ultra_Key": 5,
-                "generalv3.5_Key": 6,
-            }
-
-            common = f"{model}_Key"
-            idx = match_idx_dict.get(common)
-            if not conf["spark"][idx][common]:
-                logger.warning(f"API KEY for {model} is not set in conf.yaml")
-                API_KEY = input("Please enter your API KEY here: ")
-
-                with open("./conf.yaml", "w", encoding="utf-8") as f:
-                    conf["spark"][idx][common] = API_KEY
-                    utils.yaml.safe_dump(conf, f)
-
-            return conf["spark"][idx][common]
-
-        case 2:
-            if not conf["other"]["Key"]:
-                logger.warning(f"API KEY for {model} is not set in conf.yaml")
-                API_KEY = input("Please enter your API KEY here: ")
-
-                with open("./conf.yaml", "w", encoding="utf-8") as f:
-                    conf["other"]["Key"] = API_KEY
-                    utils.yaml.safe_dump(conf, f)
-
-            return conf["other"]["Key"]
-
+conf = utils.settings.Settings().read_yaml()
 
 # 现在只有Lite是能用的...
 @utils.dcl.dataclass
@@ -91,7 +42,7 @@ class _Spark:
 
         model = self.model.lower()
         if model in self.support:
-            self.apiKey = _check_if_none(1, model)
+            self.apiKey = utils.settings.Settings().check_if_none(conf, 1, model)
         else:
             raise ValueError(f"Unsupported model: {self.model}")
 
@@ -117,15 +68,16 @@ class _OtherAI:
     # ]
     apiKey: str = utils.dcl.field(default=conf["other"][0]["Key"], repr=False)
 
-    # def __post_init__(self):
-    #     """
-    #     匹配模型的API_KEY
-    #     """
-    #     model = self.model.lower()
-    #     if model in self.support:
-    #         self.apiKey = _check_if_none(2, model)
-    #     else:
-    #         raise ValueError(f"Unsupported model: {self.model}")
+    def __post_init__(self):
+        """
+        匹配模型的API_KEY
+        """
+        model = self.model.lower()
+        # if model in self.support:
+        #     self.apiKey = utils.settings.Settings().check_if_none(conf, 2, model)
+        # else:
+        #     raise ValueError(f"Unsupported model: {self.model}")
+        self.apiKey = utils.settings.Settings().check_if_none(conf, 2, model)
 
 
 def start(*choice: str) -> tuple[str, str]:
