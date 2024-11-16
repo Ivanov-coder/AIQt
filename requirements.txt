@@ -1,0 +1,4 @@
+pyyaml
+json_repair
+langchain_community
+httpx
