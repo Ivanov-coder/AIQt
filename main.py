@@ -1,9 +1,10 @@
 import utils
 from callAI import *
 
-CACHE_PATH = "./cache/chat.json"
 logger = utils.logs.Logger.setup_logger(fileposition=__name__)
 
+CACHE_PATH = "./cache/chat.json"
+LOG_PATH = "./log/data.log"
 
 # TODO: 在Qt中可能会存在开了Spark之后又开其它的情况，所以这里我们可能需要当窗口焦点改变时，做个挂起操作。
 async def run():
@@ -21,10 +22,9 @@ if __name__ == "__main__":
         try:
             utils.asyncio.run(main())
         except KeyboardInterrupt:
-            # 这里的删除文件最好后面再思考一下 因为这里是ctrl+c才满足条件 才会删除
-            if utils.os.path.exists(CACHE_PATH):
-                utils.os.remove(CACHE_PATH)
-                logger.info("Chat cache deleted")
+            # TODO: Qt信号槽事件 是否清除缓存
+            # 草 暂时想不到报错的解决方案
+            utils.clean.clean()
             break
         except Exception as e:
             logger.error(e)

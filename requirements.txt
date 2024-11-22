@@ -1,4 +1,8 @@
 pyyaml
 json_repair
 langchain_community
+langchain_openai
+langchain_ollama
 httpx
+g4f==0.3.3.3
+ChatTTS
