@@ -1,3 +1,4 @@
+import os
 import logging
 import colorlog
 import dataclasses as dcl
@@ -15,7 +16,8 @@ class Logger:
     level: int = dcl.field(
         default=logging.DEBUG)  # 为保证DEBUG级别日志的输出，这里默认设置为DEBUG
     format_type: str = dcl.field(
-        default='%(asctime)s %(log_color)s| %(levelname)s | %(name)s | %(message)s')
+        default=
+        '%(asctime)s %(log_color)s| %(levelname)s | %(name)s | %(message)s')
 
     @classmethod
     def setup_logger(cls, fileposition: str = __name__) -> logging.Logger:
@@ -27,7 +29,9 @@ class Logger:
         - fileposition: 日志文件位置，定义在setup_logger中。
         返回logger对象。
         """
-
+        # 没有log目录就创建一个
+        if not os.path.exists("log"):
+            os.mkdir("log")
         # 设置写入到文件data.log中
         logging.basicConfig(filename="log/data.log")
         # 设置日志等级和格式
@@ -36,18 +40,17 @@ class Logger:
         handler = logging.StreamHandler()  # 初始化handler 并且加入自己的设置
         logger.setLevel(cls.level)  # 必须设置等级 否则不会输出日志信息
         # 自定义格式
-        formatter = colorlog.ColoredFormatter(
-            fmt = cls.format_type,
-            datefmt = '%Y-%m-%d %w %H:%M:%S',
-            reset = True,
-            log_colors = {
-                'DEBUG': 'cyan',
-                'INFO': 'green',
-                'WARNING': 'yellow',
-                'ERROR': 'red',
-                'CRITICAL': 'bold_red',
-            },
-            style = '%')
+        formatter = colorlog.ColoredFormatter(fmt=cls.format_type,
+                                              datefmt='%Y-%m-%d %w %H:%M:%S',
+                                              reset=True,
+                                              log_colors={
+                                                  'DEBUG': 'cyan',
+                                                  'INFO': 'green',
+                                                  'WARNING': 'yellow',
+                                                  'ERROR': 'red',
+                                                  'CRITICAL': 'bold_red',
+                                              },
+                                              style='%')
         handler.setFormatter(formatter)
         # 去除原本的handler
         for h in logger.handlers:
