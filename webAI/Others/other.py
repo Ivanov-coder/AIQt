@@ -73,11 +73,10 @@ class CallOherAI:
         用于获取BASE_URL, API_KEY, logger。
         """
         BASE_URL, API_KEY = AI.start("2", self.model)
-        logger = utils.logs.Logger.setup_logger(fileposition=__name__)
-        return BASE_URL, API_KEY, logger
+        # logger = utils.logs.Logger.setup_logger()
+        return BASE_URL, API_KEY
 
     # TODO: 上传图片的计划只能先搁置了
-    
 
     # 调用的内部逻辑
     async def _execute(self, *, url: str, header: dict, data: dict) -> str:
@@ -87,10 +86,9 @@ class CallOherAI:
         """
 
         # 日志 确保只有执行函数时才被执行 而不是导包后就被执行
-        logger = utils.logs.Logger.setup_logger(fileposition=__name__)
-
+        # logger = utils.logs.Logger.setup_logger()
         async with httpx.AsyncClient(
-                timeout=60) as aclient:  # 使用AsyncClient建立Sessiom 避免多次请求服务器
+            timeout=60) as aclient:  # 使用AsyncClient建立Sessiom 避免多次请求服务器
             try:
                 response = await aclient.post(url, headers=header,
                                               json=data)  # POST对BASE_URL发送请求
@@ -101,12 +99,12 @@ class CallOherAI:
                     print(f"{self.model.upper()}: {answer}")
                     return answer
                 else:
-                    logger.warning(
+                    utils.settings.logger.warning(
                         f"Failed to request, STATUS_CODE: {response.status_code}"
                     )
 
             except Exception as e:
-                logger.error(e)
+                utils.settings.logger.error(e)
 
     async def callByhttpx(self) -> None:
         """
@@ -124,12 +122,18 @@ class CallOherAI:
         except Exception:  # 由于Python多协程的特性，ctrl+c就直接不打印日志了
             return  # 直接终止程序
 
-        header = {
-            "Content-Type": "application/json",
-            "Authorization": API_KEY,
-        }
+        try:
+            header = {
+                "Content-Type": "application/json",
+                "Authorization": API_KEY,
+            }
 
-        self._write_cache(content=content)
-        data = self._load_data()
-        answer = await self._execute(url=BASE_URL, header=header, data=data)
-        self._write_cache(content=answer, role="assistant")
+            self._write_cache(content=content)
+            data = self._load_data()
+            answer = await self._execute(url=BASE_URL,
+                                         header=header,
+                                         data=data)
+            self._write_cache(content=answer, role="assistant")
+
+        except Exception as e:
+            raise e

@@ -52,7 +52,6 @@ class CallSparkAI():
                 # 将log添加到wrapper中
                 wrapper.append(log)
 
-        
         # 由于json_repair库的问题 我们这里只能直接指定编码格式为gbk 重写一遍
         with open("./cache/chatSpark.json", "w", encoding="gbk") as jf:
             # 把wrapper写进去
@@ -87,10 +86,9 @@ class CallSparkAI():
         """
 
         # 日志 确保只有执行函数时才被执行 而不是导包后就被执行
-        logger = utils.logs.Logger.setup_logger(fileposition=__name__)
-
+        # logger = utils.logs.Logger.setup_logger()
         async with httpx.AsyncClient(
-                timeout=60) as aclient:  # 使用AsyncClient建立Sessiom 避免多次请求服务器
+            timeout=60) as aclient:  # 使用AsyncClient建立Sessiom 避免多次请求服务器
             try:
                 response = await aclient.post(url, headers=header,
                                               json=data)  # POST对BASE_URL发送请求
@@ -101,19 +99,19 @@ class CallSparkAI():
                     print(f"{self.model.upper()}: {answer}")
                     return answer
                 else:
-                    logger.warning(
+                    utils.settings.logger.warning(
                         f"Failed to request, STATUS_CODE: {response.status_code}"
                     )
 
             except Exception as e:
-                logger.error(e)
+                utils.settings.logger.error(e)
 
     async def callByhttpx(self) -> None:
         """
         调用Spark AI
         [官方文档](https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html#_1-%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E)
         """
-        
+
         try:
             # TODO: 需要把这个做出来到Qt中，成为滚动条去选择
             BASE_URL, API_KEY = AI.start("1", self.model)
@@ -124,12 +122,18 @@ class CallSparkAI():
         except Exception:  # 由于Python多协程的特性，ctrl+c就直接不打印日志了
             return  # 直接终止程序
 
-        header = {
-            "Content-Type": "application/json",
-            "Authorization": API_KEY,
-        }
+        try:
+            header = {
+                "Content-Type": "application/json",
+                "Authorization": API_KEY,
+            }
 
-        self._write_cache(content=content)
-        data = self._load_data()
-        answer = await self._execute(url=BASE_URL, header=header, data=data)
-        self._write_cache(content=answer, role="assistant")
+            self._write_cache(content=content)
+            data = self._load_data()
+            answer = await self._execute(url=BASE_URL,
+                                         header=header,
+                                         data=data)
+            self._write_cache(content=answer, role="assistant")
+
+        except Exception as e:
+            raise e

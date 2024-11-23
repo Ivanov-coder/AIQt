@@ -9,3 +9,4 @@ import os
 from . import settings
 import yaml
 from . import clean
+from . import colorful
