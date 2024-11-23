@@ -1,4 +1,4 @@
 from .Spark import sparkllm
-from .OtherAI import other
+from .Others import other
 
 __all__ = ["sparkllm", "other"]

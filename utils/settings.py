@@ -1,23 +1,23 @@
 import os
 import yaml
+from . import dcl
 from . import logs
 
 # 初始化日志
-logger = logs.Logger.setup_logger(fileposition=__name__)
+logger = logs.Logger.setup_logger()
 # 初始化cache文件夹
 if not os.path.exists("./cache"):
     os.mkdir("./cache")
 
 
+@dcl.dataclass
 class SetYaml:
 
-    def create_yaml(self):
-        """
-        如果没有配置文件，则创建一个
-        """
-
-        # 写入yaml文件的标准格式
-        fmt = {
+    BASIC: str = "./config"
+    # 写入yaml文件的标准格式
+    # 字典格式要求必须使用default_factory
+    FMT: dict = dcl.field(
+        default_factory={
             "other": [{
                 "Key": None
             }, {
@@ -47,29 +47,50 @@ class SetYaml:
                     "generalv3.5_Key": None
                 },
             ]
-        }
+        })
 
-        # 不存在就创建目录并写入
-        if not os.path.exists("./config/conf.yaml"):
-            os.mkdir("./config")
-            with open("./config/conf.yaml", "w", encoding="utf-8") as f:
-                yaml.dump(fmt, f, allow_unicode=True, sort_keys=False)
+    # 字典格式要求必须使用default_factory
+    PERSONA: dict = dcl.field(
+        default_factory={
+            "PERSONA": """ 
+        You are the sarcastic AI VTuber Neuro-sama. 
+        You are super confident about yourself.
+        You have a lot of knowledge and you are willing to help others.    
+        """,
+            "LANG": "cn"
+        })
 
-    def read_yaml(self) -> dict:
+    @classmethod
+    def create_yaml(cls):
         """
-        读取配置问价
+        如果没有配置文件，则创建一个
+        """
+        # 不存在就创建目录并写入
+        if not os.path.exists(f"{cls.BASIC}/conf.yaml"):
+            os.mkdir("./config")
+            with open(f"{cls.BASIC}/conf.yaml", "w", encoding="utf-8") as f:
+                yaml.dump(cls.FMT, f, allow_unicode=True, sort_keys=False)
+        # 如果存在，检查是否含有persona.yaml，没有则创建
+            with open(f"{cls.BASIC}/persona.yaml", "w", encoding="utf-8") as f:
+                yaml.dump(cls.PERSONA, f, allow_unicode=True, sort_keys=False)
+
+    @classmethod
+    def read_yaml(cls, *, filename: str = "conf.yaml") -> dict:
+        """
+        读取配置文件
         """
         # 存在直接开，不存在先写入再开
-        if os.path.exists("./config/conf.yaml"):
-            with open("./config/conf.yaml", "r", encoding="utf-8") as f:
+        if os.path.exists(f"{cls.BASIC}/{filename}"):
+            with open(f"{cls.BASIC}/{filename}", "r", encoding="utf-8") as f:
                 conf = yaml.safe_load(f)
             return conf
 
         else:
-            self.create_yaml()
-            return self.read_yaml()
+            cls.create_yaml()
+            return cls.read_yaml()
 
-    def check_if_none(self,
+    @classmethod
+    def check_if_none(cls,
                       conf: str,
                       choice: int,
                       model: str = None) -> (str | tuple[str, str]):
@@ -104,7 +125,7 @@ class SetYaml:
                     # TODO: 在Qt中需要以输入框的形式存在
                     API_KEY = input("Please enter your API KEY here: ")
 
-                    with open("./config/conf.yaml", "w",
+                    with open(f"{cls.BASIC}/conf.yaml", "w",
                               encoding="utf-8") as f:
                         # 判断是否输入了"Bearer "前缀 没有就补上
                         if "Bearer " not in API_KEY:
@@ -124,7 +145,7 @@ class SetYaml:
                     # TODO: 在Qt中需要以输入框的形式存在
                     API_KEY = input("Please enter your API KEY here: ")
 
-                    with open("./config/conf.yaml", "w",
+                    with open(f"{cls.BASIC}/conf.yaml", "w",
                               encoding="utf-8") as f:
                         conf["other"][0]["Key"] = API_KEY
                         yaml.safe_dump(conf, f)
@@ -135,9 +156,13 @@ class SetYaml:
                     # TODO: 在Qt中需要以输入框的形式存在
                     API_LINK = input("Please enter your API LINK here: ")
 
-                    with open("./config/conf.yaml", "w",
+                    with open(f"{cls.BASIC}/conf.yaml", "w",
                               encoding="utf-8") as f:
                         conf["other"][1]["Link"] = API_LINK
                         yaml.safe_dump(conf, f)
 
                 return conf["other"][0]["Key"], conf["other"][1]["Link"]
+
+            # TODO: 这部分是为了ollama的人格设置的
+            case "3":
+                pass

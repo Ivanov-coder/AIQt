@@ -1,9 +1,1588 @@
-INFO:lib.data.aiData:Invoking Spark LITE API...
-INFO:lib.data.aiData:Invoking Spark LITE API...
-INFO:lib.data.aiData:Invoking Spark LITE API...
-INFO:lib.data.aiData:Invoking Spark LITE API...
-INFO:lib.data.aiData:Invoking Spark LITE API...
-INFO:lib.data.aiData:Invoking Spark LITE API...
-INFO:lib.data.aiData:Invoking Spark LITE API...
-INFO:lib.data.aiData:Invoking Spark LITE API...
-INFO:lib.data.aiData:Invoking Spark LITE API...
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted
+ERROR:__main__:'dict' object is not callable
+INFO:__main__:Restarted

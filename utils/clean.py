@@ -1,6 +1,6 @@
 import os
 
-CACHE_PATH = "./cache/chat.json"
+CACHE_PATH = "./cache/"
 LOG_PATH = "./log/data.log"
 
 def clean() -> None:
@@ -10,7 +10,8 @@ def clean() -> None:
     """     
 
     if os.path.exists(CACHE_PATH):
-        os.remove(CACHE_PATH)
+        for file in os.listdir(CACHE_PATH):
+            os.remove(os.path.join(CACHE_PATH, file))
     
     # TODO: 这玩意等Qt出来了再做 要求用户断掉AI的连接再调用
     # if os.path.exists(LOG_PATH):

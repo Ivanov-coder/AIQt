@@ -1,16 +1,16 @@
 import utils
-from callAI import *
+from webAI import *
+from localAI import *
 
-logger = utils.logs.Logger.setup_logger(fileposition=__name__)
+# logger = utils.logs.Logger.setup_logger()
 
-CACHE_PATH = "./cache/chat.json"
-LOG_PATH = "./log/data.log"
 
 # TODO: 在Qt中可能会存在开了Spark之后又开其它的情况，所以这里我们可能需要当窗口焦点改变时，做个挂起操作。
 async def run():
     # TODO: 这里的实例化需要做成选择框给用户选择模型
-    await sparkllm.CallSparkAI("lite").callByhttpx()
+    # await sparkllm.CallSparkAI("lite").callByhttpx()
     # await other.CallOherAI("qwen-long").callByhttpx()
+    await ollamallm.CallOllamaAI(model="llama3.1").callByOllama()
 
 
 async def main():
@@ -27,5 +27,5 @@ if __name__ == "__main__":
             utils.clean.clean()
             break
         except Exception as e:
-            logger.error(e)
-            logger.info("Restarted")
+            utils.settings.logger.error(e)
+            utils.settings.logger.info("Restarted")

@@ -5,7 +5,7 @@ import dataclasses as dcl
 
 
 # 定义与日志有关的类
-@dcl.dataclass
+@dcl.dataclass(frozen=True)
 class Logger:
     """
     这是一个关于日志的类。
@@ -14,13 +14,12 @@ class Logger:
     - format_type: 日志格式
     """
     level: int = dcl.field(
-        default=logging.DEBUG)  # 为保证DEBUG级别日志的输出，这里默认设置为DEBUG
+        default=logging.INFO)
     format_type: str = dcl.field(
-        default=
-        '%(asctime)s %(log_color)s| %(levelname)s | %(name)s | %(message)s')
+        default='%(asctime)s %(log_color)s| [%(levelname)s] | %(message)s')
 
     @classmethod
-    def setup_logger(cls, fileposition: str = __name__) -> logging.Logger:
+    def setup_logger(cls) -> logging.Logger:
         """
         定义为类方法，
         可以通过Logger().setup_logger()来设置日志等级和输出格式。
@@ -35,7 +34,7 @@ class Logger:
         # 设置写入到文件data.log中
         logging.basicConfig(filename="log/data.log")
         # 设置日志等级和格式
-        logger = logging.getLogger(fileposition)
+        logger = logging.getLogger()
         # 设置日志颜色
         handler = logging.StreamHandler()  # 初始化handler 并且加入自己的设置
         logger.setLevel(cls.level)  # 必须设置等级 否则不会输出日志信息

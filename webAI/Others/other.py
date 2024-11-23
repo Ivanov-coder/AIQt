@@ -1,26 +1,15 @@
 import httpx
 import utils
-# import base64  # 将图片二进制流编码成base64格式并上传
-import lib.data.aiData as AI
+import lib.data.aiData as AI  # 此导包方式只支持在main.py中运行
 
 
-# 这里需要继承一下 主要用于做多轮对话
 @utils.dcl.dataclass
-class CallSparkAI():
+class CallOherAI:
     """
-    SparkAI类.
-    通过实例化时传入参数来改变model。
-    例如
-    >>> spark = CallSparkAI(model="lite") # 调用lite模型
-    支持调用的模型如下:
-    - lite
-    - generalv3
-    - pro-128k
-    - generalv3.5
-    - max-32k
-    - 4.0Ultra
+    用于调用其他AI.
+    使用时
     """
-    model: str = utils.dcl.field(default="lite")  # 如果有需要 请自行修改参数 默认为lite
+    model: str = "gpt-3.5-turbo"  # 如果有需要 请自行修改参数 默认为gpt-3.5-turbo
 
     def _write_cache(self, content: str, role: str = "user") -> None:
         """
@@ -34,10 +23,10 @@ class CallSparkAI():
         }
 
         # 由于json_repair库的问题 我们这里只能直接指定编码格式为gbk
-        with open("./cache/chat.json", "a+", encoding="gbk") as jf:
+        with open("./cache/chatOther.json", "a+", encoding="gbk") as jf:
             wrapper = []  # 包装器 确保传入参数是列表
             # 读取文件内容
-            cache = utils.json_repair.from_file("./cache/chat.json")
+            cache = utils.json_repair.from_file("./cache/chatOther.json")
             # 判断是否为列表
             if not isinstance(cache, list):
                 # 否 确认是否为空字符串
@@ -53,9 +42,8 @@ class CallSparkAI():
                 # 将log添加到wrapper中
                 wrapper.append(log)
 
-        
         # 由于json_repair库的问题 我们这里只能直接指定编码格式为gbk 重写一遍
-        with open("./cache/chat.json", "w", encoding="gbk") as jf:
+        with open("./cache/chatOther.json", "w", encoding="gbk") as jf:
             # 把wrapper写进去
             utils.json.dump(wrapper, jf, indent=4, ensure_ascii=False)
 
@@ -66,8 +54,7 @@ class CallSparkAI():
         图片请传入二进制数据
         ## 小尴尬 LLM不支持图片输入:/
         """
-        # wrapper = []
-        contents = utils.json_repair.from_file("./cache/chat.json")
+        contents = utils.json_repair.from_file("./cache/chatOther.json")
 
         data = {
             "model": self.model,  # 指定请求的模型
@@ -80,6 +67,17 @@ class CallSparkAI():
 
         return data
 
+    def _get_logger(
+        self, ) -> (tuple[str, str, utils.logs.Logger] | utils.logs.Logger):
+        """
+        用于获取BASE_URL, API_KEY, logger。
+        """
+        BASE_URL, API_KEY = AI.start("2", self.model)
+        # logger = utils.logs.Logger.setup_logger()
+        return BASE_URL, API_KEY
+
+    # TODO: 上传图片的计划只能先搁置了
+
     # 调用的内部逻辑
     async def _execute(self, *, url: str, header: dict, data: dict) -> str:
         """
@@ -88,10 +86,9 @@ class CallSparkAI():
         """
 
         # 日志 确保只有执行函数时才被执行 而不是导包后就被执行
-        logger = utils.logs.Logger.setup_logger(fileposition=__name__)
-
+        # logger = utils.logs.Logger.setup_logger()
         async with httpx.AsyncClient(
-                timeout=60) as aclient:  # 使用AsyncClient建立Sessiom 避免多次请求服务器
+            timeout=60) as aclient:  # 使用AsyncClient建立Sessiom 避免多次请求服务器
             try:
                 response = await aclient.post(url, headers=header,
                                               json=data)  # POST对BASE_URL发送请求
@@ -102,22 +99,22 @@ class CallSparkAI():
                     print(f"{self.model.upper()}: {answer}")
                     return answer
                 else:
-                    logger.warning(
+                    utils.settings.logger.warning(
                         f"Failed to request, STATUS_CODE: {response.status_code}"
                     )
 
             except Exception as e:
-                logger.error(e)
+                utils.settings.logger.error(e)
 
     async def callByhttpx(self) -> None:
         """
         调用Spark AI
         [官方文档](https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html#_1-%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E)
         """
-        
+
         try:
             # TODO: 需要把这个做出来到Qt中，成为滚动条去选择
-            BASE_URL, API_KEY = AI.start("1", self.model)
+            BASE_URL, API_KEY = AI.start("2", self.model)
             # 这里只支持调用Spark AI 请不要在这里调用其他AI
 
             # TODO: 需要把这个做出来到Qt中，成为输入框
@@ -125,12 +122,18 @@ class CallSparkAI():
         except Exception:  # 由于Python多协程的特性，ctrl+c就直接不打印日志了
             return  # 直接终止程序
 
-        header = {
-            "Content-Type": "application/json",
-            "Authorization": API_KEY,
-        }
+        try:
+            header = {
+                "Content-Type": "application/json",
+                "Authorization": API_KEY,
+            }
 
-        self._write_cache(content=content)
-        data = self._load_data()
-        answer = await self._execute(url=BASE_URL, header=header, data=data)
-        self._write_cache(content=answer, role="assistant")
+            self._write_cache(content=content)
+            data = self._load_data()
+            answer = await self._execute(url=BASE_URL,
+                                         header=header,
+                                         data=data)
+            self._write_cache(content=answer, role="assistant")
+
+        except Exception as e:
+            raise e
