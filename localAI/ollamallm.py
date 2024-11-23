@@ -20,10 +20,12 @@ class CallOllamaAI:
     做成Qt之后想办法让这个命令自己执行(可能又要写.bat脚本了)
     """
 
-    # 默认是llama3.1:latest(主要是自己在用)
+    # 默认是llama3.1
+    # 想要用图片的话请下载llama3.2-vision
+    # 但是这个版本比较卡，不建议
     model: str = utils.dcl.field(default="llama3.1")
 
-    def _write_cache(self, content: str, role: str = "user") -> None:
+    def _write_cache(self, *, content: str, role: str = "user", image: list = None) -> None:
         """
         写入缓存到.cache/chat.json文件中
         """
@@ -33,6 +35,15 @@ class CallOllamaAI:
             "content": content,
         }
 
+        # 忽然之间发现这样子判断是比较简单的
+        if image and self.model == "llama3.2-vision":
+            if image != []:
+                log = {
+                    "role": role,
+                    "content": content,
+                    "image": image,
+                }
+        
         # 由于json_repair库的问题 我们这里只能直接指定编码格式为gbk
         with open("./cache/chatOllama.json", "a+", encoding="gbk") as jf:
             wrapper = []  # 包装器 确保传入参数是列表
@@ -75,12 +86,13 @@ class CallOllamaAI:
 
         output = ""
         async for part in await ollama.AsyncClient().chat(model=self.model,
-                                                 messages=data,
-                                                stream=True):
-            
+                                                          messages=data,
+                                                          stream=True):
+
             print(part["message"]["content"], end='', flush=True)
             output += part["message"]["content"]
 
+        print()  # 最后打印空行
         return output
 
     async def callByOllama(self) -> None:
@@ -99,9 +111,7 @@ class CallOllamaAI:
             self._write_cache(content=content)
             data = self._load_data()
             answer = await self._execute(data=data)
-            # print(answer, end='', flush=True)
-            # self._write_cache(content=answer, role="assistant")
+            self._write_cache(content=answer, role="assistant")
 
         except Exception as e:
             raise e
-        
