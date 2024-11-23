@@ -4,7 +4,6 @@ import utils
 import lib.data.aiData as AI
 
 
-# 这里需要继承一下 主要用于做多轮对话
 @utils.dcl.dataclass
 class CallSparkAI():
     """
@@ -34,10 +33,10 @@ class CallSparkAI():
         }
 
         # 由于json_repair库的问题 我们这里只能直接指定编码格式为gbk
-        with open("./cache/chat.json", "a+", encoding="gbk") as jf:
+        with open("./cache/chatSpark.json", "a+", encoding="gbk") as jf:
             wrapper = []  # 包装器 确保传入参数是列表
             # 读取文件内容
-            cache = utils.json_repair.from_file("./cache/chat.json")
+            cache = utils.json_repair.from_file("./cache/chatSpark.json")
             # 判断是否为列表
             if not isinstance(cache, list):
                 # 否 确认是否为空字符串
@@ -55,7 +54,7 @@ class CallSparkAI():
 
         
         # 由于json_repair库的问题 我们这里只能直接指定编码格式为gbk 重写一遍
-        with open("./cache/chat.json", "w", encoding="gbk") as jf:
+        with open("./cache/chatSpark.json", "w", encoding="gbk") as jf:
             # 把wrapper写进去
             utils.json.dump(wrapper, jf, indent=4, ensure_ascii=False)
 
@@ -67,7 +66,7 @@ class CallSparkAI():
         ## 小尴尬 LLM不支持图片输入:/
         """
         # wrapper = []
-        contents = utils.json_repair.from_file("./cache/chat.json")
+        contents = utils.json_repair.from_file("./cache/chatSpark.json")
 
         data = {
             "model": self.model,  # 指定请求的模型
