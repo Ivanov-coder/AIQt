@@ -2,9 +2,11 @@
 # 不调用aiData.py文件
 import utils
 import ollama
+import base64
+
 
 # 读取人格设定
-conf = utils.settings.SetYaml.read_yaml()
+conf = utils.settings.SetYaml.read_yaml(filename="persona.yaml")
 # 导入颜色模块
 color = utils.colorful.SetColor
 
@@ -25,26 +27,33 @@ class CallOllamaAI:
     # 但是这个版本比较卡，不建议
     model: str = utils.dcl.field(default="llama3.1")
 
-    def _write_cache(self, *, content: str, role: str = "user", image: list = None) -> None:
+    def _write_cache(self,
+                     *,
+                     content: str,
+                     role: str = "user",
+                     image: (str | bytes) = None) -> None:
         """
         写入缓存到.cache/chat.json文件中
         """
 
-        log = {
-            "role": role,
-            "content": content,
-        }
-
-        # 忽然之间发现这样子判断是比较简单的
         if image and self.model == "llama3.2-vision":
-            if image != []:
-                log = {
-                    "role": role,
-                    "content": content,
-                    "image": image,
-                }
-        
-        # 由于json_repair库的问题 我们这里只能直接指定编码格式为gbk
+            # 确保必须是列表
+            if not isinstance(image, list):
+                image = [image]
+
+            log = {
+                "role": role,
+                "content": content,
+                "images": image,
+            }
+        else:
+            log = {
+                "role": role,
+                "content": content,
+            }
+
+        # 由于json_repair库的问题 我们这里只能直接指定编码格式为gbk 
+        # Windows系统默认编码是gbk，这个库跟了它
         with open("./cache/chatOllama.json", "a+", encoding="gbk") as jf:
             wrapper = []  # 包装器 确保传入参数是列表
             # 读取文件内容
@@ -73,16 +82,15 @@ class CallOllamaAI:
     def _load_data(self) -> dict:
         """
         加载文字或图片。
-        图片请传入二进制数据
-        ## 小尴尬 LLM不支持图片输入:/
         """
         contents = utils.json_repair.from_file("./cache/chatOllama.json")
 
         return contents
 
-    async def _execute(self, data: dict) -> str:
-        if not isinstance(data, list):
-            data = [data]
+    async def _execute(self, data: list[dict]) -> str:
+        """
+        内部逻辑
+        """
 
         output = ""
         async for part in await ollama.AsyncClient().chat(model=self.model,
@@ -100,15 +108,30 @@ class CallOllamaAI:
         调用ollama软件进行对话
         """
         utils.settings.logger.info(f"Invoking {self.model.upper()} API...")
+
+        # TODO: DEBUG 有时能看到图片有时不能 并且不支持图片之后只有文字输入
         try:
-            # TODO: 需要把这个做出来到Qt中，成为输入框
-            content = input("请输入您的问题：")
+            if self.model == "llama3.2-vision":
+                # TODO: 需要把这个做出来到Qt中，成为输入框
+                meta_input = input("请输入您的问题和需要附带的图片路径，以->分割：")
+                if meta_input.find("->") != -1:
+                    content, IMG_PATH = meta_input.split("->")
+                else:
+                    content = meta_input
+                image = base64.b64encode(open(IMG_PATH, "rb").read()).decode()
+                # image = open(IMG_PATH, "rb").read()
+                self._write_cache(content=content, image=image)
+
+            else:
+                # TODO: 需要把这个做出来到Qt中，成为输入框
+                content = input("请输入您的问题：")
+                self._write_cache(content=content)
 
         except Exception:  # 由于Python多协程的特性，ctrl+c就直接不打印日志了
             return  # 直接终止程序
+            
 
         try:
-            self._write_cache(content=content)
             data = self._load_data()
             answer = await self._execute(data=data)
             self._write_cache(content=answer, role="assistant")

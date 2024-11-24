@@ -3,7 +3,7 @@ import utils
 # 初始化日志 以备打印信息
 # logger = utils.logs.Logger.setup_logger()
 
-conf = utils.settings.SetYaml.read_yaml()
+conf = utils.settings.SetYaml.read_yaml(filename="conf.yaml")
 
 # 现在只有Lite是能用的...
 @utils.dcl.dataclass
