@@ -92,16 +92,27 @@ class CallOllamaAI:
         内部逻辑
         """
 
-        output = ""
-        async for part in await ollama.AsyncClient().chat(model=self.model,
-                                                          messages=data,
-                                                          stream=True):
+        try:
+            ollama.show(self.model)
 
-            print(part["message"]["content"], end='', flush=True)
-            output += part["message"]["content"]
+            output = ""
+            async for part in await ollama.AsyncClient().chat(model=self.model,
+                                                            messages=data,
+                                                            stream=True):
+                
+                print(part["message"]["content"], end='', flush=True)
+                output += part["message"]["content"]
 
-        print()  # 最后打印空行
-        return output
+            print()  # 最后打印空行
+            return output
+        
+        except ollama.ResponseError as re:
+            utils.settings.logger.warning(f"ollama API error: {re}")
+            utils.settings.logger.info("Now Downloading...")
+            utils.os.system(f"ollama pull {self.model}")
+
+        except Exception as e:
+            raise e
 
     async def callByOllama(self) -> None:
         """
@@ -119,7 +130,6 @@ class CallOllamaAI:
                 else:
                     content = meta_input
                 image = base64.b64encode(open(IMG_PATH, "rb").read()).decode()
-                # image = open(IMG_PATH, "rb").read()
                 self._write_cache(content=content, image=image)
 
             else:

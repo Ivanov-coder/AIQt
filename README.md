@@ -1,5 +1,11 @@
 # 关于本项目
 
+## 可供参考的网页：
+[Ollama-python](https://github.com/ollama/ollama-python/tree/main/examples)
+[Ollama-blog](https://ollama.org.cn/blog/)
+[batch-learning](https://blog.csdn.net/csfchh/article/details/106795352)
+
+
 ## 个人最新的想法：
 1. httpx不开session可能导致ai不能知道你之前说了啥，回去测试。不开和开的区别  --> **不是这个问题，需要手动上传聊天记录** => 此问题已被chat.json文件搞定
 2. 尽量不要使用http请求吧，用封装好的第三方库可能更快，并且功能更多
