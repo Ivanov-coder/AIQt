@@ -1,10 +1,12 @@
 from colorama import init, Fore, Back, Style
 
+
 # 背景和文字的颜色设置只能二选一，比较尴尬
 class SetColor:
     """
     设置在控制台中的颜色 ，也许有用。
     """
+
     def __init__(self):
         init(autoreset=True)
 
@@ -21,7 +23,7 @@ class SetColor:
             return Fore.YELLOW + text + Style.RESET
         elif color == "blue":
             return Fore.BLUE + text + Style.RESET
-    
+
     @classmethod
     def set_bgcolor(cls, *, text: str, color: str) -> str:
         """
@@ -35,4 +37,3 @@ class SetColor:
             return Back.YELLOW + text + Style.RESET
         elif color == "blue":
             return Back.BLUE + text + Style.RESET
-        

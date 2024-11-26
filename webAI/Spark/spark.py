@@ -1,7 +1,6 @@
 import httpx
 import utils
-# import base64  # 将图片二进制流编码成base64格式并上传
-import lib.data.aiData as AI
+import data.aiData as AI
 
 
 @utils.dcl.dataclass

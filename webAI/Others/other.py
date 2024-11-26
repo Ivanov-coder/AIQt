@@ -1,6 +1,6 @@
 import httpx
 import utils
-import lib.data.aiData as AI  # 此导包方式只支持在main.py中运行
+import data.aiData as AI
 
 
 @utils.dcl.dataclass
@@ -73,7 +73,7 @@ class CallOherAI:
         用于获取BASE_URL, API_KEY, logger。
         """
         BASE_URL, API_KEY = AI.start("2", self.model)
-        
+
         return BASE_URL, API_KEY
 
     # TODO: 上传图片的计划只能先搁置了
@@ -86,7 +86,6 @@ class CallOherAI:
         """
 
         # 日志 确保只有执行函数时才被执行 而不是导包后就被执行
-        
         async with httpx.AsyncClient(
             timeout=60) as aclient:  # 使用AsyncClient建立Sessiom 避免多次请求服务器
             try:

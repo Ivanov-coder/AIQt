@@ -1,9 +1,9 @@
 # 这个要求必要本地拥有ollama软件及大模型
+# 已解决本地没有大模型报错的问题 但需要确保本地有ollama
 # 不调用aiData.py文件
 import utils
 import ollama
 import base64
-
 
 # 读取人格设定
 conf = utils.settings.SetYaml.read_yaml(filename="persona.yaml")
@@ -27,6 +27,18 @@ class CallOllamaAI:
     # 但是这个版本比较卡，不建议
     model: str = utils.dcl.field(default="llama3.1")
 
+    @utils.typing.overload
+    def _write_cache(self, *, content: str, role: str = "user") -> None:
+        ...
+
+    @utils.typing.overload
+    def _write_cache(self,
+                     *,
+                     content: str,
+                     role: str = "user",
+                     image: (str | bytes)) -> None:
+        ...
+
     def _write_cache(self,
                      *,
                      content: str,
@@ -36,6 +48,7 @@ class CallOllamaAI:
         写入缓存到.cache/chat.json文件中
         """
 
+        # 出于性能方面的考虑 暂时决定不添加多模态功能
         if image and self.model == "llama3.2-vision":
             # 确保必须是列表
             if not isinstance(image, list):
@@ -46,13 +59,14 @@ class CallOllamaAI:
                 "content": content,
                 "images": image,
             }
+
         else:
             log = {
                 "role": role,
                 "content": content,
             }
 
-        # 由于json_repair库的问题 我们这里只能直接指定编码格式为gbk 
+        # 由于json_repair库的问题 我们这里只能直接指定编码格式为gbk
         # Windows系统默认编码是gbk，这个库跟了它
         with open("./cache/chatOllama.json", "a+", encoding="gbk") as jf:
             wrapper = []  # 包装器 确保传入参数是列表
@@ -97,19 +111,23 @@ class CallOllamaAI:
 
             output = ""
             async for part in await ollama.AsyncClient().chat(model=self.model,
-                                                            messages=data,
-                                                            stream=True):
-                
+                                                              messages=data,
+                                                              stream=True):
+
                 print(part["message"]["content"], end='', flush=True)
                 output += part["message"]["content"]
 
             print()  # 最后打印空行
             return output
-        
+
+        # 本地没大模型就下载一个
         except ollama.ResponseError as re:
             utils.settings.logger.warning(f"ollama API error: {re}")
             utils.settings.logger.info("Now Downloading...")
+
+            # TODO: 可能需要考虑把它可视化到Qt中, 毕竟这是控制台输出
             utils.os.system(f"ollama pull {self.model}")
+            # TODO: 是否还需要考虑添加删除大模型的功能？
 
         except Exception as e:
             raise e
@@ -139,7 +157,6 @@ class CallOllamaAI:
 
         except Exception:  # 由于Python多协程的特性，ctrl+c就直接不打印日志了
             return  # 直接终止程序
-            
 
         try:
             data = self._load_data()
