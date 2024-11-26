@@ -13,8 +13,7 @@ class Logger:
     - level: 日志级别
     - format_type: 日志格式
     """
-    level: int = dcl.field(
-        default=logging.INFO)
+    level: int = dcl.field(default=logging.INFO)
     format_type: str = dcl.field(
         default='%(asctime)s %(log_color)s| [%(levelname)s] | %(message)s')
 

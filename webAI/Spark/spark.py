@@ -1,7 +1,6 @@
 import httpx
 import utils
-# import base64  # 将图片二进制流编码成base64格式并上传
-import lib.data.aiData as AI
+import data.aiData as AI
 
 
 @utils.dcl.dataclass
@@ -86,7 +85,7 @@ class CallSparkAI():
         """
 
         # 日志 确保只有执行函数时才被执行 而不是导包后就被执行
-        # logger = utils.logs.Logger.setup_logger()
+        
         async with httpx.AsyncClient(
             timeout=60) as aclient:  # 使用AsyncClient建立Sessiom 避免多次请求服务器
             try:

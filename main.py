@@ -1,16 +1,29 @@
-import utils
-from webAI import *
-from localAI import *
+from utils import os
+from utils import clean
+from utils import asyncio
+from utils.settings import logger
 
-# logger = utils.logs.Logger.setup_logger()
+
+def switch(choice: str) -> None:
+    """
+    做选择用的，后面估计得做到Qt选择框里面。
+    """
+    if choice == "web":
+        import webAI
+        # TODO: 这里的实例化需要做成选择框给用户选择模型
+        return webAI.spark.CallSparkAI("lite").callByhttpx()
+        # return other.CallOherAI("qwen-long").callByhttpx()
+
+    elif choice == "local":
+        import localAI
+        # TODO: 这里的实例化需要做成选择框给用户选择模型
+        return localAI.ollamallm.CallOllamaAI(model="llama3.1").callByOllama()
 
 
 # TODO: 在Qt中可能会存在开了Spark之后又开其它的情况，所以这里我们可能需要当窗口焦点改变时，做个挂起操作。
 async def run():
     # TODO: 这里的实例化需要做成选择框给用户选择模型
-    # await sparkllm.CallSparkAI("lite").callByhttpx()
-    # await other.CallOherAI("qwen-long").callByhttpx()
-    await ollamallm.CallOllamaAI(model="llama3.1").callByOllama()
+    await switch("local")
 
 
 async def main():
@@ -20,12 +33,17 @@ async def main():
 if __name__ == "__main__":
     while True:
         try:
-            utils.asyncio.run(main())
+            asyncio.run(main())
         except KeyboardInterrupt:
             # TODO: Qt信号槽事件 是否清除缓存
-            # 草 暂时想不到报错的解决方案
-            utils.clean.clean()
+            clean.clean()
             break
+
+        except ModuleNotFoundError as e:
+            logger.warning(e)
+            logger.info("Installing requirements...")
+            os.system("pip install -r requirements.txt")
+
         except Exception as e:
-            utils.settings.logger.error(e)
-            utils.settings.logger.info("Restarted")
+            logger.error(e)
+            logger.info("Restarted")

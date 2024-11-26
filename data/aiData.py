@@ -1,9 +1,7 @@
 import utils
 
-# 初始化日志 以备打印信息
-# logger = utils.logs.Logger.setup_logger()
+conf = utils.settings.SetYaml.read_yaml(filename="conf.yaml")
 
-conf = utils.settings.SetYaml.read_yaml()
 
 # 现在只有Lite是能用的...
 @utils.dcl.dataclass
@@ -77,7 +75,8 @@ class _OtherAI:
         #     self.apiKey = utils.settings.SetYaml().check_if_none(conf, 2, model)
         # else:
         #     raise ValueError(f"Unsupported model: {self.model}")
-        self.apiKey, self.link = utils.settings.SetYaml.check_if_none(conf, 2, model)
+        self.apiKey, self.link = utils.settings.SetYaml.check_if_none(
+            conf, 2, model)
 
 
 def start(*choice: str) -> tuple[str, str]:
@@ -94,7 +93,8 @@ def start(*choice: str) -> tuple[str, str]:
         match choice:
         # 这里可以的话加个处理第二个参数没传的情况
             case ["1", str(model)]:  # 调用 Spark API
-                utils.settings.logger.info(msg=f"Invoking Spark {model.upper()} API...")
+                utils.settings.logger.info(
+                    msg=f"Invoking Spark {model.upper()} API...")
                 spark = _Spark(model=model)
                 return spark.link, spark.apiKey
 
@@ -104,9 +104,11 @@ def start(*choice: str) -> tuple[str, str]:
                 return Other.link, Other.apiKey
 
             case _:  # 如果传参错误，返回None
-                utils.settings.logger.warning("Please enter the correct choice.")
+                utils.settings.logger.warning(
+                    "Please enter the correct choice.")
                 raise ValueError("Please enter the correct choice.")
 
     except Exception as e:
-        utils.settings.logger.error(f"An error occurred while invoking AI: {e}")
+        utils.settings.logger.error(
+            f"An error occurred while invoking AI: {e}")
         raise ValueError(f"An error occurred while invoking AI: {e}")
