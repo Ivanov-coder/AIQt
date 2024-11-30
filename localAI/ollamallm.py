@@ -28,21 +28,47 @@ class CallOllamaAI:
     model: str = utils.dcl.field(default="llama3.1")
 
     @utils.typing.overload
-    def _write_cache(self, *, content: str, role: str = "user") -> None:
+    def _write_cache(self,
+                     *,
+                     ID: str,
+                     content: str,
+                     role: str = "user") -> None:
         ...
 
     @utils.typing.overload
     def _write_cache(self,
                      *,
+                     ID: str,
                      content: str,
                      role: str = "user",
                      image: (str | bytes)) -> None:
         ...
 
+    @utils.typing.overload
     def _write_cache(self,
                      *,
+                     ID: str,
                      content: str,
                      role: str = "user",
+                     isRolePlay: bool) -> None:
+        ...
+
+    @utils.typing.overload
+    def _write_cache(self,
+                     *,
+                     ID: str,
+                     content: str,
+                     role: str = "user",
+                     isRolePlay: bool,
+                     image: (str | bytes)) -> None:
+        ...
+
+    def _write_cache(self,
+                     *,
+                     ID: str,
+                     content: str,
+                     role: str = "user",
+                     isRolePlay: bool = False,
                      image: (str | bytes) = None) -> None:
         """
         写入缓存到.cache/chat.json文件中
@@ -68,36 +94,38 @@ class CallOllamaAI:
 
         # 由于json_repair库的问题 我们这里只能直接指定编码格式为gbk
         # Windows系统默认编码是gbk，这个库跟了它
-        with open("./cache/chatOllama.json", "a+", encoding="gbk") as jf:
-            wrapper = []  # 包装器 确保传入参数是列表
+        with open(f"./cache/chatOllama-{ID}.json", "a+", encoding="gbk") as jf:
             # 读取文件内容
-            cache = utils.json_repair.from_file("./cache/chatOllama.json")
+            cache = utils.json_repair.from_file(
+                f"./cache/chatOllama-{ID}.json")
             # 判断是否为列表
             if not isinstance(cache, list):
                 # 否 确认是否为空字符串
                 if cache == "":
+                    if isRolePlay:
+                        # TODO: 如何解决重复写入这段到文件中的问题？
+                        log = [log]
+                        log.insert(0, {
+                            "role": "system",
+                            "content": conf["PERSONA"]
+                        })
                     # 是 则直接令cache为log
                     cache = log
-                # 包进列表里面
-                wrapper.append(cache)
 
             else:
-                # 是 则让wrapper = cache
-                wrapper = cache
-                # 将log添加到wrapper中
-                wrapper.append(log)
+                cache.append(log)
 
         # 由于json_repair库的问题 我们这里只能直接指定编码格式为gbk 重写一遍
-        with open("./cache/chatOllama.json", "w", encoding="gbk") as jf:
+        with open(f"./cache/chatOllama-{ID}.json", "w", encoding="gbk") as jf:
             # 把wrapper写进去
-            utils.json.dump(wrapper, jf, indent=4, ensure_ascii=False)
+            utils.json.dump(cache, jf, indent=4, ensure_ascii=False)
 
     # TODO: 上传图片的计划只能先搁置了
-    def _load_data(self) -> dict:
+    def _load_data(self, ID: str) -> dict:
         """
         加载文字或图片。
         """
-        contents = utils.json_repair.from_file("./cache/chatOllama.json")
+        contents = utils.json_repair.from_file(f"./cache/chatOllama-{ID}.json")
 
         return contents
 
@@ -132,9 +160,11 @@ class CallOllamaAI:
         except Exception as e:
             raise e
 
-    async def callByOllama(self) -> None:
+    async def callByOllama(self, random_id: str) -> None:
         """
         调用ollama软件进行对话
+        :param random_id: 随机生成的id.
+        主要用途是用于对每个用户生成独一无二的id，以便在缓存中区分不同用户的对话记录。
         """
         utils.settings.logger.info(f"Invoking {self.model.upper()} API...")
 
@@ -153,15 +183,20 @@ class CallOllamaAI:
             else:
                 # TODO: 需要把这个做出来到Qt中，成为输入框
                 content = input("请输入您的问题：")
-                self._write_cache(content=content)
+                self._write_cache(ID=random_id,
+                                  content=content,
+                                  isRolePlay=True)
 
         except Exception:  # 由于Python多协程的特性，ctrl+c就直接不打印日志了
             return  # 直接终止程序
 
         try:
-            data = self._load_data()
+            data = self._load_data(ID=random_id)
             answer = await self._execute(data=data)
-            self._write_cache(content=answer, role="assistant")
+            self._write_cache(ID=random_id,
+                              content=answer,
+                              role="assistant",
+                              isRolePlay=True)
 
         except Exception as e:
             raise e
