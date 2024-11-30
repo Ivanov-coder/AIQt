@@ -87,7 +87,6 @@ available_encoding = {
     72: "!",
 }
 
-id_to_random = {}
 
 
 class GenerateID:
@@ -96,27 +95,7 @@ class GenerateID:
     """
 
     @classmethod
-    def _write_into_dict(cls) -> str:
-        """
-        对于每次调用，都写入日志当中。
-        """
-        log = ""
-        for _ in range(10):
-            log_num = random.randint(53, 72)
-            log_key = available_encoding[log_num]
-            log += log_key
-
-        return log
-
-    @classmethod
-    def _check_if_in_dict(cls, log_id: str) -> bool:
-        """
-        检查是否在字典中
-        """
-        return log_id in id_to_random
-
-    @classmethod
-    def _generate_id(cls, times: int = 10) -> tuple[str, str]:
+    def _generate_id(cls, times: int = 10) -> str:
         """
         生成一个指定长度的随机字符串
         :param times: 长度
@@ -127,31 +106,16 @@ class GenerateID:
             random_str = available_encoding[random_num]
             randId += random_str
 
-        randKey = cls._write_into_dict()
-        id_to_random[randKey] = randId
-        return randKey, randId
-
-    @typing.overload
-    def get_id(self, randKey: str) -> str:
-        ...
-
-    @typing.overload
-    def get_id(self, randKey: str = None) -> tuple[str, str]:
-        ...
+        return randId
 
     @classmethod
-    def get_id(cls, randKey: str = None) -> (str | tuple[str, str]):
+    def get_id(cls, randKey: str = None) -> str:
         """
         当存在参数randKey使获取ID，
         否则两个都生成并返回。
         """
-        if randKey:
-            if cls._check_if_in_dict(randKey):
-                return id_to_random[randKey]
-
-        else:
-            KEY, ID = cls._generate_id()
-            return KEY, ID
+        ID = cls._generate_id()
+        return ID
 
 
 def setup_ollama():

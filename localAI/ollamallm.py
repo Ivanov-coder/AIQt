@@ -26,8 +26,6 @@ class CallOllamaAI:
     # 想要用图片的话请下载llama3.2-vision
     # 但是这个版本比较卡，不建议
     model: str = utils.dcl.field(default="llama3.1")
-    # 每次生成之后不更改
-    random_key: str = utils.dcl.field(default=None)
 
     @utils.typing.overload
     def _write_cache(self,

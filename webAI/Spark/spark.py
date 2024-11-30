@@ -20,7 +20,7 @@ class CallSparkAI():
     """
     model: str = utils.dcl.field(default="lite")  # 如果有需要 请自行修改参数 默认为lite
 
-    def _write_cache(self, content: str, role: str = "user") -> None:
+    def _write_cache(self, ID: str, content: str, role: str = "user") -> None:
         """
         写入缓存到.cache/chat.json文件中
         """
@@ -32,10 +32,10 @@ class CallSparkAI():
         }
 
         # 由于json_repair库的问题 我们这里只能直接指定编码格式为gbk
-        with open("./cache/chatSpark.json", "a+", encoding="gbk") as jf:
+        with open(f"./cache/chatSpark-{ID}.json", "a+", encoding="gbk") as jf:
             wrapper = []  # 包装器 确保传入参数是列表
             # 读取文件内容
-            cache = utils.json_repair.from_file("./cache/chatSpark.json")
+            cache = utils.json_repair.from_file(f"./cache/chatSpark-{ID}.json")
             # 判断是否为列表
             if not isinstance(cache, list):
                 # 否 确认是否为空字符串
@@ -52,19 +52,19 @@ class CallSparkAI():
                 wrapper.append(log)
 
         # 由于json_repair库的问题 我们这里只能直接指定编码格式为gbk 重写一遍
-        with open("./cache/chatSpark.json", "w", encoding="gbk") as jf:
+        with open(f"./cache/chatSpark-{ID}.json", "w", encoding="gbk") as jf:
             # 把wrapper写进去
             utils.json.dump(wrapper, jf, indent=4, ensure_ascii=False)
 
     # TODO: 上传图片的计划只能先搁置了
-    def _load_data(self) -> dict:
+    def _load_data(self, ID: str) -> dict:
         """
         加载文字或图片。
         图片请传入二进制数据
         ## 小尴尬 LLM不支持图片输入:/
         """
         # wrapper = []
-        contents = utils.json_repair.from_file("./cache/chatSpark.json")
+        contents = utils.json_repair.from_file(f"./cache/chatSpark-{ID}.json")
 
         data = {
             "model": self.model,  # 指定请求的模型
@@ -85,7 +85,6 @@ class CallSparkAI():
         """
 
         # 日志 确保只有执行函数时才被执行 而不是导包后就被执行
-        
         async with httpx.AsyncClient(
             timeout=60) as aclient:  # 使用AsyncClient建立Sessiom 避免多次请求服务器
             try:
@@ -105,7 +104,7 @@ class CallSparkAI():
             except Exception as e:
                 utils.settings.logger.error(e)
 
-    async def callByhttpx(self) -> None:
+    async def callByhttpx(self, random_id: str) -> None:
         """
         调用Spark AI
         [官方文档](https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html#_1-%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E)
@@ -127,12 +126,12 @@ class CallSparkAI():
                 "Authorization": API_KEY,
             }
 
-            self._write_cache(content=content)
-            data = self._load_data()
+            self._write_cache(ID=random_id, content=content)
+            data = self._load_data(ID=random_id)
             answer = await self._execute(url=BASE_URL,
                                          header=header,
                                          data=data)
-            self._write_cache(content=answer, role="assistant")
+            self._write_cache(ID=random_id, content=answer, role="assistant")
 
         except Exception as e:
             raise e
