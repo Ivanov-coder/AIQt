@@ -44,11 +44,31 @@ class CallOllamaAI:
                      image: (str | bytes)) -> None:
         ...
 
+    @utils.typing.overload
     def _write_cache(self,
                      *,
                      ID: str,
                      content: str,
                      role: str = "user",
+                     isRolePlay: bool) -> None:
+        ...
+
+    @utils.typing.overload
+    def _write_cache(self,
+                     *,
+                     ID: str,
+                     content: str,
+                     role: str = "user",
+                     isRolePlay: bool,
+                     image: (str | bytes)) -> None:
+        ...
+
+    def _write_cache(self,
+                     *,
+                     ID: str,
+                     content: str,
+                     role: str = "user",
+                     isRolePlay: bool = False,
                      image: (str | bytes) = None) -> None:
         """
         写入缓存到.cache/chat.json文件中
@@ -75,7 +95,6 @@ class CallOllamaAI:
         # 由于json_repair库的问题 我们这里只能直接指定编码格式为gbk
         # Windows系统默认编码是gbk，这个库跟了它
         with open(f"./cache/chatOllama-{ID}.json", "a+", encoding="gbk") as jf:
-            wrapper = []  # 包装器 确保传入参数是列表
             # 读取文件内容
             cache = utils.json_repair.from_file(
                 f"./cache/chatOllama-{ID}.json")
@@ -83,21 +102,23 @@ class CallOllamaAI:
             if not isinstance(cache, list):
                 # 否 确认是否为空字符串
                 if cache == "":
+                    if isRolePlay:
+                        # TODO: 如何解决重复写入这段到文件中的问题？
+                        log = [log]
+                        log.insert(0, {
+                            "role": "system",
+                            "content": conf["PERSONA"]
+                        })
                     # 是 则直接令cache为log
                     cache = log
-                # 包进列表里面
-                wrapper.append(cache)
 
             else:
-                # 是 则让wrapper = cache
-                wrapper = cache
-                # 将log添加到wrapper中
-                wrapper.append(log)
+                cache.append(log)
 
         # 由于json_repair库的问题 我们这里只能直接指定编码格式为gbk 重写一遍
         with open(f"./cache/chatOllama-{ID}.json", "w", encoding="gbk") as jf:
             # 把wrapper写进去
-            utils.json.dump(wrapper, jf, indent=4, ensure_ascii=False)
+            utils.json.dump(cache, jf, indent=4, ensure_ascii=False)
 
     # TODO: 上传图片的计划只能先搁置了
     def _load_data(self, ID: str) -> dict:
@@ -147,7 +168,6 @@ class CallOllamaAI:
         """
         utils.settings.logger.info(f"Invoking {self.model.upper()} API...")
 
-
         # TODO: DEBUG 有时能看到图片有时不能 并且不支持图片之后只有文字输入
         try:
             if self.model == "llama3.2-vision":
@@ -163,7 +183,9 @@ class CallOllamaAI:
             else:
                 # TODO: 需要把这个做出来到Qt中，成为输入框
                 content = input("请输入您的问题：")
-                self._write_cache(ID=random_id, content=content)
+                self._write_cache(ID=random_id,
+                                  content=content,
+                                  isRolePlay=True)
 
         except Exception:  # 由于Python多协程的特性，ctrl+c就直接不打印日志了
             return  # 直接终止程序
@@ -171,7 +193,10 @@ class CallOllamaAI:
         try:
             data = self._load_data(ID=random_id)
             answer = await self._execute(data=data)
-            self._write_cache(ID=random_id, content=answer, role="assistant")
+            self._write_cache(ID=random_id,
+                              content=answer,
+                              role="assistant",
+                              isRolePlay=True)
 
         except Exception as e:
             raise e

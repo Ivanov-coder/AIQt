@@ -125,4 +125,4 @@ def setup_ollama():
     if os.system("winget list ollama") != 0:
         os.system("winget install ollama")
 
-setup_ollama()
+# setup_ollama()
