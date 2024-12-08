@@ -1,16 +1,34 @@
+import random
 import dataclasses as dcl  # 用于数据类
-import typing
-from . import logs
 import json_repair  # 用于修复可能有错误的json
+import yaml
 import asyncio
-import websockets
 import json
 import os
+import typing
 from . import settings
-import yaml
+from . import logs
 from . import clean
 from . import colorful
-import random
+
+
+__all__ = [
+    "settings",
+    "logs",
+    "clean",
+    "colorful",
+    "dcl",
+    "json_repair",
+    "yaml",
+    "asyncio",
+    "json",
+    "os",
+    "typing"
+]
+
+# 初始化cache文件夹
+if not os.path.exists("./cache"):
+    os.mkdir("./cache")
 
 available_encoding = {
     1: "A",
@@ -86,7 +104,6 @@ available_encoding = {
     71: "_",
     72: "!",
 }
-
 
 
 class GenerateID:

@@ -5,9 +5,7 @@ from . import logs
 
 # 初始化日志
 logger = logs.Logger.setup_logger()
-# 初始化cache文件夹
-if not os.path.exists("./cache"):
-    os.mkdir("./cache")
+
 
 
 @dcl.dataclass

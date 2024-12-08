@@ -27,11 +27,8 @@ class Logger:
         - fileposition: 日志文件位置，定义在setup_logger中。
         返回logger对象。
         """
-        # 没有log目录就创建一个
-        if not os.path.exists("log"):
-            os.mkdir("log")
-        # 设置写入到文件data.log中
-        logging.basicConfig(filename="log/data.log")
+        # 感觉没有必要把日志写入文件中，不做了
+
         # 设置日志等级和格式
         logger = logging.getLogger()
         # 设置日志颜色
