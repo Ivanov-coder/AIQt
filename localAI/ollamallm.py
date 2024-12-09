@@ -4,11 +4,12 @@
 import utils
 import ollama
 import base64
+import tts
 
 # 读取人格设定
 conf = utils.settings.SetYaml.read_yaml(filename="persona.yaml")
 # 导入颜色模块
-color = utils.colorful.SetColor
+# color = utils.colorful.SetColor
 
 
 @utils.dcl.dataclass
@@ -28,48 +29,38 @@ class CallOllamaAI:
     model: str = utils.dcl.field(default="llama3.1")
 
     @utils.typing.overload
-    def _write_cache(self,
-                     *,
-                     ID: str,
-                     content: str,
-                     role: str = "user") -> None:
-        ...
+    def _write_cache(self, *, ID: str, content: str, role: str = "user") -> None: ...
 
     @utils.typing.overload
-    def _write_cache(self,
-                     *,
-                     ID: str,
-                     content: str,
-                     role: str = "user",
-                     image: (str | bytes)) -> None:
-        ...
+    def _write_cache(
+        self, *, ID: str, content: str, role: str = "user", image: str | bytes
+    ) -> None: ...
 
     @utils.typing.overload
-    def _write_cache(self,
-                     *,
-                     ID: str,
-                     content: str,
-                     role: str = "user",
-                     isRolePlay: bool) -> None:
-        ...
+    def _write_cache(
+        self, *, ID: str, content: str, role: str = "user", isRolePlay: bool
+    ) -> None: ...
 
     @utils.typing.overload
-    def _write_cache(self,
-                     *,
-                     ID: str,
-                     content: str,
-                     role: str = "user",
-                     isRolePlay: bool,
-                     image: (str | bytes)) -> None:
-        ...
+    def _write_cache(
+        self,
+        *,
+        ID: str,
+        content: str,
+        role: str = "user",
+        isRolePlay: bool,
+        image: str | bytes,
+    ) -> None: ...
 
-    def _write_cache(self,
-                     *,
-                     ID: str,
-                     content: str,
-                     role: str = "user",
-                     isRolePlay: bool = False,
-                     image: (str | bytes) = None) -> None:
+    def _write_cache(
+        self,
+        *,
+        ID: str,
+        content: str,
+        role: str = "user",
+        isRolePlay: bool = False,
+        image: str | bytes = None,
+    ) -> None:
         """
         写入缓存到.cache/chat.json文件中
         """
@@ -96,19 +87,14 @@ class CallOllamaAI:
         # Windows系统默认编码是gbk，这个库跟了它
         with open(f"./cache/chatOllama-{ID}.json", "a+", encoding="gbk") as jf:
             # 读取文件内容
-            cache = utils.json_repair.from_file(
-                f"./cache/chatOllama-{ID}.json")
+            cache = utils.json_repair.from_file(f"./cache/chatOllama-{ID}.json")
             # 判断是否为列表
             if not isinstance(cache, list):
                 # 否 确认是否为空字符串
                 if cache == "":
                     if isRolePlay:
-                        # TODO: 如何解决重复写入这段到文件中的问题？
                         log = [log]
-                        log.insert(0, {
-                            "role": "system",
-                            "content": conf["PERSONA"]
-                        })
+                        log.insert(0, {"role": "system", "content": conf["PERSONA"]})
                     # 是 则直接令cache为log
                     cache = log
 
@@ -129,20 +115,32 @@ class CallOllamaAI:
 
         return contents
 
+    def _select_tts(self, *items: tuple[str]) -> None:
+        """
+        选择TTS引擎，默认是coquiTTS
+        """
+        # TODO: 做出来给人选
+        # TODO: 配置一下如何搞定路径和语速
+        match items:
+            case ["coqui", str(content), str(path)]:
+                tts.coquiTTS(text=content, output_path=path).get()
+            case ["pytts", str(content), str(path)]:
+                tts.pyTTS(text=content, output_path=path).get()
+            case _:
+                raise ValueError("Please Check your parameters!")
+
     async def _execute(self, data: list[dict]) -> str:
         """
         内部逻辑
         """
 
         try:
-            ollama.show(self.model)
-
             output = ""
-            async for part in await ollama.AsyncClient().chat(model=self.model,
-                                                              messages=data,
-                                                              stream=True):
+            async for part in await ollama.AsyncClient().chat(
+                model=self.model, messages=data, stream=True
+            ):
 
-                print(part["message"]["content"], end='', flush=True)
+                print(part["message"]["content"], end="", flush=True)
                 output += part["message"]["content"]
 
             print()  # 最后打印空行
@@ -183,9 +181,7 @@ class CallOllamaAI:
             else:
                 # TODO: 需要把这个做出来到Qt中，成为输入框
                 content = input("请输入您的问题：")
-                self._write_cache(ID=random_id,
-                                  content=content,
-                                  isRolePlay=True)
+                self._write_cache(ID=random_id, content=content, isRolePlay=True)
 
         except Exception:  # 由于Python多协程的特性，ctrl+c就直接不打印日志了
             return  # 直接终止程序
@@ -193,10 +189,12 @@ class CallOllamaAI:
         try:
             data = self._load_data(ID=random_id)
             answer = await self._execute(data=data)
-            self._write_cache(ID=random_id,
-                              content=answer,
-                              role="assistant",
-                              isRolePlay=True)
+            self._write_cache(
+                ID=random_id, content=answer, role="assistant", isRolePlay=True
+            )
+            # TODO: 需要做出来给人选择用什么TTS
+            # TODO: 发现个问题，生成语音的速度太慢了，思考下怎么优化
+            self._select_tts("coqui", answer, f"./audio/chatOllama-{random_id}.wav")
 
         except Exception as e:
             raise e

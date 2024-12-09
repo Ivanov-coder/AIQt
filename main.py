@@ -1,8 +1,7 @@
-# 5. 数据库可以使用mysql：
-# 6. 预设表的字段是: id[int]=>, model[varchar], prompt[varchar]=>给llm预设的人格/提示词等, filepath[varchar]=> 聊天记录的文件路径, time[datetime], user[varchar]=> 用户(将成为btree主键)
+# 正在开发TTS和ASR
 
 from utils import os
-# from utils import clean
+from utils import clean
 from utils import asyncio
 from utils import GenerateID
 from utils.settings import logger
@@ -10,7 +9,7 @@ from utils.settings import logger
 randID = GenerateID.get_id()
 
 
-def switch(choice: str) -> None:
+def switch(choice: str):
     """
     做选择用的，后面估计得做到Qt选择框里面。
     """
@@ -48,7 +47,7 @@ if __name__ == "__main__":
         # TODO: Qt信号槽事件 需要更改模型之后重新生成聊天记录文件
         # TODO: 也就是当选择框改变字段时，重新调用get_id()方法
         except KeyboardInterrupt:
-            #     clean.clean()
+            clean.clean()
             break
 
         except ModuleNotFoundError as e:
@@ -61,7 +60,7 @@ if __name__ == "__main__":
             else:
                 logger.error("Failed to install requirements.")
                 break
-
+        # PS 如果出了什么bug需要调试，请直接注释掉下面那一段
         except Exception as e:
             logger.error(e)
             logger.info("Restarted")

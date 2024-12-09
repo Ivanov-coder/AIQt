@@ -1,16 +1,34 @@
+import random
 import dataclasses as dcl  # 用于数据类
-import typing
-from . import logs
 import json_repair  # 用于修复可能有错误的json
+import yaml
 import asyncio
-import websockets
 import json
 import os
+import typing
 from . import settings
-import yaml
+from . import logs
 from . import clean
 from . import colorful
-import random
+
+
+__all__ = [
+    "settings",
+    "logs",
+    "clean",
+    "colorful",
+    "dcl",
+    "json_repair",
+    "yaml",
+    "asyncio",
+    "json",
+    "os",
+    "typing"
+]
+
+# 初始化cache文件夹
+if not os.path.exists("./cache"):
+    os.mkdir("./cache")
 
 available_encoding = {
     1: "A",
@@ -88,7 +106,6 @@ available_encoding = {
 }
 
 
-
 class GenerateID:
     """
     用于生成ID
@@ -120,9 +137,14 @@ class GenerateID:
 
 def setup_ollama():
     """
-    安装ollama
+    安装ollama.
+    配Docker镜像的时候才发现原本代码有大问题，忘记支持linux了...
     """
-    if os.system("winget list ollama") != 0:
-        os.system("winget install ollama")
+    # TODO: 这里似乎可以根据输出情况提醒用户打开Ollama应用
+    if os.system("ollama --version") != 0:
+        if os.name == "nt":
+            settings.logger.warning("Ollama is not installed, please download it from https://ollama.com/download/OllamaSetup.exe")
+        # elif os.name == "posix":  # 针对Linux
+        #     os.system("snap install ollama")
 
-# setup_ollama()
+setup_ollama()

@@ -1,4 +1,4 @@
-from .Spark import spark
-from .Others import other
+from . import spark
+from . import other
 
 __all__ = ["spark", "other"]
