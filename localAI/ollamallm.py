@@ -120,14 +120,14 @@ class CallOllamaAI:
         选择TTS引擎，默认是coquiTTS
         """
         # TODO: 做出来给人选
+        # TODO: 配置一下如何搞定路径和语速
         match items:
-            case ["coqui", str(content)]:
-                tts.coquiTTS(text=content).get()
-            case ["pytts", str(content)]:
-                tts.pyTTS(text=content).get()
+            case ["coqui", str(content), str(path)]:
+                tts.coquiTTS(text=content, output_path=path).get()
+            case ["pytts", str(content), str(path)]:
+                tts.pyTTS(text=content, output_path=path).get()
             case _:
                 raise ValueError("Please Check your parameters!")
-        
 
     async def _execute(self, data: list[dict]) -> str:
         """
@@ -144,7 +144,6 @@ class CallOllamaAI:
                 output += part["message"]["content"]
 
             print()  # 最后打印空行
-            # TODO: 需要做出来给人选择用什么TTS
             return output
 
         # 本地没大模型就下载一个
@@ -193,8 +192,9 @@ class CallOllamaAI:
             self._write_cache(
                 ID=random_id, content=answer, role="assistant", isRolePlay=True
             )
-
-            self._select_tts("coqui", answer)
+            # TODO: 需要做出来给人选择用什么TTS
+            # TODO: 发现个问题，生成语音的速度太慢了，思考下怎么优化
+            self._select_tts("coqui", answer, f"./audio/chatOllama-{random_id}.wav")
 
         except Exception as e:
             raise e

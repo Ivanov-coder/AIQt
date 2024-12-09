@@ -3,19 +3,23 @@ import wave
 import pyaudio
 
 
+# TODO: 可以开放这个API 但是不建议(太难听了)
+
 class pyTTS:
     # 初始设定请做到settings.yaml文件中
-    '''
+    """
     用于生成并播放音频
-    '''
+    """
 
-    def __init__(self,
-                 *,
-                 lang: str = "en",
-                 rate: int = 150,
-                 volume: float = 1.0,
-                 output_path: str = "/audio.wav",
-                 text=None) -> None:
+    def __init__(
+        self,
+        *,
+        lang: str = "en",
+        rate: int = 150,
+        volume: float = 1.0,
+        output_path: str = "./audio/audio.wav",
+        text=None,
+    ) -> None:
 
         self.LANG = lang
         self.RATE = rate
@@ -53,11 +57,9 @@ class pyTTS:
                 output=True,
             )
 
-            while (data := w.readframes(self.CHUNK)):
+            while len(data := w.readframes(self.CHUNK)):
                 stream.write(data)
-                data = w.readframes(self.CHUNK)
 
-            stream.stop_stream()
             stream.close()
 
             p.terminate()

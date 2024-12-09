@@ -9,7 +9,7 @@ from utils.settings import logger
 randID = GenerateID.get_id()
 
 
-def switch(choice: str) -> None:
+def switch(choice: str):
     """
     做选择用的，后面估计得做到Qt选择框里面。
     """
@@ -60,7 +60,7 @@ if __name__ == "__main__":
             else:
                 logger.error("Failed to install requirements.")
                 break
-
-        # except Exception as e:
-        #     logger.error(e)
-        #     logger.info("Restarted")
+        # PS 如果出了什么bug需要调试，请直接注释掉下面那一段
+        except Exception as e:
+            logger.error(e)
+            logger.info("Restarted")

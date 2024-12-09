@@ -4,6 +4,9 @@ import pyaudio
 from TTS.api import TTS
 from torch.cuda import is_available
 
+# TODO: 要思考一下如何搞定False的问题
+# print(is_available())
+
 
 class coquiTTS:
     # 初始设定请做到settings.yaml文件中
@@ -14,28 +17,38 @@ class coquiTTS:
     def __init__(
         self,
         *,
-        lang: str = "en",   # TODO: 查下官网看下支持什么
-        device: str = "cuda" if is_available() else "cpu",
-        output_path: str = "./audio.wav",
-        text=None,
+        lang: str = "en",  # TODO: 查下官网看下支持什么
+        device: str = (
+            "cuda" if is_available() else "cpu"
+        ),  # TODO: 草 这里也有大问题 如果只下载torch，包是"cpu"的，但是cpu太慢了 需要想想怎么样在requirements.txt里面插入cuda版本
+        output_path: str = "./audio/audio.wav",
+        text: str = None,
+        emotion: str = "Neutral",
+        speed: float = 1,
     ) -> None:
 
         self.LANG = lang
         self.DEVICE = device
         self.OUTPUT_PATH = output_path
         self.TEXT = text
+        self.EMOTION = emotion
+        self.SPEED = speed
         self.CHUNK = 1024
 
     def _generate(self):
         try:
             # TODO: 这里只做了一个模型的接口，后面看下其他模型是否可用
-            model = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2").to(self.DEVICE)
+            model = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2").to(
+                self.DEVICE
+            )
             # TODO: 这里的speaker也只做了其中一个的接口，后面看下能否开放选择，甚至是克隆自己的声音。
             model.tts_to_file(
                 text=self.TEXT,
                 language=self.LANG,
-                speaker="Daisy Studious", # TODO 开放API
+                speaker="Daisy Studious",  # TODO 开放API
                 file_path=self.OUTPUT_PATH,
+                emotion=self.EMOTION,
+                speed=self.SPEED,
             )
         except Exception as e:
             raise e
@@ -54,11 +67,9 @@ class coquiTTS:
                 output=True,
             )
 
-            while data := w.readframes(self.CHUNK):
+            while len(data := w.readframes(self.CHUNK)):
                 stream.write(data)
-                data = w.readframes(self.CHUNK)
 
-            stream.stop_stream()
             stream.close()
 
             p.terminate()
