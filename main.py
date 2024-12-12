@@ -29,7 +29,7 @@ def switch(choice: str):
         # TODO: 这里的实例化需要做成选择框给用户选择模型
         return localAI.ollamallm.CallOllamaAI(model="llama3.1").callByOllama(
             random_id=randID,
-            isTTS= False    # TODO: 做出来
+            isTTS=True    # TODO: 做出来
         )
 
 
@@ -48,12 +48,12 @@ if __name__ == "__main__":
     while True:
         try:
             asyncio.run(main())
-        # TODO: Qt信号槽事件 需要更改模型之后重新生成聊天记录文件
-        # TODO: 也就是当选择框改变字段时，重新调用get_id()方法
+        # TODO: Qt信号槽事件 需要更改模型之后重新生成聊天记录文件 => 也就是当选择框改变字段时，重新调用get_id()方法
         except KeyboardInterrupt:
             clean.clean()
             break
-
+        
+        # XXX: 这是本地情况
         except ModuleNotFoundError as e:
             logger.warning(e)
             logger.info("Installing requirements...")

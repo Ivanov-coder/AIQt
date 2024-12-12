@@ -164,11 +164,15 @@ class CallOllamaAI:
         except Exception as e:
             raise e
 
-    async def callByOllama(self, random_id: str, isTTS: bool = False) -> None:
+    async def callByOllama(
+        self, random_id: str, isTTS: bool = False, count: int = 0
+    ) -> None:
         """
         调用ollama软件进行对话
         :param random_id: 随机生成的id.
         主要用途是用于对每个用户生成独一无二的id，以便在缓存中区分不同用户的对话记录。
+        :param isTTS: 检测是否需要TTS。
+        :param count: 用于给wav文件编辑顺序
         """
         utils.settings.logger.info(f"Invoking {self.model.upper()} API...")
 
@@ -201,7 +205,11 @@ class CallOllamaAI:
             # TODO: 需要做出来给人选择用什么TTS
             # TODO: 发现个问题，生成语音的速度太慢了，思考下怎么优化
             if isTTS:
-                self._select_tts("coqui", answer, f"./audio/chatOllama-{random_id}.wav")
+                self._select_tts(
+                    "coqui",
+                    answer,
+                    f"./audio/chat{self.model}-{count + 1}-{random_id}.wav",
+                )
 
         except Exception as e:
             raise e
