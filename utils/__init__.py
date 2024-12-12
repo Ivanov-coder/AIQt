@@ -23,7 +23,7 @@ __all__ = [
     "asyncio",
     "json",
     "os",
-    "typing"
+    "typing",
 ]
 
 # 初始化cache文件夹
@@ -143,8 +143,11 @@ def setup_ollama():
     # TODO: 这里似乎可以根据输出情况提醒用户打开Ollama应用
     if os.system("ollama --version") != 0:
         if os.name == "nt":
-            settings.logger.warning("Ollama is not installed, please download it from https://ollama.com/download/OllamaSetup.exe")
+            settings.logger.warning(
+                "Ollama is not installed, please download it from https://ollama.com/download/OllamaSetup.exe"
+            )
         # elif os.name == "posix":  # 针对Linux
         #     os.system("snap install ollama")
+
 
 setup_ollama()
