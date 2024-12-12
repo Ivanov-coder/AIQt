@@ -2,15 +2,21 @@ import httpx
 import utils
 import data.aiData as AI
 
+# 读取人格设定
+conf = utils.settings.SetYaml.read_yaml("otherpersona.yaml")
+
 
 @utils.dcl.dataclass
 class CallOtherAI:
     """
     用于调用其他AI.
     """
+
     model: str = "gpt-3.5-turbo"  # 如果有需要 请自行修改参数 默认为gpt-3.5-turbo
 
-    def _write_cache(self, ID:str, content: str, role: str = "user") -> None:
+    def _write_cache(
+        self, ID: str, content: str, role: str = "user", isRolePlay: bool = False
+    ) -> None:
         """
         写入缓存到.cache/chat.json文件中
         """
@@ -21,30 +27,27 @@ class CallOtherAI:
             "content_type": "text",
         }
 
-        # 由于json_repair库的问题 我们这里只能直接指定编码格式为gbk
-        with open(f"./cache/chatOther-{ID}.json", "a+", encoding="gbk") as jf:
-            wrapper = []  # 包装器 确保传入参数是列表
-            # 读取文件内容
-            cache = utils.json_repair.from_file(f"./cache/chatOther-{ID}.json")
-            # 判断是否为列表
+        with open(f"./cache/chat{self.model}-{ID}.json", "a+", encoding="utf-8") as jf:
+
+            cache = utils.json_repair.load(jf)
+
             if not isinstance(cache, list):
-                # 否 确认是否为空字符串
-                if cache == "":
-                    # 是 则直接令cache为log
+                if isRolePlay:
+                    log = [log]
+                    log.insert(
+                        0,
+                        {
+                            "role": "system",
+                            "content": conf["PERSONA"],
+                            "content_type": "text",
+                        },
+                    )
                     cache = log
-                # 包进列表里面
-                wrapper.append(cache)
-
             else:
-                # 是 则让wrapper = cache
-                wrapper = cache
-                # 将log添加到wrapper中
-                wrapper.append(log)
+                cache.append(log)
 
-        # 由于json_repair库的问题 我们这里只能直接指定编码格式为gbk 重写一遍
-        with open(f"./cache/chatOther-{ID}.json", "w", encoding="gbk") as jf:
-            # 把wrapper写进去
-            utils.json.dump(wrapper, jf, indent=4, ensure_ascii=False)
+        with open(f"./cache/chat{self.model}-{ID}.json", "w", encoding="utf-8") as jf:
+            utils.json.dump(cache, jf, indent=4, ensure_ascii=False)
 
     # TODO: 上传图片的计划只能先搁置了
     def _load_data(self, ID: str) -> dict:
@@ -53,7 +56,8 @@ class CallOtherAI:
         图片请传入二进制数据
         ## 小尴尬 LLM不支持图片输入:/
         """
-        contents = utils.json_repair.from_file(f"./cache/chatOther-{ID}.json")
+        with open(f"./cache/chat{self.model}-{ID}.json", "r", encoding="utf-8") as jf:
+            contents = utils.json.load(jf)
 
         data = {
             "model": self.model,  # 指定请求的模型
@@ -67,7 +71,8 @@ class CallOtherAI:
         return data
 
     def _get_logger(
-        self, ) -> (tuple[str, str, utils.logs.Logger] | utils.logs.Logger):
+        self,
+    ) -> tuple[str, str, utils.logs.Logger] | utils.logs.Logger:
         """
         用于获取BASE_URL, API_KEY, logger。
         """
@@ -81,20 +86,24 @@ class CallOtherAI:
     async def _execute(self, *, url: str, header: dict, data: dict) -> str:
         """
         调用Spark AI.
-        
+
         """
 
         # 日志 确保只有执行函数时才被执行 而不是导包后就被执行
         async with httpx.AsyncClient(
-            timeout=60) as aclient:  # 使用AsyncClient建立Sessiom 避免多次请求服务器
+            timeout=60
+        ) as aclient:  # 使用AsyncClient建立Sessiom 避免多次请求服务器
             try:
-                response = await aclient.post(url, headers=header,
-                                              json=data)  # POST对BASE_URL发送请求
+                response = await aclient.post(
+                    url, headers=header, json=data
+                )  # POST对BASE_URL发送请求
                 if response.status_code == 200:
-                    answer = utils.json_repair.loads(
-                        response.text)["choices"][0]["message"][
-                            "content"]  # 获取回答 请自行查阅API文档
-                    print(f"{self.model.upper()}: {answer}")
+                    answer = utils.json_repair.loads(response.text)["choices"][0][
+                        "message"
+                    ][
+                        "content"
+                    ]  # 获取回答 请自行查阅API文档
+                    print(f"{self.model}-> {answer}")
                     return answer
                 else:
                     utils.settings.logger.warning(
@@ -126,12 +135,12 @@ class CallOtherAI:
                 "Authorization": API_KEY,
             }
 
-            self._write_cache(ID=random_id, content=content)
+            self._write_cache(ID=random_id, content=content, isRolePlay=True)
             data = self._load_data(ID=random_id)
-            answer = await self._execute(url=BASE_URL,
-                                         header=header,
-                                         data=data)
-            self._write_cache(ID=random_id, content=answer, role="assistant")
+            answer = await self._execute(url=BASE_URL, header=header, data=data)
+            self._write_cache(
+                ID=random_id, content=answer, role="assistant", isRolePlay=True
+            )
 
         except Exception as e:
             raise e

@@ -73,7 +73,7 @@ class SetYaml:
                 yaml.dump(cls.PERSONA, f, allow_unicode=True, sort_keys=False)
 
     @classmethod
-    def read_yaml(cls, *, filename: str = "conf.yaml") -> dict:
+    def read_yaml(cls, filename: str) -> dict:
         """
         读取配置文件
         """

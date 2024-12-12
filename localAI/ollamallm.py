@@ -7,7 +7,7 @@ import base64
 import tts
 
 # 读取人格设定
-conf = utils.settings.SetYaml.read_yaml(filename="persona.yaml")
+conf = utils.settings.SetYaml.read_yaml("ollamapersona.yaml")
 # 导入颜色模块
 # color = utils.colorful.SetColor
 
@@ -65,7 +65,7 @@ class CallOllamaAI:
         写入缓存到.cache/chat.json文件中
         """
 
-        # 出于性能方面的考虑 暂时决定不添加多模态功能
+        # XXX: 出于性能方面的考虑 暂时决定不添加多模态功能
         if image and self.model == "llama3.2-vision":
             # 确保必须是列表
             if not isinstance(image, list):
@@ -83,35 +83,41 @@ class CallOllamaAI:
                 "content": content,
             }
 
-        # 由于json_repair库的问题 我们这里只能直接指定编码格式为gbk
-        # Windows系统默认编码是gbk，这个库跟了它
-        with open(f"./cache/chatOllama-{ID}.json", "a+", encoding="gbk") as jf:
-            # 读取文件内容
-            cache = utils.json_repair.from_file(f"./cache/chatOllama-{ID}.json")
-            # 判断是否为列表
-            if not isinstance(cache, list):
-                # 否 确认是否为空字符串
-                if cache == "":
-                    if isRolePlay:
-                        log = [log]
-                        log.insert(0, {"role": "system", "content": conf["PERSONA"]})
-                    # 是 则直接令cache为log
-                    cache = log
+        log = {
+            "role": role,
+            "content": content,
+            "content_type": "text",
+        }
 
+        with open(f"./cache/chat{self.model}-{ID}.json", "a+", encoding="utf-8") as jf:
+
+            cache = utils.json_repair.load(jf)
+
+            if not isinstance(cache, list):
+                if isRolePlay:
+                    log = [log]
+                    log.insert(
+                        0,
+                        {
+                            "role": "system",
+                            "content": conf["PERSONA"],
+                            "content_type": "text",
+                        },
+                    )
+                    cache = log
             else:
                 cache.append(log)
 
-        # 由于json_repair库的问题 我们这里只能直接指定编码格式为gbk 重写一遍
-        with open(f"./cache/chatOllama-{ID}.json", "w", encoding="gbk") as jf:
-            # 把wrapper写进去
+        with open(f"./cache/chat{self.model}-{ID}.json", "w", encoding="utf-8") as jf:
             utils.json.dump(cache, jf, indent=4, ensure_ascii=False)
 
-    # TODO: 上传图片的计划只能先搁置了
+    # XXX: 上传图片的计划只能先搁置了
     def _load_data(self, ID: str) -> dict:
         """
         加载文字或图片。
         """
-        contents = utils.json_repair.from_file(f"./cache/chatOllama-{ID}.json")
+        with open(f"./cache/chat{self.model}-{ID}.json", "r", encoding="utf-8") as jf:
+            contents = utils.json.load(jf)
 
         return contents
 
@@ -158,7 +164,7 @@ class CallOllamaAI:
         except Exception as e:
             raise e
 
-    async def callByOllama(self, random_id: str) -> None:
+    async def callByOllama(self, random_id: str, isTTS: bool = False) -> None:
         """
         调用ollama软件进行对话
         :param random_id: 随机生成的id.
@@ -194,7 +200,8 @@ class CallOllamaAI:
             )
             # TODO: 需要做出来给人选择用什么TTS
             # TODO: 发现个问题，生成语音的速度太慢了，思考下怎么优化
-            self._select_tts("coqui", answer, f"./audio/chatOllama-{random_id}.wav")
+            if isTTS:
+                self._select_tts("coqui", answer, f"./audio/chatOllama-{random_id}.wav")
 
         except Exception as e:
             raise e

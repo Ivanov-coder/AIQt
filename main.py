@@ -16,17 +16,21 @@ def switch(choice: str):
     # TODO: 这里的实例化需要做成选择框给用户选择模型
     if choice == "web-spark":
         from webAI import spark
+
         return spark.CallSparkAI(model="lite").callByhttpx(random_id=randID)
     elif choice == "web-other":
         from webAI import other
-        return other.CallOtherAI(model="qwen-long").callByhttpx(
-            random_id=randID)
+
+        return other.CallOtherAI(model="qwen-long").callByhttpx(random_id=randID)
 
     elif choice == "local":
         import localAI
+
         # TODO: 这里的实例化需要做成选择框给用户选择模型
         return localAI.ollamallm.CallOllamaAI(model="llama3.1").callByOllama(
-            random_id=randID)
+            random_id=randID,
+            isTTS= False    # TODO: 做出来
+        )
 
 
 # TODO: 在Qt中可能会存在开了Spark之后又开其它的情况，所以这里我们可能需要当窗口焦点改变时，做个挂起操作。
@@ -61,6 +65,6 @@ if __name__ == "__main__":
                 logger.error("Failed to install requirements.")
                 break
         # PS 如果出了什么bug需要调试，请直接注释掉下面那一段
-        except Exception as e:
-            logger.error(e)
-            logger.info("Restarted")
+        # except Exception as e:
+        #     logger.error(e)
+        #     logger.info("Restarted")
