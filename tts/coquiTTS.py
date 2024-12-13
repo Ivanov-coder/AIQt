@@ -17,10 +17,10 @@ class coquiTTS:
     def __init__(
         self,
         *,
-        lang: str = "en",  # TODO: 查下官网看下支持什么
+        lang: str,  # WARN: Supported languages are ['en', 'es', 'fr', 'de', 'it', 'pt', 'pl', 'tr', 'ru', 'nl', 'cs', 'ar', 'zh-cn', 'hu', 'ko', 'ja', 'hi']
         device: str = (
             "cuda" if is_available() else "cpu"
-        ),  # TODO: 草 这里也有大问题 如果只下载torch，包是"cpu"的，但是cpu太慢了 需要想想怎么样在requirements.txt里面插入cuda版本
+        ),  # FIXME: 草 这里也有大问题 如果只下载torch，包是"cpu"的，但是cpu太慢了 需要想想怎么样在requirements.txt里面插入cuda版本
         output_path: str = "./audio/audio.wav",
         text: str = None,
         emotion: str = "Neutral",

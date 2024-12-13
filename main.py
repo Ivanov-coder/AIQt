@@ -7,7 +7,7 @@ from utils import GenerateID
 from utils.settings import logger
 
 randID = GenerateID.get_id()
-
+count = 0 # 当生成wav时记录音频编号
 
 def switch(choice: str):
     """
@@ -26,10 +26,14 @@ def switch(choice: str):
     elif choice == "local":
         import localAI
 
+        global count    # 没法子了 不然每次进入循环都会被重新调用
+        count += 1
+
         # TODO: 这里的实例化需要做成选择框给用户选择模型
         return localAI.ollamallm.CallOllamaAI(model="llama3.1").callByOllama(
             random_id=randID,
-            isTTS=True    # TODO: 做出来
+            isTTS=True,    # TODO: 做出来
+            count=count
         )
 
 

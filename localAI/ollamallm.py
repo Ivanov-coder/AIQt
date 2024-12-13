@@ -86,7 +86,6 @@ class CallOllamaAI:
         log = {
             "role": role,
             "content": content,
-            "content_type": "text",
         }
 
         with open(f"./cache/chat{self.model}-{ID}.json", "a+", encoding="utf-8") as jf:
@@ -100,10 +99,11 @@ class CallOllamaAI:
                         0,
                         {
                             "role": "system",
-                            "content": conf["PERSONA"],
-                            "content_type": "text",
+                            "content": conf["PERSONA"]
+                            + f"Though you can speak other languages, you always speak {conf['LANG']}",  # 这一部分用于加上人格及设置语言
                         },
                     )
+                    print()
                     cache = log
             else:
                 cache.append(log)
@@ -128,8 +128,9 @@ class CallOllamaAI:
         # TODO: 做出来给人选
         # TODO: 配置一下如何搞定路径和语速
         match items:
-            case ["coqui", str(content), str(path)]:
-                tts.coquiTTS(text=content, output_path=path).get()
+            case ["coqui", str(lang), str(content), str(path)]:
+                tts.coquiTTS(lang=lang, text=content, output_path=path).get()
+            # TODO: 看下pytts怎么修：
             case ["pytts", str(content), str(path)]:
                 tts.pyTTS(text=content, output_path=path).get()
             case _:
@@ -165,7 +166,7 @@ class CallOllamaAI:
             raise e
 
     async def callByOllama(
-        self, random_id: str, isTTS: bool = False, count: int = 0
+        self, random_id: str, isTTS: bool = False, count: int = 1
     ) -> None:
         """
         调用ollama软件进行对话
@@ -176,7 +177,7 @@ class CallOllamaAI:
         """
         utils.settings.logger.info(f"Invoking {self.model.upper()} API...")
 
-        # TODO: DEBUG 有时能看到图片有时不能 并且不支持图片之后只有文字输入
+        # FIXME: DEBUG 有时能看到图片有时不能 并且不支持图片之后只有文字输入
         try:
             if self.model == "llama3.2-vision":
                 # TODO: 需要把这个做出来到Qt中，成为输入框
@@ -207,8 +208,10 @@ class CallOllamaAI:
             if isTTS:
                 self._select_tts(
                     "coqui",
+                    conf["LANG"],
                     answer,
-                    f"./audio/chat{self.model}-{count + 1}-{random_id}.wav",
+                    # FIXME: 编号不起效果，还是chat{self.model}-1-{random_id}.wav的格式 会被覆盖
+                    f"./audio/chat{self.model}-{count}-{random_id}.wav",
                 )
 
         except Exception as e:

@@ -77,11 +77,11 @@ class CallSparkAI:
         # 日志 确保只有执行函数时才被执行 而不是导包后就被执行
         async with httpx.AsyncClient(
             timeout=60
-        ) as aclient:  # 使用AsyncClient建立Sessiom 避免多次请求服务器
+        ) as aclient:
             try:
                 response = await aclient.post(
                     url, headers=header, json=data
-                )  # POST对BASE_URL发送请求
+                )
                 if response.status_code == 200:
                     answer = utils.json_repair.loads(response.text)["choices"][0][
                         "message"
@@ -107,19 +107,18 @@ class CallSparkAI:
         try:
             # TODO: 需要把这个做出来到Qt中，成为滚动条去选择
             BASE_URL, API_KEY = AI.start("1", self.model)
-            # 这里只支持调用Spark AI 请不要在这里调用其他AI
 
             # TODO: 需要把这个做出来到Qt中，成为输入框
             content = input("请输入您的问题：")
         except Exception:  # 由于Python多协程的特性，ctrl+c就直接不打印日志了
-            return  # 直接终止程序
+            return
 
         try:
             header = {
                 "Content-Type": "application/json",
                 "Authorization": API_KEY,
             }
-
+            
             self._write_cache(ID=random_id, content=content)
             data = self._load_data(ID=random_id)
             answer = await self._execute(url=BASE_URL, header=header, data=data)
