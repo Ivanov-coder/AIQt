@@ -6,5 +6,6 @@ spark:
 - lite_Key: Bearer GpbCOeQkmowTpvxxyVcs:pdJpmahxnlZjysFDQBqS
 - generalv3_Key: null
 - pro-128k_Key: null
+- max-32_Key: null
 - 4.0Ultra_Key: null
 - generalv3.5_Key: null

@@ -89,21 +89,20 @@ class CallOtherAI:
 
         """
 
-        # 日志 确保只有执行函数时才被执行 而不是导包后就被执行
         async with httpx.AsyncClient(
             timeout=60
-        ) as aclient:  # 使用AsyncClient建立Sessiom 避免多次请求服务器
+        ) as aclient:
             try:
                 response = await aclient.post(
                     url, headers=header, json=data
-                )  # POST对BASE_URL发送请求
+                )
                 if response.status_code == 200:
                     answer = utils.json_repair.loads(response.text)["choices"][0][
                         "message"
                     ][
                         "content"
                     ]  # 获取回答 请自行查阅API文档
-                    print(f"{self.model}-> {answer}")
+                    print(f"{answer}")
                     return answer
                 else:
                     utils.settings.logger.warning(
@@ -115,8 +114,7 @@ class CallOtherAI:
 
     async def callByhttpx(self, random_id: str) -> None:
         """
-        调用Spark AI
-        [官方文档](https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html#_1-%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E)
+        调用其他的AI
         """
 
         try:
@@ -127,7 +125,7 @@ class CallOtherAI:
             # TODO: 需要把这个做出来到Qt中，成为输入框
             content = input("请输入您的问题：")
         except Exception:  # 由于Python多协程的特性，ctrl+c就直接不打印日志了
-            return  # 直接终止程序
+            return
 
         try:
             header = {
