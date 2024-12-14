@@ -1,10 +1,12 @@
+import tts
 import httpx
 import utils
 import data.aiData as AI
 
 # 读取人格设定
 conf = utils.settings.SetYaml.read_yaml("otherpersona.yaml")
-
+# 导入颜色模块
+color = utils.colorful.SetColor
 
 @utils.dcl.dataclass
 class CallOtherAI:
@@ -80,6 +82,21 @@ class CallOtherAI:
 
         return BASE_URL, API_KEY
 
+    def _select_tts(self, *items: tuple[str]) -> None:
+        """
+        选择TTS引擎，默认是coquiTTS
+        """
+        # TODO: 做出来给人选
+        # TODO: 配置一下如何搞定路径和语速
+        match items:
+            case ["coqui", str(lang), str(content), str(path)]:
+                tts.coquiTTS(lang=lang, text=content, output_path=path).get()
+            # TODO: 看下pytts怎么修：
+            case ["pytts", str(content), str(path)]:
+                tts.pyTTS(text=content, output_path=path).get()
+            case _:
+                raise ValueError("Please Check your parameters!")
+
     # TODO: 上传图片的计划只能先搁置了
 
     # 调用的内部逻辑
@@ -88,21 +105,17 @@ class CallOtherAI:
         调用Spark AI.
 
         """
-
-        async with httpx.AsyncClient(
-            timeout=60
-        ) as aclient:
+        # BUG: 思考如何做到流式输出：
+        async with httpx.AsyncClient(timeout=60) as aclient:
             try:
-                response = await aclient.post(
-                    url, headers=header, json=data
-                )
+                response = await aclient.post(url, headers=header, json=data)
                 if response.status_code == 200:
                     answer = utils.json_repair.loads(response.text)["choices"][0][
                         "message"
                     ][
                         "content"
                     ]  # 获取回答 请自行查阅API文档
-                    print(f"{answer}")
+                    print(f"{color.set_frcolor(text=answer,color='blue')}")
                     return answer
                 else:
                     utils.settings.logger.warning(
@@ -112,7 +125,9 @@ class CallOtherAI:
             except Exception as e:
                 utils.settings.logger.error(e)
 
-    async def callByhttpx(self, random_id: str) -> None:
+    async def callByhttpx(
+        self, random_id: str, isTTS: bool = False, count: int = 1
+    ) -> None:
         """
         调用其他的AI
         """
@@ -139,6 +154,13 @@ class CallOtherAI:
             self._write_cache(
                 ID=random_id, content=answer, role="assistant", isRolePlay=True
             )
+            if isTTS:
+                self._select_tts(
+                    "coqui",
+                    conf["LANG"],
+                    answer,
+                    f"./audio/chat{self.model}-{count}-{random_id}.wav",
+                )
 
         except Exception as e:
             raise e
