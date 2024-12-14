@@ -1,4 +1,4 @@
-# 正在开发TTS和ASR
+# WARN: TTS almost done, Now ASR
 
 from utils import os
 from utils import clean
