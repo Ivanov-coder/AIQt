@@ -1,15 +1,14 @@
-# 这个要求必要本地拥有ollama软件及大模型
-# 已解决本地没有大模型报错的问题 但需要确保本地有ollama
-# 不调用aiData.py文件
+# FIXME: 已解决本地没有大模型报错的问题 但需要确保本地有ollama
+
+import tts
 import utils
 import ollama
 import base64
-import tts
 
 # 读取人格设定
 conf = utils.settings.SetYaml.read_yaml("ollamapersona.yaml")
 # 导入颜色模块
-# color = utils.colorful.SetColor
+color = utils.colorful.SetColor
 
 
 @utils.dcl.dataclass
@@ -147,7 +146,8 @@ class CallOllamaAI:
                 model=self.model, messages=data, stream=True
             ):
 
-                print(part["message"]["content"], end="", flush=True)
+                content = color.set_frcolor(text=part["message"]["content"],color="blue")
+                print(content, end="", flush=True)
                 output += part["message"]["content"]
 
             print()  # 最后打印空行
@@ -210,7 +210,6 @@ class CallOllamaAI:
                     "coqui",
                     conf["LANG"],
                     answer,
-                    # FIXME: 编号不起效果，还是chat{self.model}-1-{random_id}.wav的格式 会被覆盖
                     f"./audio/chat{self.model}-{count}-{random_id}.wav",
                 )
 

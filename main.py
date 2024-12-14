@@ -7,7 +7,11 @@ from utils import GenerateID
 from utils.settings import logger
 
 randID = GenerateID.get_id()
-count = 0 # 当生成wav时记录音频编号
+
+# 当生成wav时记录音频编号
+count_other_wav = 0
+count_ollama_wav = 0
+
 
 def switch(choice: str):
     """
@@ -21,26 +25,29 @@ def switch(choice: str):
     elif choice == "web-other":
         from webAI import other
 
-        return other.CallOtherAI(model="qwen-long").callByhttpx(random_id=randID)
+        global count_other_wav  # 没法子了 不然每次进入循环都会被重新调用
+        count_other_wav += 1
+
+        return other.CallOtherAI(model="qwen-long").callByhttpx(
+            random_id=randID, isTTS=True, count=count_other_wav
+        )  # TODO: isTTS做出来
 
     elif choice == "local":
         import localAI
 
-        global count    # 没法子了 不然每次进入循环都会被重新调用
-        count += 1
+        global count_ollama_wav  # 没法子了 不然每次进入循环都会被重新调用
+        count_ollama_wav += 1
 
         # TODO: 这里的实例化需要做成选择框给用户选择模型
         return localAI.ollamallm.CallOllamaAI(model="llama3.1").callByOllama(
-            random_id=randID,
-            isTTS=True,    # TODO: 做出来
-            count=count
+            random_id=randID, isTTS=True, count=count_ollama_wav  # TODO: isTTScld做出来
         )
 
 
 # TODO: 在Qt中可能会存在开了Spark之后又开其它的情况，所以这里我们可能需要当窗口焦点改变时，做个挂起操作。
 async def run():
     # TODO: 这里的实例化需要做成选择框给用户选择模型
-    choice = "local"
+    choice = "web-other"
     await switch(choice)
 
 
@@ -56,7 +63,7 @@ if __name__ == "__main__":
         except KeyboardInterrupt:
             clean.clean()
             break
-        
+
         # XXX: 这是本地情况
         except ModuleNotFoundError as e:
             logger.warning(e)
