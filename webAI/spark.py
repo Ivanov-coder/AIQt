@@ -73,15 +73,9 @@ class CallSparkAI:
         调用Spark AI.
 
         """
-
-        # 日志 确保只有执行函数时才被执行 而不是导包后就被执行
-        async with httpx.AsyncClient(
-            timeout=60
-        ) as aclient:
+        async with httpx.AsyncClient(timeout=60) as aclient:
             try:
-                response = await aclient.post(
-                    url, headers=header, json=data
-                )
+                response = await aclient.post(url, headers=header, json=data)
                 if response.status_code == 200:
                     answer = utils.json_repair.loads(response.text)["choices"][0][
                         "message"
@@ -103,6 +97,7 @@ class CallSparkAI:
         调用Spark AI
         [官方文档](https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html#_1-%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E)
         """
+        root = f"chat{self.model}-{random_id}"  # 删除的聊天记录的根命名
 
         try:
             # TODO: 需要把这个做出来到Qt中，成为滚动条去选择
@@ -118,7 +113,7 @@ class CallSparkAI:
                 "Content-Type": "application/json",
                 "Authorization": API_KEY,
             }
-            
+
             self._write_cache(ID=random_id, content=content)
             data = self._load_data(ID=random_id)
             answer = await self._execute(url=BASE_URL, header=header, data=data)

@@ -8,6 +8,7 @@ conf = utils.settings.SetYaml.read_yaml("otherpersona.yaml")
 # 导入颜色模块
 color = utils.colorful.SetColor
 
+
 @utils.dcl.dataclass
 class CallOtherAI:
     """
@@ -56,7 +57,6 @@ class CallOtherAI:
         """
         加载文字或图片。
         图片请传入二进制数据
-        ## 小尴尬 LLM不支持图片输入:/
         """
         with open(f"./cache/chat{self.model}-{ID}.json", "r", encoding="utf-8") as jf:
             contents = utils.json.load(jf)
@@ -90,22 +90,24 @@ class CallOtherAI:
         # TODO: 配置一下如何搞定路径和语速
         match items:
             case ["coqui", str(lang), str(content), str(path)]:
-                tts.coquiTTS(lang=lang, text=content, output_path=path).get()
+                tts.check_if_need_tts()(lang=lang, text=content, output_path=path).get()
             # TODO: 看下pytts怎么修：
             case ["pytts", str(content), str(path)]:
-                tts.pyTTS(text=content, output_path=path).get()
+                tts.check_if_need_tts("pytts")(text=content, output_path=path).get()
             case _:
                 raise ValueError("Please Check your parameters!")
 
-    # TODO: 上传图片的计划只能先搁置了
+    # XXX: 上传图片的计划只能先搁置了
 
     # 调用的内部逻辑
-    async def _execute(self, *, url: str, header: dict, data: dict) -> str:
+    async def _execute(
+        self, *, url: str, header: dict, data: dict, frcolor: str
+    ) -> str:
         """
         调用Spark AI.
 
         """
-        # BUG: 思考如何做到流式输出：
+
         async with httpx.AsyncClient(timeout=60) as aclient:
             try:
                 response = await aclient.post(url, headers=header, json=data)
@@ -115,7 +117,7 @@ class CallOtherAI:
                     ][
                         "content"
                     ]  # 获取回答 请自行查阅API文档
-                    print(f"{color.set_frcolor(text=answer,color='blue')}")
+                    print(f"{color.set_frcolor(text=answer,color=frcolor)}")
                     return answer
                 else:
                     utils.settings.logger.warning(
@@ -126,7 +128,7 @@ class CallOtherAI:
                 utils.settings.logger.error(e)
 
     async def callByhttpx(
-        self, random_id: str, isTTS: bool = False, count: int = 1
+        self, random_id: str, frcolor: str, isTTS: bool = False, count: int = 1
     ) -> None:
         """
         调用其他的AI
@@ -150,7 +152,9 @@ class CallOtherAI:
 
             self._write_cache(ID=random_id, content=content, isRolePlay=True)
             data = self._load_data(ID=random_id)
-            answer = await self._execute(url=BASE_URL, header=header, data=data)
+            answer = await self._execute(
+                url=BASE_URL, header=header, data=data, frcolor=frcolor
+            )
             self._write_cache(
                 ID=random_id, content=answer, role="assistant", isRolePlay=True
             )
@@ -161,6 +165,8 @@ class CallOtherAI:
                     answer,
                     f"./audio/chat{self.model}-{count}-{random_id}.wav",
                 )
+
+        # TODO: Qt信号槽事件 需要更改模型之后重新生成聊天记录文件 => 也就是当选择框改变字段时，重新调用get_id()方法
 
         except Exception as e:
             raise e
