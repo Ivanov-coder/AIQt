@@ -165,7 +165,12 @@ class CallOllamaAI:
             raise e
 
     async def callByOllama(
-        self, random_id: str, frcolor: str, isTTS: bool = False, count: int = 1
+        self,
+        content: str,
+        random_id: str,
+        frcolor: str,
+        isTTS: bool = False,
+        count: int = 1,
     ) -> None:
         """
         调用ollama软件进行对话
@@ -175,23 +180,20 @@ class CallOllamaAI:
         :param count: 用于给wav文件编辑顺序
         """
         utils.settings.logger.info(f"Invoking {self.model.upper()} API...")
-        root = f"chat{self.model}-{random_id}"  # 删除的聊天记录的根命名
+        # root = f"chat{self.model}-{random_id}"  # 删除的聊天记录的根命名
 
         # FIXME: DEBUG 有时能看到图片有时不能 并且不支持图片之后只有文字输入
         try:
             if self.model == "llama3.2-vision":
                 # TODO: 需要把这个做出来到Qt中，成为输入框
-                meta_input = input("请输入您的问题和需要附带的图片路径，以->分割：")
-                if meta_input.find("->") != -1:
-                    content, IMG_PATH = meta_input.split("->")
+                if content.find("->") != -1:
+                    ctn, IMG_PATH = content.split("->")
                 else:
-                    content = meta_input
+                    ctn = content
                 image = base64.b64encode(open(IMG_PATH, "rb").read()).decode()
-                self._write_cache(content=content, image=image)
+                self._write_cache(content=ctn, image=image)
 
             else:
-                # TODO: 需要把这个做出来到Qt中，成为输入框
-                content = input("请输入您的问题：")
                 self._write_cache(ID=random_id, content=content, isRolePlay=True)
 
         except Exception:  # 由于Python多协程的特性，ctrl+c就直接不打印日志了

@@ -27,6 +27,7 @@ class MainPart:
   |    1   |     Chat     |
   |    2   |   Settings   |
   |    3   |     Info     |
+  +--------+--------------+
   |    E   |     Exit     |
   +--------+--------------+
   """
@@ -49,6 +50,8 @@ class SettingPart:
   |    2   |   spark   |
   |    3   |   other   |
   +--------+-----------+
+  |    B   |  Backward |
+  +--------+-----------+
   Hey! Just choose one to enter the setting part!
   """
 
@@ -59,6 +62,8 @@ class SettingPart:
   |    1   |   model     |
   |    2   |   isTTS     |
   |    3   |   Prompt    |
+  +--------+-------------+
+  |    B   |   Backward  |
   +--------+-------------+
   Hey! These are infos:
 
@@ -88,15 +93,19 @@ class SettingPart:
   |    1   |   True    |
   |    2   |   False   |
   +--------+-----------+
+  |    B   |  Backward |
+  +--------+-----------+
   """
 
     settings_page_for_spark = r"""
-  +--------+-------------+
-  | Choice |  Function   |
-  +--------+-------------+
-  |    1   |   model     |
-  |    2   |   top_p     |
-  +--------+-------------+
+  +--------+------------+
+  | Choice |  Function  |
+  +--------+------------+
+  |    1   |   model    |
+  |    2   |   top_p    |
+  +--------+------------+
+  |    B   |  Backward  |
+  +--------+------------+
   Hey! These are infos:
 
   1. Model is for you to choose:
@@ -123,11 +132,13 @@ class InfoPart:
     """
 
     end_page = r"""
-  +--------+----------------+
-  | Choice |  Information   |
-  +--------+----------------+
-  |    1   |   About Us     |
-  |    2   |   Contact      |
-  |    3   |   Feedback     |
-  +--------+----------------+
+  +--------+--------------+
+  | Choice |  Information |
+  +--------+--------------+
+  |    1   |   About Us   |
+  |    2   |   Contact    |
+  |    3   |   Feedback   |
+  +--------+--------------+
+  |    B   |   Backward   |
+  +--------+--------------+
   """

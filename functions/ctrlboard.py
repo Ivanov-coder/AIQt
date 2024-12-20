@@ -1,8 +1,13 @@
 from ._pages import *
 from utils import os
 from utils import asyncio
+from utils import json
 from utils import GenerateID
+from utils import setup_ollama
 from utils.settings import logger
+from utils.colorful import SetColor
+
+frcolor = SetColor.set_frcolor
 
 
 class CtrlBoard:
@@ -16,20 +21,35 @@ class CtrlBoard:
         cls._choose()
 
     def _status_now(cls):
+        # 用于记录是第几个页面
         pass
 
-    # @staticmethod
-    # def _start() -> None:
+    @staticmethod
+    def _write_into_conf(**kwargs) -> None:
+        # 第一次使用时将选择和大模型写入文件 之后再通过设置界面更改
+        pass
 
     @staticmethod
     def _choose():
         # 这里可能需要实现状态机功能，我们需要判断是哪个页面
-        print(MainPart.main_page)
-        choice = input("Please enter the key you want: ")
-        if choice == "1":
-            Chat.chat()
 
-        if choice.upper() == "E":
+        if (
+            not input(
+                frcolor(text="\nPress Any Key here")
+                + frcolor(text="(E to exit): ", color="red")
+            ).upper()
+            == "E"
+        ):
+            print(MainPart.main_page)
+            choice = input(frcolor(text="\nPlease enter the key you want: "))
+            # 这里面的嵌套if想办法优化一下
+            if choice == "1":
+                Chat(choice="ollama", model="llama3.1").chat()
+
+            elif choice.upper() == "E":
+                exit()
+
+        else:
             exit()
 
 
@@ -40,61 +60,75 @@ class Chat:
     count_other_wav = 0
     count_ollama_wav = 0
 
-    @classmethod
-    def _switch(cls, choice: str):
+    def __init__(self, choice: str = "ollama", model: str = "llama3.1"):
+        r"""
+        :param: choice: str -> Select the APP you want to use
+        :param: model: str -> Select the model you want to use
+        """
+        self.choice = choice
+        self.model = model
+
+    def _switch(self, content: str):
         r"""
         做选择用的，后面估计得做到Qt选择框里面。
         """
         # TODO: 这里的实例化需要做成选择框给用户选择模型
-        if choice == "web-spark":
+        if self.choice == "spark":
             from webAI import spark
 
-            return spark.CallSparkAI(model="lite").callByhttpx(random_id=cls.randID)
+            return spark.CallSparkAI(model="lite").callByhttpx(
+                content=content, random_id=self.randID
+            )
 
-        elif choice == "web-other":
+        elif self.choice == "other":
             from webAI import other
 
-            cls.count_other_wav += 1
+            self.count_other_wav += 1
 
             return other.CallOtherAI(model="qwen-long").callByhttpx(
-                random_id=cls.randID,
+                content=content,
+                random_id=self.randID,
                 isTTS=True,
-                count=cls.count_other_wav,
+                count=self.count_other_wav,
                 frcolor="lightblue",  # TODO: isTTS frcolor做出来
             )
 
-        elif choice == "local":
+        elif self.choice == "ollama":
             import localAI
 
-            cls.count_ollama_wav += 1
+            setup_ollama()
+
+            self.count_ollama_wav += 1
 
             # TODO: 这里的实例化需要做成选择框给用户选择模型
             return localAI.ollamallm.CallOllamaAI(model="llama3.1").callByOllama(
-                random_id=cls.randID,
+                content=content,
+                random_id=self.randID,
                 isTTS=True,
-                count=cls.count_ollama_wav,
+                count=self.count_ollama_wav,
                 frcolor="lightblue",  # TODO: isTTS frcolor做出来
             )
 
-    @classmethod
-    # TODO: 在Qt中可能会存在开了Spark之后又开其它的情况，所以这里我们可能需要当窗口焦点改变时，做个挂起操作。
-    async def _run(cls):
-        # TODO: 这里的实例化需要做成选择框给用户选择模型
-        choice = "local"
-        await cls._switch(choice)
+    async def _call(self):
+        content = input(
+            frcolor(text="\nPlease enter you questions: ") + "_____\b\b\b\b\b"
+        )
+        await self._switch(content)
 
-    @classmethod
-    async def _main(cls):
-        await cls._run()
+    async def _main(self):
+        try:
+            await self._call()
+        except EOFError:
+            print(frcolor(text="Hey! Please Enter Something!\n", color="red"))
+            await self._call()
 
-    @classmethod
-    def chat(cls):
+    def chat(self):
         r"""
-        Begin chat
+        Begin chatting
         """
         while True:
             try:
-                asyncio.run(cls._main())
+                asyncio.run(self._main())
             except KeyboardInterrupt:
                 CtrlBoard.run()
 
