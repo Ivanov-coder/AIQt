@@ -8,14 +8,12 @@ import os
 import typing
 from . import settings
 from . import logs
-from . import clean
 from . import colorful
 
 
 __all__ = [
     "settings",
     "logs",
-    "clean",
     "colorful",
     "dcl",
     "json_repair",

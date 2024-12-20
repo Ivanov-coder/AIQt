@@ -6,7 +6,7 @@ from torch.cuda import is_available
 
 # TODO: 要思考一下如何搞定False的问题
 # print(is_available())
-
+# FIXME: 对于单个模型的多个wav文件 需要开个文件夹 不然太乱了
 
 class coquiTTS:
     # 初始设定请做到settings.yaml文件中

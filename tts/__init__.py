@@ -1,10 +1,8 @@
-import os
-from .coquiTTS import coquiTTS
-from .pyTTS import pyTTS
+from utils import os
+from ._check import check_if_need_tts
 
 __all__ = [
-    "coquiTTS",
-    "pyTTS",
+    "check_if_need_tts",
 ]
 
 # 初始化一下储存.wav的文件夹

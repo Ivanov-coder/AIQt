@@ -1,5 +1,3 @@
-# FIXME: 已解决本地没有大模型报错的问题 但需要确保本地有ollama
-
 import tts
 import utils
 import ollama
@@ -125,17 +123,16 @@ class CallOllamaAI:
         选择TTS引擎，默认是coquiTTS
         """
         # TODO: 做出来给人选
-        # TODO: 配置一下如何搞定路径和语速
         match items:
             case ["coqui", str(lang), str(content), str(path)]:
-                tts.coquiTTS(lang=lang, text=content, output_path=path).get()
+                tts.check_if_need_tts()(lang=lang, text=content, output_path=path).get()
             # TODO: 看下pytts怎么修：
             case ["pytts", str(content), str(path)]:
-                tts.pyTTS(text=content, output_path=path).get()
+                tts.check_if_need_tts("pytts")(text=content, output_path=path).get()
             case _:
                 raise ValueError("Please Check your parameters!")
 
-    async def _execute(self, data: list[dict]) -> str:
+    async def _execute(self, data: list[dict], frcolor: str) -> str:
         """
         内部逻辑
         """
@@ -146,7 +143,9 @@ class CallOllamaAI:
                 model=self.model, messages=data, stream=True
             ):
 
-                content = color.set_frcolor(text=part["message"]["content"],color="blue")
+                content = color.set_frcolor(
+                    text=part["message"]["content"], color=frcolor
+                )
                 print(content, end="", flush=True)
                 output += part["message"]["content"]
 
@@ -166,7 +165,7 @@ class CallOllamaAI:
             raise e
 
     async def callByOllama(
-        self, random_id: str, isTTS: bool = False, count: int = 1
+        self, random_id: str, frcolor: str, isTTS: bool = False, count: int = 1
     ) -> None:
         """
         调用ollama软件进行对话
@@ -176,6 +175,7 @@ class CallOllamaAI:
         :param count: 用于给wav文件编辑顺序
         """
         utils.settings.logger.info(f"Invoking {self.model.upper()} API...")
+        root = f"chat{self.model}-{random_id}"  # 删除的聊天记录的根命名
 
         # FIXME: DEBUG 有时能看到图片有时不能 并且不支持图片之后只有文字输入
         try:
@@ -199,7 +199,7 @@ class CallOllamaAI:
 
         try:
             data = self._load_data(ID=random_id)
-            answer = await self._execute(data=data)
+            answer = await self._execute(data=data, frcolor=frcolor)
             self._write_cache(
                 ID=random_id, content=answer, role="assistant", isRolePlay=True
             )

@@ -23,6 +23,14 @@ class SetColor:
             return Fore.YELLOW + text + Fore.RESET
         elif color == "blue":
             return Fore.BLUE + text + Fore.RESET
+        elif color == "lightred":
+            return Fore.LIGHTRED_EX + text + Fore.RESET
+        elif color == "lightgreen":
+            return Fore.LIGHTGREEN_EX + text + Fore.RESET
+        elif color == "lightyellow":
+            return Fore.LIGHTYELLOW_EX + text + Fore.RESET
+        elif color == "lightblue":
+            return Fore.LIGHTBLUE_EX + text + Fore.RESET
 
     @classmethod
     def set_bgcolor(cls, *, text: str, color: str) -> str:
