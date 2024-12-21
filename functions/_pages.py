@@ -1,12 +1,10 @@
-lines = "+------------------------------------------------------------------------------------------------------+"
-line = "|         |"
-
-
 class MainPart:
     r"""
     Contains:
     1. welcome_page
-    2. main_page
+    2. main_page => main_page_avaliable_func: dict[str: list[str, str]]
+    3. chat_page_for_the_first_time => chat_page_avaliable_func: dict[str: list[str, str]]
+    (The first element in the list is PageStatus, the second element is UserAction)
     """
 
     welcome_page = r"""
@@ -31,7 +29,38 @@ class MainPart:
   |    E   |     Exit     |
   +--------+--------------+
   """
+    main_page_avaliable_func: dict[str : list[str, str]] = {
+        # The first element in the list is PageStatus, the second element is UserAction
+        "1": ["Chat", "Forward"],
+        "2": ["SettingsPart", "Forward"],
+        "3": ["InfoPart", "Forward"],
+        "E": ["Exit", "Exit"],
+    }
 
+    chat_page_for_the_first_time = r"""
+  +--------+-----------+
+  | Choice |   Value   |
+  +--------+-----------+
+  |    1   |   ollama  |
+  |    2   |   spark   |
+  |    3   |   other   |
+  +--------+-----------+
+  |    B   |  Backward |
+  +--------+-----------+
+  Hey! I guess you are using the program for the first time.
+  It doesn't matter, let me guide you!
+  Please enter the app you want to use, and then enter the model you want to use.
+  User Space to split:
+  For example:
+    1 llama3.1
+    """
+    chat_page_avaliable_func: dict[str : list[str, str]] = {
+        # The first element in the list is PageStatus, the second element is UserAction
+        "1": ["Chat", "Maintain"],
+        "2": ["Chat", "Maintain"],
+        "3": ["Chat", "Maintain"],
+        "B": ["MainPart", "Backward"],
+    }
 
 class SettingsPart:
     r"""

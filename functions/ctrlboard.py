@@ -14,6 +14,7 @@ page_status_transite = PageStatusTransite()
 
 
 class CtrlBoard:
+
     r"""
     Use the board to control the behavior of our user
     """
@@ -23,19 +24,26 @@ class CtrlBoard:
         # cls._start()
         cls._choose()
 
-    def _status_now(cls):
-        # 用于记录是第几个页面
-        pass
+    def _update_status(self, available_func:dict, choice:str, default_page:str) -> str:
+        new_page_status, user_action = available_func.get(
+                choice, ["MainPart", "Maintain"]
+            )
+        current_page_status = page_status_transite.transite_to(new_page_status, user_action)
 
-    @staticmethod
-    def _write_into_conf(**kwargs) -> None:
+        return current_page_status
+
+    def _write_into_conf(self, **kwargs) -> None:
         # 第一次使用时将选择和大模型写入文件 之后再通过设置界面更改
-        pass
+        with open("./config/conf.json", "w") as f:
+            json.dump(kwargs, f)
 
-    @staticmethod
-    def _choose():
-        # 这里可能需要实现状态机功能，我们需要判断是哪个页面
+    
+    def _read_conf(self) -> dict:
+        # 读取配置文件
+        with open("./config/conf.json", "r") as f:
+            data = json.load(f)
 
+    def _choose(self):
         if (
             not input(
                 frcolor(text="\nPress Any Key here")
@@ -45,8 +53,23 @@ class CtrlBoard:
         ):
             print(MainPart.main_page)
             choice = input(frcolor(text="\nPlease enter the key you want: "))
-            
-            # # 这里面的嵌套if想办法优化一下
+            new_page_status, user_action = MainPart.main_page_avaliable_func.get(
+                choice, ["MainPart", "Maintain"]
+            )
+            current_page_status = page_status_transite.transite_to(new_page_status, user_action)
+
+            if current_page_status == "Chat":
+                try:
+                    num, model = self._read_conf()
+
+                except:
+                    print(MainPart.chat_page_for_the_first_time)
+                    num, model = input("Please enter your choice here: ")
+                    self._write_into_conf(choice=num, model=model)
+
+                finally:
+                    Chat(num, model).chat()
+                    
             # if choice == "1":
             #     Chat(choice="ollama", model="llama3.1").chat()
 
@@ -64,7 +87,7 @@ class Chat:
     count_other_wav = 0
     count_ollama_wav = 0
 
-    def __init__(self, choice: str = "ollama", model: str = "llama3.1"):
+    def __init__(self, choice: str = "1", model: str = "llama3.1"):
         r"""
         :param: choice: str -> Select the APP you want to use
         :param: model: str -> Select the model you want to use
@@ -76,28 +99,7 @@ class Chat:
         r"""
         做选择用的，后面估计得做到Qt选择框里面。
         """
-        # TODO: 这里的实例化需要做成选择框给用户选择模型
-        if self.choice == "spark":
-            from webAI import spark
-
-            return spark.CallSparkAI(model="lite").callByhttpx(
-                content=content, random_id=self.randID
-            )
-
-        elif self.choice == "other":
-            from webAI import other
-
-            self.count_other_wav += 1
-
-            return other.CallOtherAI(model="qwen-long").callByhttpx(
-                content=content,
-                random_id=self.randID,
-                isTTS=True,
-                count=self.count_other_wav,
-                frcolor="lightblue",  # TODO: isTTS frcolor做出来
-            )
-
-        elif self.choice == "ollama":
+        if self.choice == "1":
             import localAI
 
             setup_ollama()
@@ -112,6 +114,29 @@ class Chat:
                 count=self.count_ollama_wav,
                 frcolor="lightblue",  # TODO: isTTS frcolor做出来
             )
+        # TODO: 这里的实例化需要做成选择框给用户选择模型
+
+        elif self.choice == "2":
+            from webAI import spark
+
+            return spark.CallSparkAI(model="lite").callByhttpx(
+                content=content, random_id=self.randID
+            )
+
+        elif self.choice == "3":
+            from webAI import other
+
+            self.count_other_wav += 1
+
+            return other.CallOtherAI(model="qwen-long").callByhttpx(
+                content=content,
+                random_id=self.randID,
+                isTTS=True,
+                count=self.count_other_wav,
+                frcolor="lightblue",  # TODO: isTTS frcolor做出来
+            )
+
+        
 
     async def _call(self):
         content = input(
