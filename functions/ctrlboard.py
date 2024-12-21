@@ -14,34 +14,22 @@ page_status_transite = PageStatusTransite()
 
 
 class CtrlBoard:
-
     r"""
     Use the board to control the behavior of our user
     """
 
-    @classmethod
-    def run(cls):
-        # cls._start()
-        cls._choose()
+    def run(self):
+        try:
+            self._choose()
 
-    def _update_status(self, available_func:dict, choice:str, default_page:str) -> str:
-        new_page_status, user_action = available_func.get(
-                choice, ["MainPart", "Maintain"]
-            )
-        current_page_status = page_status_transite.transite_to(new_page_status, user_action)
+        except KeyboardInterrupt:
+            logger.info("Off the program")
+            exit()
 
-        return current_page_status
-
-    def _write_into_conf(self, **kwargs) -> None:
-        # 第一次使用时将选择和大模型写入文件 之后再通过设置界面更改
-        with open("./config/conf.json", "w") as f:
-            json.dump(kwargs, f)
-
-    
-    def _read_conf(self) -> dict:
-        # 读取配置文件
-        with open("./config/conf.json", "r") as f:
-            data = json.load(f)
+        except Exception as e:
+            logger.error(e)
+            logger.info("Restarted")
+            self.run()
 
     def _choose(self):
         if (
@@ -53,34 +41,65 @@ class CtrlBoard:
         ):
             print(MainPart.main_page)
             choice = input(frcolor(text="\nPlease enter the key you want: "))
-            new_page_status, user_action = MainPart.main_page_avaliable_func.get(
-                choice, ["MainPart", "Maintain"]
+            current_page_status = self.update_status(
+                "MainPart", MainPart.main_page_avaliable_func, choice
             )
-            current_page_status = page_status_transite.transite_to(new_page_status, user_action)
-
+            # FIXME: 用Ctrl+C推出之后反而状态机回不到MainPart了，需要改改
             if current_page_status == "Chat":
                 try:
                     num, model = self._read_conf()
 
                 except:
-                    print(MainPart.chat_page_for_the_first_time)
-                    num, model = input("Please enter your choice here: ")
+                    print(Chat.chat_page_for_the_first_time)
+                    num, model = input("Please enter your choice here: ").split(" ")
                     self._write_into_conf(choice=num, model=model)
 
-                finally:
-                    Chat(num, model).chat()
-                    
-            # if choice == "1":
-            #     Chat(choice="ollama", model="llama3.1").chat()
+                ChatWithAI(num, model).chat()
+                current_page_status = self.update_status(
+                    "Chat", Chat.chat_page_avaliable_func, choice
+                )
 
-            # elif choice.upper() == "E":
-            #     exit()
+            if current_page_status == "SettingsPart":
+
+                pass
+
+            if current_page_status == "InfoPart":
+                pass
+
+            if current_page_status == "Exit":
+                exit()
 
         else:
             exit()
 
+    def update_status(
+        self, default_page: str, available_dict: dict, choice: str
+    ) -> str:
+        new_page_status, user_action = available_dict.get(
+            choice, [default_page, "Maintain"]
+        )
+        
+        current_page_status = page_status_transite.transite_to(
+            new_page_status, user_action
+        )
 
-class Chat:
+        return current_page_status
+
+    @staticmethod
+    def _write_into_conf(self, **kwargs) -> None:
+        # 第一次使用时将选择和大模型写入文件 之后再通过设置界面更改
+        with open("./config/conf.json", "w") as f:
+            json.dump(kwargs, f)
+
+    @staticmethod
+    def _read_conf() -> dict:
+        # 读取配置文件
+        with open("./config/conf.json", "r") as f:
+            data = json.load(f)
+            return data["choice"], data["model"]
+
+
+class ChatWithAI:
     randID = GenerateID.get_id()
 
     # 当生成wav时记录音频编号
@@ -136,8 +155,6 @@ class Chat:
                 frcolor="lightblue",  # TODO: isTTS frcolor做出来
             )
 
-        
-
     async def _call(self):
         content = input(
             frcolor(text="\nPlease enter you questions: ") + "_____\b\b\b\b\b"
@@ -159,7 +176,7 @@ class Chat:
             try:
                 asyncio.run(self._main())
             except KeyboardInterrupt:
-                CtrlBoard.run()
+                CtrlBoard().run()
 
             # XXX: 这是本地情况
             except ModuleNotFoundError as e:

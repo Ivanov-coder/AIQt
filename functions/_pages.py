@@ -3,7 +3,6 @@ class MainPart:
     Contains:
     1. welcome_page
     2. main_page => main_page_avaliable_func: dict[str: list[str, str]]
-    3. chat_page_for_the_first_time => chat_page_avaliable_func: dict[str: list[str, str]]
     (The first element in the list is PageStatus, the second element is UserAction)
     """
 
@@ -37,21 +36,28 @@ class MainPart:
         "E": ["Exit", "Exit"],
     }
 
+
+class Chat:
+    r"""
+    Contains:
+    1. chat_page_for_the_first_time => chat_page_avaliable_func: dict[str: list[str, str]]
+    """
+
     chat_page_for_the_first_time = r"""
-  +--------+-----------+
-  | Choice |   Value   |
-  +--------+-----------+
-  |    1   |   ollama  |
-  |    2   |   spark   |
-  |    3   |   other   |
-  +--------+-----------+
-  |    B   |  Backward |
-  +--------+-----------+
-  Hey! I guess you are using the program for the first time.
-  It doesn't matter, let me guide you!
-  Please enter the app you want to use, and then enter the model you want to use.
-  User Space to split:
-  For example:
+    +--------+-----------+
+    | Choice |   Value   |
+    +--------+-----------+
+    |    1   |   ollama  |
+    |    2   |   spark   |
+    |    3   |   other   |
+    +--------+-----------+
+    |    B   |  Backward |
+    +--------+-----------+
+    Hey! I guess you are using the program for the first time.
+    It doesn't matter, let me guide you!
+    Please enter the app you want to use, and then enter the model you want to use.
+    User Space to split:
+    For example:
     1 llama3.1
     """
     chat_page_avaliable_func: dict[str : list[str, str]] = {
@@ -61,6 +67,7 @@ class MainPart:
         "3": ["Chat", "Maintain"],
         "B": ["MainPart", "Backward"],
     }
+
 
 class SettingsPart:
     r"""

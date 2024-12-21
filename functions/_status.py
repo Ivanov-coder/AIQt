@@ -59,6 +59,7 @@ class PageStatusTransite:
                 },
                 {
                     UserAction.FORWARD: [
+                        PageStatus.CHAT,
                         PageStatus.SETTINGSPART,
                         PageStatus.INFOPART,
                     ]
@@ -137,8 +138,9 @@ class PageStatusTransite:
         Avaliable Parameters:
             1. MainPart
             2. SettingsPart
-            3. InfoPart
-            4. Exit
+            3. Chat
+            4. InfoPart
+            5. Exit
 
         :param: new_status:
         Avaliable Parameters:
@@ -165,22 +167,17 @@ class PageStatusTransite:
         else:
             return False
 
-    def transite_to(
-        self, new_page: str, user_action: str
-    ) -> tuple[str, UserAction] | None:
+    def transite_to(self, new_page: str, user_action: str) -> str | None:
         r"""
         If can, transite, return the latest value of the Status for you to go ahead.
 
-        You can ignore the returned value [UserAction.MAINTAIN], it's just a placeholder.
 
         If can't, raise InvalidTransition Error.
         """
         if self._can_transite_to(new_page, user_action):
             self.current_PageStatus = PageStatus(new_page)
-            return (
-                self.current_PageStatus.value,
-                UserAction.MAINTAIN,
-            )  # Since user enter the new page, the UserAction should be "MAINTAIN" until he/she do the next action.
+            return self.current_PageStatus.value
+
         else:
             raise InvalidTransition(
                 f"Cannot transite from {self.current_PageStatus.value} to {new_page} By {user_action}"

@@ -149,7 +149,7 @@ class CallOllamaAI:
                 print(content, end="", flush=True)
                 output += part["message"]["content"]
 
-            print()  # 最后打印空行
+            print()
             return output
 
         # 本地没大模型就下载一个
