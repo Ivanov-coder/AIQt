@@ -33,16 +33,36 @@ class MainPart:
   """
 
 
-class SettingPart:
+class SettingsPart:
     r"""
     Contains:
     1. settings_page_main
+    2. settings_page_for_choose_one
     2. settings_page_for_ollama_and_other
     3. settings_page_for_spark
     4. settings_if_enter_isTTS
     """
 
     settings_page_main = r"""
+  +--------+-----------+
+  | Choice |   Value   |
+  +--------+-----------+
+  |    1   |    API    |
+  |    2   |   Detail  |
+  +--------+-----------+
+  |    B   |  Backward |
+  +--------+-----------+
+  Hey! These are infos:
+  1. API is for you to choose which one do you want to use:
+    Available:
+    - ollama: This one requires you to install an APP on PC called "Ollama"
+      Website: !$["https://ollama.com/download"]$!.
+    - Spark: If you choose this one, you need to enter your API key.
+    - Other: If you choose this one, you need to enter the Request URL and API key.
+
+  2. Detail is for you to set the detailed settings of these 3 options above.
+  """
+    settings_page_for_choose_one = r"""
   +--------+-----------+
   | Choice |   Value   |
   +--------+-----------+
@@ -53,13 +73,12 @@ class SettingPart:
   |    B   |  Backward |
   +--------+-----------+
   Hey! Just choose one to enter the setting part!
-  """
-
+"""
     settings_page_for_ollama_and_other = r"""
   +--------+-------------+
   | Choice |  Function   |
   +--------+-------------+
-  |    1   |   model     |
+  |    1   |   Model     |
   |    2   |   isTTS     |
   |    3   |   Prompt    |
   +--------+-------------+
@@ -67,7 +86,7 @@ class SettingPart:
   +--------+-------------+
   Hey! These are infos:
 
-  1. model is for you to choose!
+  1. Model is for you to choose!
     If you use "ollama", then just enter the name of the model in the website: 
     !$["https://ollama.com/library"]$!
     And then the program will download it automatically.
@@ -76,8 +95,11 @@ class SettingPart:
 
   2. isTTS means if you need text to speech,
     default to False.
-    If you select True, you may need to wait for a while
-    We highly RECCOMMEND FALSE (@_@) Since waiting makes annoyance.
+    If you select True, you may need to wait for a while.
+    The program will download some files on your computer when you first use it.
+    I highly RECCOMMEND FALSE (@!_!@) IF YOU HAVEN'T CUDA! Since waiting makes annoyance.
+    But if you want to have a try, just go ahead.
+    And you can choose the voice you like haha. (#^_^#)
 
   3. Prompt is used to control the character of the AI.
     For example:
@@ -101,7 +123,7 @@ class SettingPart:
   +--------+------------+
   | Choice |  Function  |
   +--------+------------+
-  |    1   |   model    |
+  |    1   |   Model    |
   |    2   |   top_p    |
   +--------+------------+
   |    B   |  Backward  |

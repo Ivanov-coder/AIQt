@@ -6,8 +6,11 @@ from utils import GenerateID
 from utils import setup_ollama
 from utils.settings import logger
 from utils.colorful import SetColor
+from ._status import PageStatusTransite, UserAction
+
 
 frcolor = SetColor.set_frcolor
+page_status_transite = PageStatusTransite()
 
 
 class CtrlBoard:
@@ -42,12 +45,13 @@ class CtrlBoard:
         ):
             print(MainPart.main_page)
             choice = input(frcolor(text="\nPlease enter the key you want: "))
-            # 这里面的嵌套if想办法优化一下
-            if choice == "1":
-                Chat(choice="ollama", model="llama3.1").chat()
+            
+            # # 这里面的嵌套if想办法优化一下
+            # if choice == "1":
+            #     Chat(choice="ollama", model="llama3.1").chat()
 
-            elif choice.upper() == "E":
-                exit()
+            # elif choice.upper() == "E":
+            #     exit()
 
         else:
             exit()
