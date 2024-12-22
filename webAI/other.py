@@ -128,7 +128,12 @@ class CallOtherAI:
                 utils.settings.logger.error(e)
 
     async def callByhttpx(
-        self, random_id: str, frcolor: str, isTTS: bool = False, count: int = 1
+        self,
+        content: str,
+        random_id: str,
+        frcolor: str,
+        isTTS: bool = False,
+        count: int = 1,
     ) -> None:
         """
         调用其他的AI
@@ -139,8 +144,6 @@ class CallOtherAI:
             BASE_URL, API_KEY = AI.start("2", self.model)
             # 这里只支持调用Spark AI 请不要在这里调用其他AI
 
-            # TODO: 需要把这个做出来到Qt中，成为输入框
-            content = input("请输入您的问题：")
         except Exception:  # 由于Python多协程的特性，ctrl+c就直接不打印日志了
             return
 

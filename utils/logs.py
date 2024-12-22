@@ -1,4 +1,3 @@
-import os
 import logging
 import colorlog
 import dataclasses as dcl
@@ -13,9 +12,11 @@ class Logger:
     - level: 日志级别
     - format_type: 日志格式
     """
+
     level: int = dcl.field(default=logging.INFO)
     format_type: str = dcl.field(
-        default='%(asctime)s %(log_color)s| [%(levelname)s] | %(message)s')
+        default="%(asctime)s %(log_color)s| [%(levelname)s] | %(message)s"
+    )
 
     @classmethod
     def setup_logger(cls) -> logging.Logger:
@@ -35,17 +36,19 @@ class Logger:
         handler = logging.StreamHandler()  # 初始化handler 并且加入自己的设置
         logger.setLevel(cls.level)  # 必须设置等级 否则不会输出日志信息
         # 自定义格式
-        formatter = colorlog.ColoredFormatter(fmt=cls.format_type,
-                                              datefmt='%Y-%m-%d %w %H:%M:%S',
-                                              reset=True,
-                                              log_colors={
-                                                  'DEBUG': 'cyan',
-                                                  'INFO': 'green',
-                                                  'WARNING': 'yellow',
-                                                  'ERROR': 'red',
-                                                  'CRITICAL': 'bold_red',
-                                              },
-                                              style='%')
+        formatter = colorlog.ColoredFormatter(
+            fmt=cls.format_type,
+            datefmt="%Y-%m-%d %w %H:%M:%S",
+            reset=True,
+            log_colors={
+                "DEBUG": "cyan",
+                "INFO": "green",
+                "WARNING": "yellow",
+                "ERROR": "red",
+                "CRITICAL": "bold_red",
+            },
+            style="%",
+        )
         handler.setFormatter(formatter)
         # 去除原本的handler
         for h in logger.handlers:

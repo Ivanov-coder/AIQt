@@ -146,6 +146,3 @@ def setup_ollama():
             )
         # elif os.name == "posix":  # 针对Linux
         #     os.system("snap install ollama")
-
-
-setup_ollama()

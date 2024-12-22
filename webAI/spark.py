@@ -45,7 +45,6 @@ class CallSparkAI:
         with open(f"./cache/chat{self.model}-{ID}.json", "w", encoding="utf-8") as jf:
             utils.json.dump(cache, jf, indent=4, ensure_ascii=False)
 
-    # TODO: 上传图片的计划只能先搁置了
     def _load_data(self, ID: str) -> dict:
         """
         加载文字或图片。
@@ -92,7 +91,7 @@ class CallSparkAI:
             except Exception as e:
                 utils.settings.logger.error(e)
 
-    async def callByhttpx(self, random_id: str) -> None:
+    async def callByhttpx(self, content: str, random_id: str) -> None:
         """
         调用Spark AI
         [官方文档](https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html#_1-%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E)
@@ -104,7 +103,6 @@ class CallSparkAI:
             BASE_URL, API_KEY = AI.start("1", self.model)
 
             # TODO: 需要把这个做出来到Qt中，成为输入框
-            content = input("请输入您的问题：")
         except Exception:  # 由于Python多协程的特性，ctrl+c就直接不打印日志了
             return
 
