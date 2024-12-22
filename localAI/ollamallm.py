@@ -206,7 +206,6 @@ class CallOllamaAI:
                 ID=random_id, content=answer, role="assistant", isRolePlay=True
             )
             # TODO: 需要做出来给人选择用什么TTS
-            # TODO: 发现个问题，生成语音的速度太慢了，思考下怎么优化
             if isTTS:
                 self._select_tts(
                     "coqui",

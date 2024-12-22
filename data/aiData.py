@@ -50,7 +50,6 @@ class _Spark:
             raise ValueError(f"Unsupported model: {self.model}")
 
 
-# TODO: 这里的API KEY最好也得做出来
 @utils.dcl.dataclass
 class _OtherAI:
     """

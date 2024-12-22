@@ -41,6 +41,7 @@ class Chat:
     r"""
     Contains:
     1. chat_page_for_the_first_time => chat_page_avaliable_func: dict[str: list[str, str]]
+    2. chat_page_for_backward_func: dict[str: list[str, str]]
     """
 
     chat_page_for_the_first_time = r"""
@@ -65,6 +66,19 @@ class Chat:
         "1": ["Chat", "Maintain"],
         "2": ["Chat", "Maintain"],
         "3": ["Chat", "Maintain"],
+        "B": ["MainPart", "Backward"],
+    }
+
+    chat_page_for_backward = r"""
+    +--------+-----------+
+    | Choice |   Value   |
+    +--------+-----------+
+    |    B   |  Backward |
+    +--------+-----------+
+"""
+
+    chat_page_for_backward_func: dict[str : list[str, str]] = {
+        # The first element in the list is PageStatus, the second element is UserAction
         "B": ["MainPart", "Backward"],
     }
 

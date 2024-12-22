@@ -65,6 +65,9 @@ class PageStatusTransite:
                     ]
                 },
                 {
+                    UserAction.BACKWARD: [],
+                },
+                {
                     UserAction.EXIT: [
                         PageStatus.EXIT,
                     ]
@@ -77,9 +80,15 @@ class PageStatusTransite:
                     ]
                 },
                 {
+                    UserAction.FORWARD: [],
+                },
+                {
                     UserAction.BACKWARD: [
                         PageStatus.MAINPART,
                     ]
+                },
+                {
+                    UserAction.EXIT: [],
                 },
             ],
             PageStatus.SETTINGSPART: [
@@ -89,7 +98,7 @@ class PageStatusTransite:
                     ]
                 },
                 {
-                    UserAction.MAINTAIN: [
+                    UserAction.FORWARD: [
                         PageStatus.SETTINGSPART,
                     ]
                 },
@@ -98,6 +107,9 @@ class PageStatusTransite:
                         PageStatus.MAINPART,
                         PageStatus.SETTINGSPART,
                     ]
+                },
+                {
+                    UserAction.EXIT: [],
                 },
             ],
             PageStatus.INFOPART: [
@@ -107,7 +119,7 @@ class PageStatusTransite:
                     ]
                 },
                 {
-                    UserAction.MAINTAIN: [
+                    UserAction.FORWARD: [
                         PageStatus.INFOPART,
                     ]
                 },
@@ -117,8 +129,13 @@ class PageStatusTransite:
                         PageStatus.MAINPART,
                     ]
                 },
+                {
+                    UserAction.EXIT: [],
+                },
             ],
-            PageStatus.EXIT: {UserAction.MAINTAIN: []},
+            PageStatus.EXIT: {
+                UserAction.MAINTAIN: [],
+            },
         }
         self._user_action_to_num_orm: dict[PageStatus:int] = {
             # It is used to be the index of the list in self._transite_rules

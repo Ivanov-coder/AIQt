@@ -45,7 +45,6 @@ class CallSparkAI:
         with open(f"./cache/chat{self.model}-{ID}.json", "w", encoding="utf-8") as jf:
             utils.json.dump(cache, jf, indent=4, ensure_ascii=False)
 
-    # TODO: 上传图片的计划只能先搁置了
     def _load_data(self, ID: str) -> dict:
         """
         加载文字或图片。

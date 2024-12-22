@@ -1,12 +1,10 @@
 from ._pages import *
-from utils import os
-from utils import asyncio
+from ._chat import ChatWithAI
 from utils import json
-from utils import GenerateID
-from utils import setup_ollama
+from utils import typing
 from utils.settings import logger
 from utils.colorful import SetColor
-from ._status import PageStatusTransite, UserAction
+from ._status import PageStatusTransite
 
 
 frcolor = SetColor.set_frcolor
@@ -20,74 +18,117 @@ class CtrlBoard:
 
     def run(self):
         try:
-            self._choose()
+            if (
+                not input(
+                    frcolor(text="\nPress Any Key here")
+                    + frcolor(text="(E to exit): ", color="red")
+                ).upper()
+                == "E"
+            ):
+                self._choose()
+            else:
+                logger.info("Off the program")
+                exit()
 
         except KeyboardInterrupt:
             logger.info("Off the program")
             exit()
 
-        except Exception as e:
-            logger.error(e)
-            logger.info("Restarted")
-            self.run()
+        # except Exception as e:
+        #     logger.error(e)
+        #     logger.info("Restarted")
+        #     self.run()
 
-    def _choose(self):
-        if (
-            not input(
-                frcolor(text="\nPress Any Key here")
-                + frcolor(text="(E to exit): ", color="red")
-            ).upper()
-            == "E"
-        ):
-            print(MainPart.main_page)
-            choice = input(frcolor(text="\nPlease enter the key you want: "))
-            current_page_status = self.update_status(
-                "MainPart", MainPart.main_page_avaliable_func, choice
-            )
-            # FIXME: 用Ctrl+C推出之后反而状态机回不到MainPart了，需要改改
-            if current_page_status == "Chat":
-                try:
-                    num, model = self._read_conf()
-
-                except:
-                    print(Chat.chat_page_for_the_first_time)
-                    num, model = input("Please enter your choice here: ").split(" ")
-                    self._write_into_conf(choice=num, model=model)
-
-                ChatWithAI(num, model).chat()
-                current_page_status = self.update_status(
-                    "Chat", Chat.chat_page_avaliable_func, choice
-                )
-
-            if current_page_status == "SettingsPart":
-
-                pass
-
-            if current_page_status == "InfoPart":
-                pass
-
-            if current_page_status == "Exit":
-                exit()
-
-        else:
-            exit()
-
-    def update_status(
-        self, default_page: str, available_dict: dict, choice: str
+    def _update_status(
+        self, *, available_dict: dict, choice: str, next_page: str
     ) -> str:
         new_page_status, user_action = available_dict.get(
-            choice, [default_page, "Maintain"]
+            choice, [next_page, "Maintain"]
         )
-        
+
         current_page_status = page_status_transite.transite_to(
             new_page_status, user_action
         )
 
         return current_page_status
 
+    def _choose(self):
+        current_page_status = "MainPart"  # Default PageStatus
+        page_status_to_func_orm = {  # This is used to transfer the page status to the function, and then we can execute it successfully
+            "MainPart": self._for_main_part,
+            "Chat": self._for_chat,
+            "SettingsPart": self._for_settings_part,
+            "InfoPart": self._for_info_part,
+            "Exit": self._for_exit,
+        }
+        while True:
+            try:
+                current_page_status = page_status_to_func_orm.get(current_page_status)()
+            except Exception as e:
+                raise e
+
+    def _for_main_part(self) -> str:
+        r"""Return the current PageStatus [MAINPART]"""
+        print(MainPart.main_page)
+        choice = input(frcolor(text="\nPlease Enter the Key you want: "))
+        current_page_status = self._update_status(
+            next_page="MainPart",
+            available_dict=MainPart.main_page_avaliable_func,
+            choice=choice,
+        )
+        return current_page_status
+
+    def _for_chat(self) -> str:
+        r"""Return the current PageStatus [CHAT]"""
+        try:
+            num, model = self._read_conf()
+        except:
+            print(Chat.chat_page_for_the_first_time)
+            num, model = input("Please enter your choice here: ").split(" ")
+            self._write_into_conf(choice=num, model=model)
+
+        try:
+            ChatWithAI(num, model).chat()
+            current_page_status = self._update_status(
+                next_page="Chat",
+                available_dict=Chat.chat_page_avaliable_func,
+                choice=choice,
+            )
+
+        except KeyboardInterrupt:
+
+            print(Chat.chat_page_for_backward)
+            choice = input(frcolor(text="\nPlease enter the key you want: "))
+            current_page_status = self._update_status(
+                next_page="MainPart",
+                available_dict=Chat.chat_page_for_backward_func,
+                choice=choice,
+            )
+
+        return current_page_status
+
+    def _for_settings_part(self) -> str:
+        r"""Return the current PageStatus [SETTINGSPART]"""
+        pass
+
+    def _for_info_part(self) -> str:
+        r"""Return the current PageStatus [INFOPART]"""
+        pass
+
+    def _for_exit(self) -> None:
+        r"""Since exited, we don't need PageStatus here"""
+        logger.info("Off the program")
+        exit()
+
     @staticmethod
-    def _write_into_conf(self, **kwargs) -> None:
-        # 第一次使用时将选择和大模型写入文件 之后再通过设置界面更改
+    def _write_into_conf(**kwargs) -> None:
+        r"""
+        kwargs: Give Params with the formation:
+            choice = str
+            model = str
+        """
+        # TODO: 第一次使用时将选择和大模型写入文件 之后再通过设置界面更改
+        # TODO: 需要对三个方式都保存调用哪个模型
         with open("./config/conf.json", "w") as f:
             json.dump(kwargs, f)
 
@@ -97,99 +138,3 @@ class CtrlBoard:
         with open("./config/conf.json", "r") as f:
             data = json.load(f)
             return data["choice"], data["model"]
-
-
-class ChatWithAI:
-    randID = GenerateID.get_id()
-
-    # 当生成wav时记录音频编号
-    count_other_wav = 0
-    count_ollama_wav = 0
-
-    def __init__(self, choice: str = "1", model: str = "llama3.1"):
-        r"""
-        :param: choice: str -> Select the APP you want to use
-        :param: model: str -> Select the model you want to use
-        """
-        self.choice = choice
-        self.model = model
-
-    def _switch(self, content: str):
-        r"""
-        做选择用的，后面估计得做到Qt选择框里面。
-        """
-        if self.choice == "1":
-            import localAI
-
-            setup_ollama()
-
-            self.count_ollama_wav += 1
-
-            # TODO: 这里的实例化需要做成选择框给用户选择模型
-            return localAI.ollamallm.CallOllamaAI(model="llama3.1").callByOllama(
-                content=content,
-                random_id=self.randID,
-                isTTS=True,
-                count=self.count_ollama_wav,
-                frcolor="lightblue",  # TODO: isTTS frcolor做出来
-            )
-        # TODO: 这里的实例化需要做成选择框给用户选择模型
-
-        elif self.choice == "2":
-            from webAI import spark
-
-            return spark.CallSparkAI(model="lite").callByhttpx(
-                content=content, random_id=self.randID
-            )
-
-        elif self.choice == "3":
-            from webAI import other
-
-            self.count_other_wav += 1
-
-            return other.CallOtherAI(model="qwen-long").callByhttpx(
-                content=content,
-                random_id=self.randID,
-                isTTS=True,
-                count=self.count_other_wav,
-                frcolor="lightblue",  # TODO: isTTS frcolor做出来
-            )
-
-    async def _call(self):
-        content = input(
-            frcolor(text="\nPlease enter you questions: ") + "_____\b\b\b\b\b"
-        )
-        await self._switch(content)
-
-    async def _main(self):
-        try:
-            await self._call()
-        except EOFError:
-            print(frcolor(text="Hey! Please Enter Something!\n", color="red"))
-            await self._call()
-
-    def chat(self):
-        r"""
-        Begin chatting
-        """
-        while True:
-            try:
-                asyncio.run(self._main())
-            except KeyboardInterrupt:
-                CtrlBoard().run()
-
-            # XXX: 这是本地情况
-            except ModuleNotFoundError as e:
-                logger.warning(e)
-                logger.info("Installing requirements...")
-                stdstatus = os.system("pip install -r requirements.txt")
-
-                if stdstatus == 0:
-                    logger.info("Requirements installed successfully.")
-                else:
-                    logger.error("Failed to install requirements.")
-                    break
-            # PS 如果出了什么bug需要调试，请直接注释掉下面那一段
-            # except Exception as e:
-            #     logger.error(e)
-            #     logger.info("Restarted")
