@@ -27,6 +27,8 @@ __all__ = [
 # 初始化cache文件夹
 if not os.path.exists("./cache"):
     os.mkdir("./cache")
+if not os.path.exists("./config"):
+    os.mkdir("./config")
 
 available_encoding = {
     1: "A",

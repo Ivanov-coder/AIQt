@@ -69,14 +69,6 @@ class Chat:
         "B": ["MainPart", "Backward"],
     }
 
-    chat_page_for_backward = r"""
-    +--------+-----------+
-    | Choice |   Value   |
-    +--------+-----------+
-    |    B   |  Backward |
-    +--------+-----------+
-"""
-
     chat_page_for_backward_func: dict[str : list[str, str]] = {
         # The first element in the list is PageStatus, the second element is UserAction
         "B": ["MainPart", "Backward"],
@@ -200,17 +192,37 @@ class SettingsPart:
 
 class InfoPart:
     r"""
-    Here is to show my infos.
+    Contains:
+    1. select_page
+    2. about_page
+    3. info_page_availale_func
     """
 
-    end_page = r"""
+    select_page = r"""
   +--------+--------------+
   | Choice |  Information |
   +--------+--------------+
   |    1   |   About Us   |
-  |    2   |   Contact    |
-  |    3   |   Feedback   |
   +--------+--------------+
   |    B   |   Backward   |
   +--------+--------------+
   """
+    about_page = r"""
+            +------  +------  +------+     /\        /    +------
+           /        /        /       /    /  \      /    / 
+          +----    +----    +-------+    /    \    /    +----
+         /        /        /    \       /      \  /    /
+        /        +------  /      \__   /        \/    +------
+        (!@$ Hello~ I'm Ferne! The developer of this program $@!)
+       {      Well as you see, this is a project about AI,       }
+       /       I've been doing it for about 1/4 of a year        /
+\ You can use it to know how to use some advanced features about Python \
+$                  Such as Enum, Finite Machines                        $
+[             *^____^*I'll write detailed comments*^____^*              ]
+          [            !Welcome to share experience!            ]
+"""
+
+    info_page_available_func = {
+        "1": ["InfoPart", "Maintain"],
+        "B": ["MainPart", "Backward"],
+    }

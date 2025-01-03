@@ -1,7 +1,6 @@
 from ._pages import *
 from ._chat import ChatWithAI
 from utils import json
-from utils import typing
 from utils.settings import logger
 from utils.colorful import SetColor
 from ._status import PageStatusTransite
@@ -96,9 +95,7 @@ class CtrlBoard:
             )
 
         except KeyboardInterrupt:
-
-            print(Chat.chat_page_for_backward)
-            choice = input(frcolor(text="\nPlease enter the key you want: "))
+            choice = "B"
             current_page_status = self._update_status(
                 next_page="MainPart",
                 available_dict=Chat.chat_page_for_backward_func,
@@ -113,7 +110,26 @@ class CtrlBoard:
 
     def _for_info_part(self) -> str:
         r"""Return the current PageStatus [INFOPART]"""
-        pass
+
+        print(InfoPart.select_page)
+        while choice := input(frcolor(text="\nPlease Enter the Key you want: ")):
+
+            if choice != "B":
+                print(InfoPart.about_page)
+                current_page_status = self._update_status(
+                    next_page="InfoPart",
+                    available_dict=InfoPart.info_page_available_func,
+                    choice=choice,
+                )
+
+            else:
+                current_page_status = self._update_status(
+                    next_page="InfoPart",
+                    available_dict=InfoPart.info_page_available_func,
+                    choice=choice,
+                )
+
+            return current_page_status
 
     def _for_exit(self) -> None:
         r"""Since exited, we don't need PageStatus here"""

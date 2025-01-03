@@ -3,19 +3,19 @@ import utils
 api = utils.settings.SetYaml.read_yaml(filename="api.yaml")
 
 
-# 现在只有Lite是能用的...
 @utils.dcl.dataclass
 class _Spark:
-    """ "
-    Spark AI 数据类.
-    使用Spark API调用AI模型.
-    默认使用Spark Lite API，
-    请不要在外部调用该类。
-    由于可以被导出的函数为start，所以请使用下面的方法
-    例如：
+    r"""
+    Spark AI
+
+    Using Spark API to invoke LLMS.
+    Default to "lite"
+
+    Since the function "start()" is what I hope you to use.
+    So Please use it like this:
     >>> model = "pro"
-    >>> start("2", model)    # 调用pro
-    支持调用的模型如下:
+    >>> start("2", model)    # Invoke "pro"
+    Avaliable Models:
     - lite
     - generalv3
     - pro-128k
@@ -35,12 +35,12 @@ class _Spark:
         "max-32k",
         "4.0Ultra",
     ]
-    # key的格式应为 "Bearer " + key
+    # The formation of key should be: "Bearer " + key
     apiKey: str = utils.dcl.field(default=api["spark"][1]["lite_Key"], repr=False)
 
     def __post_init__(self):
-        """
-        匹配模型的API_KEY
+        r"""
+        For check the API_KEY of Spark
         """
 
         model = self.model.lower()
@@ -52,15 +52,18 @@ class _Spark:
 
 @utils.dcl.dataclass
 class _OtherAI:
-    """
-    ### 其他 AI 数据类。
-    使用镜像网站[aihubmix](www.aihubmix.com)调用AI模型 。
-    默认使用GPT-3.5-turbo，
-    传入名字以调用其他模型。
-    由于可以被导出的函数为start，所以请使用下面的方法
-    例如：
+    r"""
+    ### Other AI
+
+    Using the mirror website [aihubmix](www.aihubmix.com) to invoke LLMs.
+    Default to gpt-3.5-turbo.
+
+    Give the name of model to invoke other LLM.
+
+    Since the function "start()" is what I hope you to use.
+    So Please use it like this:
     >>> model = "qwen-long"
-    >>> start("2", model)    # 调用qwen-long
+    >>> start("2", model)    # Invoke qwen-long
     """
 
     model: str = utils.dcl.field(default="gpt-3.5-turbo")
@@ -72,8 +75,8 @@ class _OtherAI:
     apiKey: str = utils.dcl.field(default=api["other"][0]["Key"], repr=False)
 
     def __post_init__(self):
-        """
-        匹配模型的API_KEY
+        r"""
+        Check the API Key of models
         """
         model = self.model.lower()
         # if model in self.support:
@@ -84,29 +87,29 @@ class _OtherAI:
 
 
 def start(*choice: str) -> tuple[str, str]:
-    """
-    ### 你传入的 参数必须有选择AI模型的值
-    比如说你要调用Spark Pro API：
+    r"""
+    ### You must give the name of the model you want to use
+    For example: Invoking "Spark Pro API":
     >>> start("1", "Spark Pro")
 
-    ### 返回值为一个元组，第一个元素是API的链接，第二个元素是API的密钥。
+    ### Then it'll return a tuple[str, str], 1st is API Link, 2nd is API Key
     >>> link, pwd = start("1", "Spark Pro")
     >>> "link", "pwd"
     """
     try:
         match choice:
-            # 这里可以的话加个处理第二个参数没传的情况
-            case ["1", str(model)]:  # 调用 Spark API
+            
+            case ["1", str(model)]:  # Invoke Spark API
                 utils.settings.logger.info(msg=f"Invoking Spark {model.upper()} API...")
                 spark = _Spark(model=model)
                 return spark.link, spark.apiKey
 
-            case ["2", str(model)]:  # 调用 other API
+            case ["2", str(model)]:  # Invoke other API
                 utils.settings.logger.info(f"Invoking {model.upper()} API...")
                 Other = _OtherAI(model=model)
                 return Other.link, Other.apiKey
 
-            case _:  # 如果传参错误，返回None
+            case _:  # Return None IF params can't match the formation
                 utils.settings.logger.warning("Please enter the correct choice.")
                 raise ValueError("Please enter the correct choice.")
 

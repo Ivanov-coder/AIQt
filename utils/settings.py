@@ -39,17 +39,15 @@ class SetYaml:
             "LANG": "en",
         }
 
-        if not os.path.exists(f"{cls.BASIC}"):
-            os.mkdir(f"./{cls.BASIC}")
-            # TODO: 新开个 conf.yaml来配置语音的语言设置等
-            with open(f"{cls.BASIC}/api.yaml", "w", encoding="utf-8") as f:
-                yaml.dump(FMT, f, allow_unicode=True, sort_keys=False)
+        # TODO: 新开个 conf.yaml来配置语音的语言设置等
+        with open(f"{cls.BASIC}/api.yaml", "w", encoding="utf-8") as f:
+            yaml.dump(FMT, f, allow_unicode=True, sort_keys=False)
 
-            with open(f"{cls.BASIC}/ollamapersona.yaml", "w", encoding="utf-8") as f:
-                yaml.dump(PERSONA, f, allow_unicode=True, sort_keys=False)
+        with open(f"{cls.BASIC}/ollamapersona.yaml", "w", encoding="utf-8") as f:
+            yaml.dump(PERSONA, f, allow_unicode=True, sort_keys=False)
 
-            with open(f"{cls.BASIC}/otherpersona.yaml", "w", encoding="utf-8") as f:
-                yaml.dump(PERSONA, f, allow_unicode=True, sort_keys=False)
+        with open(f"{cls.BASIC}/otherpersona.yaml", "w", encoding="utf-8") as f:
+            yaml.dump(PERSONA, f, allow_unicode=True, sort_keys=False)
 
     @classmethod
     def read_yaml(cls, filename: str) -> dict:
