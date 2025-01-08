@@ -78,8 +78,6 @@ class SettingsPart:
 	3. settings_page_for_ollama_and_other => func
 	4. settings_page_for_spark => func
 	5. settings_if_enter_isTTS => func
-
-	Summary_ORM
 	"""
 
 	settings_page_main = r"""
@@ -131,6 +129,7 @@ class SettingsPart:
 		"B": ["SettingsPart", "Backward"],
 	}
 
+# TODO: 看下能不能把spark的页面和ollama_and_others的页面合并一下
 	settings_page_for_spark = r"""
 	+--------+------------+
 	| Choice |  Function  |
@@ -167,15 +166,16 @@ class SettingsPart:
 	}
 
 	settings_page_for_ollama_and_other = r"""
-	+--------+-------------+
-	| Choice |  Function   |
-	+--------+-------------+
-	|    1   |   Model     |
-	|    2   |   isTTS     |
-	|    3   |   Prompt    |
-	+--------+-------------+
-	|    B   |   Backward  |
-	+--------+-------------+
+	+--------+---------------------+
+	| Choice |       Function      |
+	+--------+---------------------+
+	|    1   |   	   Model       |
+	|    2   |   	   isTTS       |
+	|    3   |  	   Prompt      |
+	|    4   |   top_p (spark only)|
+	+--------+---------------------+
+	|    B   |  	   Backward    |
+	+--------+---------------------+
 	Hey! These are infos:
 
 	1. Model is for you to choose!
@@ -227,37 +227,6 @@ class SettingsPart:
 		"B": ["SettingsPart", "Backward"],
 	}
 
-	# TODO: 这里需要有关于进入到第几个页面的逻辑，方便转出和对应打印哪个页面
-	# TODO: 最好加入一个退出所有界面的选项
-	# FIXME: 嘶……感觉会相当难维护了……
-	Summary_ORM = {
-		"settings_page_main": (
-			settings_page_main,
-			settings_page_main_avaliable_func,
-		),
-		"settings_page_for_choose_API": (
-			settings_page_for_choose_API,
-			settings_page_for_choose_API_avaliable_func,
-		),
-		"settings_page_for_ollama_and_other": (
-			settings_page_for_ollama_and_other,
-			settings_page_for_ollama_and_other_avaliable_func,
-		),  # Parallel
-		"settings_page_for_spark": (
-			settings_page_for_spark,
-			settings_page_for_spark_avaliable_func,
-		),  # Parallel
-		"settings_if_enter_isTTS": (
-			settings_if_enter_isTTS,
-			settings_if_enter_isTTS_avaliable_func,
-		),
-	}
-
-	def __init__(self, page):
-		self.page = page
-
-	def get_current_page(self) -> dict:
-		self.Summary_ORM[self.page]
 
 
 class InfoPart:
