@@ -26,7 +26,7 @@ class MainPart:
 	main_page_avaliable_func: dict[str : list[str, str]] = {
 		# The first element in the list is PageStatus, the second element is UserAction
 		"1": ["Chat", "Forward"],
-		"2": ["SettingsPart", "Forward"],
+		"2": ["settings_page_main", "Forward"],
 		"3": ["InfoPart", "Forward"],
 		"E": ["Exit", "Exit"],
 	}
@@ -80,12 +80,21 @@ class SettingsPart:
 	5. settings_if_enter_isTTS => func
 	"""
 
+	r"""
+	Workflow:
+			=> api => end(Choose application to use)
+	main =|
+			=> detail => api(Choose aplication to set conf)
+	"""		
+
+	# TODO: Rewrite all func(dict) with "SettingsPart"
+
 	settings_page_main = r"""
 	+--------+-----------+
 	| Choice |   Value   |
 	+--------+-----------+
-	|    1   |    API    |
-	|    2   |   Detail  |
+	|   ap   |    API    |
+	|   de   |   Detail  |
 	+--------+-----------+
 	|    B   |  Backward |
 	+--------+-----------+
@@ -94,8 +103,7 @@ class SettingsPart:
 		Available:
 		- ollama: This one requires you to install an APP on PC called "Ollama"
 			Website: !$["https://ollama.com/download"]$!.
-		- Spark: If you choose this one, you need to enter your API key
-		.
+		- Spark: If you choose this one, you need to enter your API key.
 		- Other: If you choose this one, you need to enter the Request URL and API key.
 
 	2. Detail is for you to set the detailed settings of these 3 options above.
@@ -103,18 +111,20 @@ class SettingsPart:
 
 	settings_page_main_avaliable_func = {
 		# The first element in the list is PageStatus, the second element is UserAction
-		"1": ["SettingsPart", "Forward"],
-		"2": ["SettingsPart", "Forward"],
+		"ap": ["settings_page_for_choose_API", "Forward"],
+		"de": ["settings_page_for_choose_API", "Forward"],
 		"B": ["MainPart", "Backward"],
 	}
+	# TODO: First deal with entering the main part
+	# -------------------------------------------------------------------
 
 	settings_page_for_choose_API = r"""
 	+--------+-----------+
 	| Choice |   Value   |
 	+--------+-----------+
-	|    1   |   ollama  |
-	|    2   |   spark   |
-	|    3   |   other   |
+	|   ol   |   ollama  |
+	|   sp   |   spark   |
+	|   ot   |   other   |
 	+--------+-----------+
 	|    B   |  Backward |
 	+--------+-----------+
@@ -123,10 +133,10 @@ class SettingsPart:
 
 	settings_page_for_choose_API_avaliable_func = {
 		# The first element in the list is PageStatus, the second element is UserAction
-		"1": ["SettingsPart", "Forward"],
-		"2": ["SettingsPart", "Forward"],
-		"3": ["SettingsPart", "Forward"],
-		"B": ["SettingsPart", "Backward"],
+		"ol": ["settings_page_for_ollama_and_other", "Forward"],
+		"sp": ["settings_page_for_spark", "Forward"],
+		"ot": ["settings_page_for_ollama_and_other", "Forward"],
+		"B": ["settings_page_main", "Backward"],
 	}
 
 # TODO: 看下能不能把spark的页面和ollama_and_others的页面合并一下
@@ -162,19 +172,18 @@ class SettingsPart:
 		# The first element in the list is PageStatus, the second element is UserAction
 		"1": ["SettingsPart", "Forward"],
 		"2": ["SettingsPart", "Forward"],
-		"B": ["SettingsPart", "Backward"],
+		"B": ["settings_page_for_choose_API", "Backward"],
 	}
 
 	settings_page_for_ollama_and_other = r"""
 	+--------+---------------------+
 	| Choice |       Function      |
 	+--------+---------------------+
-	|    1   |   	   Model       |
-	|    2   |   	   isTTS       |
-	|    3   |  	   Prompt      |
-	|    4   |   top_p (spark only)|
+	|    mo  |   	  Model        |
+	|    it  |   	  isTTS        |
+	|    pr  |  	  Prompt       |
 	+--------+---------------------+
-	|    B   |  	   Backward    |
+	|    B   |  	 Backward      |
 	+--------+---------------------+
 	Hey! These are infos:
 
@@ -200,13 +209,13 @@ class SettingsPart:
 		if you enter the sentence like that, the Agent will think it as Neuro-sama.
 		Just let your ideas fly here! (@^_^@)
 	"""
-
+	# TODO: Finish it, though Model should let user enter words in the terminal
 	settings_page_for_ollama_and_other_avaliable_func = {
 		# The first element in the list is PageStatus, the second element is UserAction
-		"1": ["SettingsPart", "Forward"],
-		"2": ["SettingsPart", "Forward"],
-		"3": ["SettingsPart", "Forward"],
-		"B": ["SettingsPart", "Backward"],
+		"mo": ["SettingsPart", "Forward"],
+		"it": ["settings_if_enter_isTTS", "Forward"],
+		"pr": ["SettingsPart", "Forward"],
+		"B": ["settings_page_for_choose_API", "Backward"],
 	}
 
 	settings_if_enter_isTTS = r"""
@@ -219,14 +228,40 @@ class SettingsPart:
 	|    B   |  Backward |
 	+--------+-----------+
 	"""
-
+	# TODO: Finish it, later write a conf file for code to read
+	# And user enter keywords, change the value of the conf file
 	settings_if_enter_isTTS_avaliable_func = {
 		# The first element in the list is PageStatus, the second element is UserAction
 		"1": ["SettingsPart", "Forward"],
 		"2": ["SettingsPart", "Forward"],
-		"B": ["SettingsPart", "Backward"],
+		"B": ["settings_page_for_ollama_and_other", "Backward"],
 	}
 
+	# TODO: 这里需要有关于进入到第几个页面的逻辑，方便转出和对应打印哪个页面
+	# TODO: 最好加入一个退出所有界面的选项
+	# FIXME: 嘶……感觉会相当难维护了……
+	Summary_ORM = {
+		"settings_page_main": (
+			settings_page_main,
+			settings_page_main_avaliable_func,
+		),
+		"settings_page_for_choose_API": (
+			settings_page_for_choose_API,
+			settings_page_for_choose_API_avaliable_func,
+		),
+		"settings_page_for_ollama_and_other": (
+			settings_page_for_ollama_and_other,
+			settings_page_for_ollama_and_other_avaliable_func,
+		),  # Parallel
+		"settings_page_for_spark": (
+			settings_page_for_spark,
+			settings_page_for_spark_avaliable_func,
+		),  # Parallel
+		"settings_if_enter_isTTS": (
+			settings_if_enter_isTTS,
+			settings_if_enter_isTTS_avaliable_func,
+		),
+	}
 
 
 class InfoPart:
