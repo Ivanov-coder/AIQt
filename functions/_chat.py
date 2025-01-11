@@ -38,9 +38,8 @@ class ChatWithAI:
             return localAI.ollamallm.CallOllamaAI(model=self.model).callByOllama(
                 content=content,
                 random_id=self.randID,
-                isTTS=True,
                 count=self.count_ollama_wav,
-                frcolor="lightblue",  # TODO: isTTS frcolor做出来
+                frcolor="lightblue",  # TODO: frcolor做出来
             )
         # TODO: 这里的实例化需要做成选择框给用户选择模型
 
@@ -59,9 +58,8 @@ class ChatWithAI:
             return other.CallOtherAI(model=self.model).callByhttpx(
                 content=content,
                 random_id=self.randID,
-                isTTS=True,
                 count=self.count_other_wav,
-                frcolor="lightblue",  # TODO: isTTS frcolor做出来
+                frcolor="lightblue",  # TODO: frcolor做出来
             )
 
     async def _call(self):

@@ -14,13 +14,6 @@ class PageStatus(Enum):
 
     MAINPART = "MainPart"
     CHAT = "Chat"
-    # SETTINGSPART = (
-    #     "settings_page_main",
-    #     "settings_page_for_choose_API",
-    #     "settings_page_for_ollama_and_other",
-    #     "settings_page_for_spark",
-    #     "settings_if_enter_isTTS",
-    # )
     SETTINGSPART_FOR_MAIN = "settings_page_main"
     SETTINGSPART_FOR_CHOOSE_API = "settings_page_for_choose_API"
     SETTINGSPART_FOR_OLLAMA_AND_OTHER = "settings_page_for_ollama_and_other"

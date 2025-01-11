@@ -1,9 +1,10 @@
 from ._pages import *
-from utils import json
+from utils import yaml
 from ._chat import ChatWithAI
 from abc import ABC, abstractmethod
 from utils.colorful import SetColor
 from utils.settings import logger
+from utils.settings import SetYaml
 from ._status import PageStatusTransite
 
 
@@ -22,25 +23,21 @@ class ForPages(ABC):
         r"""
         :params:
         - available_dict: (dict)
-                                        The dictionary that contains the available page status and user action
+            The dictionary that contains the available page status and user action
         - choice: (str)
-                                        The choice of the user
+            The choice of the user
         - current_page: (str)
-                                        The current page status
+            The current page status
         :return:
         - current_page_status: (str)
         """
         new_page_status, user_action = available_dict.get(
             choice, [current_page, "Maintain"]
         )
-        # if new_page_status != "settings_page_main":
+
         current_page_status = page_status_transite.transite_to(
             new_page_status, user_action
         )
-
-        # current_page_status = settings_page_status_transite.transite_to(
-        # 		new_page_status, user_action
-        # 	)
 
         return current_page_status
 
@@ -65,7 +62,9 @@ class ForChatPart(ForPages):
             num, model = self._read_conf()
         except:
             print(Chat.chat_page_for_the_first_time)
-            num, model = input("Please enter your choice here: ").split(" ")
+            num, model = input(
+                "Please enter your choice here(Use space to split 2 values): "
+            ).split(" ")
             self._write_into_conf(choice=num, model=model)
 
         try:
@@ -79,7 +78,7 @@ class ForChatPart(ForPages):
         except KeyboardInterrupt:
             choice = "B"
             current_page_status = self.update_status(
-                current_page="MainPart",
+                current_page="Chat",
                 available_dict=Chat.chat_page_for_backward_func,
                 choice=choice,
             )
@@ -94,21 +93,27 @@ class ForChatPart(ForPages):
         """
         # TODO: 第一次使用时将选择和大模型写入文件 之后再通过设置界面更改
         # TODO: 需要对三个方式都保存调用哪个模型
-        with open("./config/conf.json", "w") as f:
-            json.dump(kwargs, f)
+        key = "using_chat_model"  # This is the key in configuration
+        SetYaml.rewrite_yaml(key, kwargs)
 
     def _read_conf(self) -> dict:
         # 读取配置文件
-        with open("./config/conf.json", "r") as f:
-            data = json.load(f)
-            return data["choice"], data["model"]
+        with open("./config/settings.yml") as f:
+            conf = yaml.safe_load(f)
+
+            return (
+                conf["using_chat_model"][0]["choice"],
+                conf["using_chat_model"][1]["model"],
+            )
 
 
 class ForSettingsPart(ForPages):
     def for_self_part(self, new_page_status: str = "settings_page_main"):
-        # TODO: 目前的方案是新增加一个枚举和状态机来专门负责SettingsPart
-        # 这样子的话可能就要改一下传入的transite函数了
-        r"""Return the current PageStatus [SETTINGS]"""
+        r"""
+        Return the current PageStatus [SETTINGS]
+        :params:
+        - new_page_status: (str) This is for the whole program can change to the proper pages the user needs
+        """
         summary_orm = SettingsPart.Summary_ORM
         settings_pages_names = list(summary_orm.keys())
 
@@ -177,5 +182,8 @@ class HandlePages:
                     current_page_status = page_status_to_func_orm.get(
                         "settings_page_main"
                     )(current_page_status)
+            except KeyboardInterrupt:
+                current_page_status = page_status_to_func_orm.get("Exit")()
+
             except Exception as e:
                 raise e

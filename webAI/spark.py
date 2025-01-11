@@ -92,19 +92,11 @@ class CallSparkAI:
                 utils.settings.logger.error(e)
 
     async def callByhttpx(self, content: str, random_id: str) -> None:
-        """
+        r"""
         调用Spark AI
         [官方文档](https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html#_1-%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E)
         """
-        root = f"chat{self.model}-{random_id}"  # 删除的聊天记录的根命名
-
-        try:
-            # TODO: 需要把这个做出来到Qt中，成为滚动条去选择
-            BASE_URL, API_KEY = AI.start("1", self.model)
-
-            # TODO: 需要把这个做出来到Qt中，成为输入框
-        except Exception:  # 由于Python多协程的特性，ctrl+c就直接不打印日志了
-            return
+        BASE_URL, API_KEY = AI.start("1", self.model)
 
         try:
             header = {

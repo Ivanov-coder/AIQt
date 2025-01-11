@@ -93,8 +93,8 @@ class SettingsPart:
 	+--------+-----------+
 	| Choice |   Value   |
 	+--------+-----------+
-	|   ap   |    API    |
-	|   de   |   Detail  |
+	|    1   |    API    |
+	|    2   |   Detail  |
 	+--------+-----------+
 	|    B   |  Backward |
 	+--------+-----------+
@@ -111,8 +111,8 @@ class SettingsPart:
 
 	settings_page_main_avaliable_func = {
 		# The first element in the list is PageStatus, the second element is UserAction
-		"ap": ["settings_page_for_choose_API", "Forward"],
-		"de": ["settings_page_for_choose_API", "Forward"],
+		"1": ["settings_page_for_choose_API", "Forward"],
+		"2": ["settings_page_for_choose_API", "Forward"],
 		"B": ["MainPart", "Backward"],
 	}
 	# TODO: First deal with entering the main part
@@ -122,9 +122,9 @@ class SettingsPart:
 	+--------+-----------+
 	| Choice |   Value   |
 	+--------+-----------+
-	|   ol   |   ollama  |
-	|   sp   |   spark   |
-	|   ot   |   other   |
+	|    1   |   ollama  |
+	|    2   |   spark   |
+	|    3   |   other   |
 	+--------+-----------+
 	|    B   |  Backward |
 	+--------+-----------+
@@ -133,9 +133,9 @@ class SettingsPart:
 
 	settings_page_for_choose_API_avaliable_func = {
 		# The first element in the list is PageStatus, the second element is UserAction
-		"ol": ["settings_page_for_ollama_and_other", "Forward"],
-		"sp": ["settings_page_for_spark", "Forward"],
-		"ot": ["settings_page_for_ollama_and_other", "Forward"],
+		"1": ["settings_page_for_ollama_and_other", "Forward"],
+		"2": ["settings_page_for_spark", "Forward"],
+		"3": ["settings_page_for_ollama_and_other", "Forward"],
 		"B": ["settings_page_main", "Backward"],
 	}
 
@@ -179,9 +179,9 @@ class SettingsPart:
 	+--------+---------------------+
 	| Choice |       Function      |
 	+--------+---------------------+
-	|    mo  |   	  Model        |
-	|    it  |   	  isTTS        |
-	|    pr  |  	  Prompt       |
+	|    1  |   	  Model        |
+	|    2   |   	  isTTS        |
+	|    3   |  	  Prompt       |
 	+--------+---------------------+
 	|    B   |  	 Backward      |
 	+--------+---------------------+
@@ -212,9 +212,9 @@ class SettingsPart:
 	# TODO: Finish it, though Model should let user enter words in the terminal
 	settings_page_for_ollama_and_other_avaliable_func = {
 		# The first element in the list is PageStatus, the second element is UserAction
-		"mo": ["SettingsPart", "Forward"],
-		"it": ["settings_if_enter_isTTS", "Forward"],
-		"pr": ["SettingsPart", "Forward"],
+		"1": ["SettingsPart", "Forward"],
+		"2": ["settings_if_enter_isTTS", "Forward"],
+		"3": ["SettingsPart", "Forward"],
 		"B": ["settings_page_for_choose_API", "Backward"],
 	}
 

@@ -30,6 +30,7 @@ if not os.path.exists("./cache"):
 if not os.path.exists("./config"):
     os.mkdir("./config")
 
+
 available_encoding = {
     1: "A",
     2: "B",

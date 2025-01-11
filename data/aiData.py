@@ -1,7 +1,5 @@
 import utils
 
-api = utils.settings.SetYaml.read_yaml(filename="api.yaml")
-
 
 @utils.dcl.dataclass
 class _Spark:
@@ -24,9 +22,10 @@ class _Spark:
     - 4.0Ultra
     """
 
+    api: dict
+    link: str
+    apiKey: str
     model: str = "lite"
-    link: str = api["spark"][0]["Spark_Link"]
-    # 这里不能直接定义为field 选择使用ClassVar类定义
     support: utils.typing.ClassVar[list[str]] = [
         "lite",
         "generalv3",
@@ -36,7 +35,6 @@ class _Spark:
         "4.0Ultra",
     ]
     # The formation of key should be: "Bearer " + key
-    apiKey: str = utils.dcl.field(default=api["spark"][1]["lite_Key"], repr=False)
 
     def __post_init__(self):
         r"""
@@ -45,7 +43,7 @@ class _Spark:
 
         model = self.model.lower()
         if model in self.support:
-            self.apiKey = utils.settings.SetYaml.check_if_none(api, 1, model)
+            self.apiKey = utils.settings.SetYaml.check_if_none(self.api, 1, model)
         else:
             raise ValueError(f"Unsupported model: {self.model}")
 
@@ -66,24 +64,19 @@ class _OtherAI:
     >>> start("2", model)    # Invoke qwen-long
     """
 
+    api: dict
+    link: str = ""
+    apiKey: str = ""
     model: str = utils.dcl.field(default="gpt-3.5-turbo")
-    link: str = utils.dcl.field(default=api["other"][1]["Link"])
-    # 这里不能直接定义为field 选择使用ClassVar类定义
-    # support: utils.typing.ClassVar[list[str]] = [
-    #     "lite", "generalv3", "pro-128k", "generalv3.5", "max-32k", "4.0Ultra"
-    # ]
-    apiKey: str = utils.dcl.field(default=api["other"][0]["Key"], repr=False)
 
     def __post_init__(self):
         r"""
         Check the API Key of models
         """
         model = self.model.lower()
-        # if model in self.support:
-        #     self.apiKey = utils.settings.SetYaml().check_if_none(api, 2, model)
-        # else:
-        #     raise ValueError(f"Unsupported model: {self.model}")
-        self.apiKey, self.link = utils.settings.SetYaml.check_if_none(api, 2, model)
+        self.apiKey, self.link = utils.settings.SetYaml.check_if_none(
+            self.api, 2, model
+        )
 
 
 def start(*choice: str) -> tuple[str, str]:
@@ -96,17 +89,25 @@ def start(*choice: str) -> tuple[str, str]:
     >>> link, pwd = start("1", "Spark Pro")
     >>> "link", "pwd"
     """
+    api = utils.settings.SetYaml.read_yaml(filename="settings.yml")
+    SPARK_LINK = api["spark_conf"][0]["Spark_Link"]
+    SPARK_MODEL_KEY = api["spark_conf"][1]["model_key"]
+    OTHER_LINK = api["other_conf"][1]["Link"]
+    OTHER_KEY = api["other_conf"][0]["Key"]
     try:
         match choice:
-            
             case ["1", str(model)]:  # Invoke Spark API
                 utils.settings.logger.info(msg=f"Invoking Spark {model.upper()} API...")
-                spark = _Spark(model=model)
+                spark = _Spark(
+                    model=model, api=api, link=SPARK_LINK, apiKey=SPARK_MODEL_KEY
+                )
                 return spark.link, spark.apiKey
 
             case ["2", str(model)]:  # Invoke other API
                 utils.settings.logger.info(f"Invoking {model.upper()} API...")
-                Other = _OtherAI(model=model)
+                Other = _OtherAI(
+                    model=model, api=api, link=OTHER_LINK, apiKey=OTHER_KEY
+                )
                 return Other.link, Other.apiKey
 
             case _:  # Return None IF params can't match the formation
@@ -114,5 +115,4 @@ def start(*choice: str) -> tuple[str, str]:
                 raise ValueError("Please enter the correct choice.")
 
     except Exception as e:
-        utils.settings.logger.error(f"An error occurred while invoking AI: {e}")
         raise ValueError(f"An error occurred while invoking AI: {e}")

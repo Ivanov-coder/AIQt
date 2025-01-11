@@ -3,15 +3,16 @@ import httpx
 import utils
 import data.aiData as AI
 
-# 读取人格设定
-conf = utils.settings.SetYaml.read_yaml("otherpersona.yaml")
-# 导入颜色模块
+OTHER_CONF = utils.settings.SetYaml.read_yaml("settings.yml")["other_conf"]
+PERSONA = OTHER_CONF[2]["PERSONA"]
+LANG = OTHER_CONF[3]["LANG"]
+isTTS = OTHER_CONF[4]["isTTS"]
 color = utils.colorful.SetColor
 
 
 @utils.dcl.dataclass
 class CallOtherAI:
-    """
+    r"""
     用于调用其他AI.
     """
 
@@ -41,7 +42,7 @@ class CallOtherAI:
                         0,
                         {
                             "role": "system",
-                            "content": conf["PERSONA"],
+                            "content": PERSONA,
                             "content_type": "text",
                         },
                     )
@@ -132,20 +133,14 @@ class CallOtherAI:
         content: str,
         random_id: str,
         frcolor: str,
-        isTTS: bool = False,
         count: int = 1,
     ) -> None:
         """
         调用其他的AI
         """
-
-        try:
-            # TODO: 需要把这个做出来到Qt中，成为滚动条去选择
-            BASE_URL, API_KEY = AI.start("2", self.model)
-            # 这里只支持调用Spark AI 请不要在这里调用其他AI
-
-        except Exception:  # 由于Python多协程的特性，ctrl+c就直接不打印日志了
-            return
+        
+        # TODO: 需要把这个做出来到Qt中，成为滚动条去选择
+        BASE_URL, API_KEY = AI.start("2", self.model)
 
         try:
             header = {
@@ -164,7 +159,7 @@ class CallOtherAI:
             if isTTS:
                 self._select_tts(
                     "coqui",
-                    conf["LANG"],
+                    LANG,
                     answer,
                     f"./audio/chat{self.model}-{count}-{random_id}.wav",
                 )

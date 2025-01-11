@@ -3,9 +3,10 @@ import utils
 import ollama
 import base64
 
-# Read Persona
-conf = utils.settings.SetYaml.read_yaml("ollamapersona.yaml")
-# Import Color model
+OLLAMA_CONF = utils.settings.SetYaml.read_yaml("settings.yml")["ollama_conf"]
+PERSONA = OLLAMA_CONF[0]["PERSONA"]
+LANG = OLLAMA_CONF[1]["LANG"]
+isTTS = OLLAMA_CONF[2]["isTTS"]
 color = utils.colorful.SetColor
 
 
@@ -94,8 +95,8 @@ class CallOllamaAI:
                         0,
                         {
                             "role": "system",
-                            "content": conf["PERSONA"]
-                            + f"Though you can speak other languages, you always speak {conf['LANG']}",  # 这一部分用于加上人格及设置语言
+                            "content": PERSONA
+                            + f"Though you can speak other languages, you always speak {LANG}",  # 这一部分用于加上人格及设置语言
                         },
                     )
                     print()
@@ -131,7 +132,7 @@ class CallOllamaAI:
                 raise ValueError("Please Check your parameters!")
 
     async def _execute(self, data: list[dict], frcolor: str) -> str:
-        """
+        r"""
         内部逻辑
         """
 
@@ -167,7 +168,6 @@ class CallOllamaAI:
         content: str,
         random_id: str,
         frcolor: str,
-        isTTS: bool = False,
         count: int = 1,
     ) -> None:
         r"""
@@ -206,7 +206,7 @@ class CallOllamaAI:
             if isTTS:
                 self._select_tts(
                     "coqui",
-                    conf["LANG"],
+                    LANG,
                     answer,
                     f"./audio/chat{self.model}-{count}-{random_id}.wav",
                 )
