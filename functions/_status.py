@@ -7,13 +7,19 @@ class PageStatus(Enum):
 
     MAINPART: main page, the default value should be this
     CHAT: chat page
-    SETTINGSPART: settings page
+    INSETTING: This state occurs when user writing something they need into the conf file
+    SETTINGSPART_FOR_MAIN: "settings_page_main"
+    SETTINGSPART_FOR_CHOOSE_API: "settings_page_for_choose_API"
+    SETTINGSPART_FOR_OLLAMA_AND_OTHER: "settings_page_for_ollama_and_other"
+    SETTINGSPART_FOR_SPARK: "settings_page_for_spark"
+    SETTINGSPART_FOR_TTS: "settings_if_enter_isTTS"
     INFOPART: info page
     EXIT: Exit the program
     """
 
     MAINPART = "MainPart"
     CHAT = "Chat"
+    INSETTING = "SettingsPart"  # This state occurs when user writing something they need into the conf file
     SETTINGSPART_FOR_MAIN = "settings_page_main"
     SETTINGSPART_FOR_CHOOSE_API = "settings_page_for_choose_API"
     SETTINGSPART_FOR_OLLAMA_AND_OTHER = "settings_page_for_ollama_and_other"
@@ -136,7 +142,12 @@ class PageStatusTransite:
                         PageStatus.SETTINGSPART_FOR_OLLAMA_AND_OTHER,
                     ]
                 },
-                {UserAction.FORWARD: []},  # TODO: Here may need something
+                {
+                    UserAction.FORWARD: [
+                        PageStatus.INSETTING,
+                        PageStatus.SETTINGSPART_FOR_TTS,
+                    ]
+                },  # TODO: Here may need something
                 {
                     UserAction.BACKWARD: [
                         PageStatus.SETTINGSPART_FOR_MAIN,
@@ -151,7 +162,11 @@ class PageStatusTransite:
                         PageStatus.SETTINGSPART_FOR_SPARK,
                     ]
                 },
-                {UserAction.FORWARD: []},  # TODO: Here may need something
+                {
+                    UserAction.FORWARD: [
+                        PageStatus.INSETTING,
+                    ]
+                },  # TODO: Here may need something
                 {
                     UserAction.BACKWARD: [
                         PageStatus.SETTINGSPART_FOR_MAIN,
@@ -162,10 +177,27 @@ class PageStatusTransite:
             ],
             PageStatus.SETTINGSPART_FOR_TTS: [
                 {UserAction.MAINTAIN: [PageStatus.SETTINGSPART_FOR_TTS]},
-                {UserAction.FORWARD: []},  # TODO: Here may need something
+                {
+                    UserAction.FORWARD: [
+                        PageStatus.INSETTING,
+                    ]
+                },  # TODO: Here may need something
                 {
                     UserAction.BACKWARD: [
                         PageStatus.SETTINGSPART_FOR_OLLAMA_AND_OTHER,
+                    ]
+                },
+                {UserAction.EXIT: []},
+            ],
+            # INSETTING
+            PageStatus.INSETTING: [
+                {UserAction.MAINTAIN: [PageStatus.INSETTING]},
+                {
+                    UserAction.BACKWARD: [
+                        PageStatus.SETTINGSPART_FOR_OLLAMA_AND_OTHER,
+                        PageStatus.SETTINGSPART_FOR_SPARK,
+                        PageStatus.SETTINGSPART_FOR_TTS,
+                        PageStatus.SETTINGSPART_FOR_MAIN # Directly to the initial page
                     ]
                 },
                 {UserAction.EXIT: []},
@@ -247,76 +279,11 @@ class PageStatusTransite:
     def transite_to(self, new_page: str, user_action: str) -> str | None:
         r"""
         If can, transite, return the latest value of the Status for you to go ahead.
-
-
         If can't, raise InvalidTransition Error.
         """
         if not self._can_transite_to(new_page, user_action):
             raise InvalidTransition(
                 f"Cannot transite from {self.current_PageStatus.value} to {new_page} By {user_action}"
             )
-
         self.current_PageStatus = PageStatus(new_page)
-
         return self.current_PageStatus.value
-
-        # TODO: Add sentences to handle SettingsPart
-        # return SettingsPageTransite().transite_to(new_page, user_action)
-
-
-# class SettingsPageTransite:
-#     def __init__(self):
-#         self.current_settings_page_status: PageStatus = (
-#             PageStatus.MAINPART
-#         )
-
-#         self._transite_rules: dict[
-#             PageStatus : list[dict[UserAction : list[PageStatus]]]
-#         ] = {
-
-#         }
-
-#         self._user_action_to_num_orm: dict[PageStatus:int] = {
-#             # It is used to be the index of the list in self._transite_rules
-#             # And if you add a new UserAction, you should add it here
-#             # Also, define the list in self._transite_rules by this order
-#             # Otherwise, it will raise an IndexError :/
-#             UserAction.MAINTAIN: 0,
-#             UserAction.FORWARD: 1,
-#             UserAction.BACKWARD: 2,
-#             UserAction.EXIT: 3,
-#         }
-
-#     def _can_transite_to(self, new_settings_page_status: str, user_action: str) -> bool:
-#         available_actions_dict_list = self._transite_rules[
-#             self.current_settings_page_status
-#         ]  # get the list of actions
-
-#         # TODO: Think about something to build up a map
-#         orm_idx = self._user_action_to_num_orm[
-#             UserAction(user_action)
-#         ]  # get the index to the proper UserAction
-
-#         available_transitions = available_actions_dict_list[orm_idx].get(
-#             UserAction(user_action), []
-#         )  # get the list of PageStatus, if can't match, return []
-
-#         if PageStatus(new_settings_page_status) in available_transitions:
-#             return True
-#         else:
-#             return False
-
-#     def transite_to(self, new_settings_page: str, user_action: str) -> str | None:
-#         r"""
-#         If can, transite, return the latest value of the Status for you to go ahead.
-
-#         If can't, raise InvalidTransition Error.
-#         """
-#         if not self._can_transite_to(new_settings_page, user_action):
-#             raise InvalidTransition(
-#                 f"Cannot transite from {self.current_settings_page_status.value} to {new_settings_page} By {user_action}"
-#             )
-
-#         self.current_PageStatus = PageStatus(new_settings_page)
-#         # TODO: Add sentences to handle SettingsPart
-#         return self.current_PageStatus.value

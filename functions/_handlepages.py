@@ -1,7 +1,6 @@
 from ._pages import *
 from utils import yaml
 from ._chat import ChatWithAI
-from abc import ABC, abstractmethod
 from utils.colorful import SetColor
 from utils.settings import logger
 from utils.settings import SetYaml
@@ -12,10 +11,12 @@ frcolor = SetColor.set_frcolor
 page_status_transite = PageStatusTransite()
 
 
-class ForPages(ABC):
-    @abstractmethod
+class ForPages:
     def for_self_part(self):
-        pass
+        raise NotImplementedError(
+            # Avoiding not rewriting since each subclass needs to handle different conditions
+            f"Subclass <{self.__class__.__name__}> must rewrite the method <for_self_part()>"
+        )
 
     def update_status(
         self, *, available_dict: dict, choice: str, current_page: str
@@ -88,16 +89,13 @@ class ForChatPart(ForPages):
     def _write_into_conf(self, **kwargs) -> None:
         r"""
         kwargs: Give Params with the formation:
-                        choice = str
-                        model = str
+        choice : str
+        model : str
         """
-        # TODO: 第一次使用时将选择和大模型写入文件 之后再通过设置界面更改
-        # TODO: 需要对三个方式都保存调用哪个模型
         key = "using_chat_model"  # This is the key in configuration
         SetYaml.rewrite_yaml(key, kwargs)
 
     def _read_conf(self) -> dict:
-        # 读取配置文件
         with open("./config/settings.yml") as f:
             conf = yaml.safe_load(f)
 
@@ -115,23 +113,52 @@ class ForSettingsPart(ForPages):
         - new_page_status: (str) This is for the whole program can change to the proper pages the user needs
         """
         summary_orm = SettingsPart.Summary_ORM
-        settings_pages_names = list(summary_orm.keys())
 
         current_page_status = new_page_status
-        if current_page_status not in settings_pages_names:
-            raise ValueError("Invalid option")
+        page_detail, avaliable_dict = summary_orm.get(
+            current_page_status,
+            [
+                SettingsPart.settings_page_main,
+                {"B": ("settings_page_main", "Backward")},
+            ],
+        )
 
-        page_detail, avaliable_dict = summary_orm.get(current_page_status, [])
+        if (
+            current_page_status != "SettingsPart"
+        ):  # FIXME: 晚点完成这里的设置TTS和Prompt等逻辑
+            print(page_detail)
+            choice = input(frcolor(text="\nPlease Enter the Key you want: "))
 
-        print(page_detail)
-        choice = input(frcolor(text="\nPlease Enter the Key you want: "))
+        else:
+            print("Please enter the content you want to change", end=" ")
+            content = input(frcolor(text="(Split by space!):\n", color="red")).split(
+                " "
+            )
+            if self._check_if_need_rewrite(current_page_status):
+                print(content)
+
+                # self._rewrite_into_conf()
+            print("Finished!")
+            choice = "B"
 
         current_page_status = self.update_status(
             current_page=current_page_status,
-            available_dict=avaliable_dict,  # TODO: Here we need to check which page is in
+            available_dict=avaliable_dict,
             choice=choice,
         )
         return current_page_status
+
+    def _check_if_need_rewrite(self, current_page: str):
+        r"""Check if the current page allow user to write into the yaml file"""
+        if current_page == "SettingsPart":  # See _status.py, the class PageStatus
+            return True
+
+        return False
+
+    def _rewrite_into_conf(self, **kwargs):
+        r"""Write the params into the yaml file"""
+        # SetYaml.rewrite_yaml(**kwargs)
+        pass
 
 
 class ForInfoPart(ForPages):
@@ -178,10 +205,12 @@ class HandlePages:
                     current_page_status = page_status_to_func_orm.get(
                         current_page_status
                     )()
-                else:
+                else:  # Since some setting pages haven't defined here, we just use this way to call ForSettingsPart
                     current_page_status = page_status_to_func_orm.get(
                         "settings_page_main"
-                    )(current_page_status)
+                    )(
+                        current_page_status
+                    )  # Give the current_pages it is now, in order to let FSM check if can transite to other pages
             except KeyboardInterrupt:
                 current_page_status = page_status_to_func_orm.get("Exit")()
 

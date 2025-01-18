@@ -16,7 +16,7 @@ class SetYaml:
                 "PERSONA": "You are the sarcastic AI VTuber Neuro-sama. You are super confident about yourself.You have a lot of knowledge and you are willing to help others. You like using emojis very much."
             },
             {"LANG": "en"},
-            {"isTTS": True},
+            {"isTTS": False},  # Default to be False, it should be opened by user
         ],
         "other_conf": [
             {"Key": None},
@@ -25,7 +25,7 @@ class SetYaml:
                 "PERSONA": "You are the sarcastic AI VTuber Neuro-sama. You are super confident about yourself.You have a lot of knowledge and you are willing to help others. You like using emojis very much."
             },
             {"LANG": "en"},
-            {"isTTS": True},
+            {"isTTS": False},  # Default to be False, it should be opened by user
         ],
         "spark_conf": [
             {"Spark_Link": "https://spark-api-open.xf-yun.com/v1/chat/completions"},
@@ -47,7 +47,6 @@ class SetYaml:
         r"""
         Create a configuration file when haven't
         """
-        # "https://aihubmix.com/v1/chat/completions"    AihubMix 的聊天对接
 
         with open(f"{cls.BASIC}/{cls.DUMPFILE}", "w", encoding="utf-8") as f:
             yaml.safe_dump(cls.CONFIG, f)

@@ -1,18 +1,40 @@
-class MainPart:
-	r"""
-	Contains:
-	1. welcome_page
-	2. main_page => main_page_avaliable_func: dict[str: list[str, str]]
-	(The first element in the list is PageStatus, the second element is UserAction)
-	"""
+from ._status import PageStatus, UserAction
 
-	welcome_page = r"""
+# PAGE STATUS HERE
+MAIN_PART = PageStatus.MAINPART.value
+CHAT_PART = PageStatus.CHAT.value
+INFO_PART = PageStatus.INFOPART.value
+EXIT_PROGRAM = PageStatus.EXIT.value
+INSETTING = PageStatus.INSETTING.value
+SETTINGSPART_FOR_MAIN = PageStatus.SETTINGSPART_FOR_MAIN.value
+SETTINGSPART_FOR_CHOOSE_API = PageStatus.SETTINGSPART_FOR_CHOOSE_API.value
+SETTINGSPART_FOR_OLLAMA_AND_OTHER = PageStatus.SETTINGSPART_FOR_OLLAMA_AND_OTHER.value
+SETTINGSPART_FOR_SPARK = PageStatus.SETTINGSPART_FOR_SPARK.value
+SETTINGSPART_FOR_TTS = PageStatus.SETTINGSPART_FOR_TTS.value
+
+
+# USER ACTION HERE
+MAINTAIN = UserAction.MAINTAIN.value
+FORWARD = UserAction.FORWARD.value
+BACKWARD = UserAction.BACKWARD.value
+EXIT = UserAction.EXIT.value
+
+
+class MainPart:
+    r"""
+    Contains:
+    1. welcome_page
+    2. main_page => main_page_avaliable_func: dict[str: list[str, str]]
+    (The first element in the list is PageStatus, the second element is UserAction)
+    """
+
+    welcome_page = r"""
   (!@$ Hello~ I'm Ferne! The developer of this program $@!)
 [^_^$           Please Press Any Key to Start         $^_^]
   {%$                  Have Fun here!                 $%}
 	"""
 
-	main_page = r"""
+    main_page = r"""
 	+--------+--------------+
 	| Choice |   Function   |
 	+--------+--------------+
@@ -23,23 +45,23 @@ class MainPart:
 	|    E   |     Exit     |
 	+--------+--------------+
 	"""
-	main_page_avaliable_func: dict[str : list[str, str]] = {
-		# The first element in the list is PageStatus, the second element is UserAction
-		"1": ["Chat", "Forward"],
-		"2": ["settings_page_main", "Forward"],
-		"3": ["InfoPart", "Forward"],
-		"E": ["Exit", "Exit"],
-	}
+    main_page_avaliable_func: dict[str : list[str, str]] = {
+        # The first element in the list is PageStatus, the second element is UserAction
+        "1": (CHAT_PART, FORWARD),
+        "2": (SETTINGSPART_FOR_MAIN, FORWARD),
+        "3": (INFO_PART, FORWARD),
+        "E": (EXIT_PROGRAM, EXIT),
+    }
 
 
 class Chat:
-	r"""
-	Contains:
-	1. chat_page_for_the_first_time => chat_page_avaliable_func: dict[str: list[str, str]]
-	2. chat_page_for_backward_func: dict[str: list[str, str]]
-	"""
+    r"""
+    Contains:
+    1. chat_page_for_the_first_time => chat_page_avaliable_func: dict[str: list[str, str]]
+    2. chat_page_for_backward_func: dict[str: list[str, str]]
+    """
 
-	chat_page_for_the_first_time = r"""
+    chat_page_for_the_first_time = r"""
 		+--------+-----------+
 		| Choice |   Value   |
 		+--------+-----------+
@@ -56,40 +78,40 @@ class Chat:
 		For example:
 		1 llama3.1
 		"""
-	chat_page_avaliable_func: dict[str : list[str, str]] = {
-		# The first element in the list is PageStatus, the second element is UserAction
-		"1": ["Chat", "Maintain"],
-		"2": ["Chat", "Maintain"],
-		"3": ["Chat", "Maintain"],
-		"B": ["MainPart", "Backward"],
-	}
+    chat_page_avaliable_func: dict[str : list[str, str]] = {
+        # The first element in the list is PageStatus, the second element is UserAction
+        "1": (CHAT_PART, MAINTAIN),
+        "2": (CHAT_PART, MAINTAIN),
+        "3": (CHAT_PART, MAINTAIN),
+        "B": (MAIN_PART, BACKWARD),
+    }
 
-	chat_page_for_backward_func: dict[str : list[str, str]] = {
-		# The first element in the list is PageStatus, the second element is UserAction
-		"B": ["MainPart", "Backward"],
-	}
+    chat_page_for_backward_func: dict[str : list[str, str]] = {
+        # The first element in the list is PageStatus, the second element is UserAction
+        "B": (MAIN_PART, BACKWARD),
+    }
 
 
 class SettingsPart:
-	r"""
-	Contains:
-	1. settings_page_main => func
-	2. settings_page_for_choose_API => func
-	3. settings_page_for_ollama_and_other => func
-	4. settings_page_for_spark => func
-	5. settings_if_enter_isTTS => func
-	"""
+    r"""
+    Contains:
+    1. settings_page_main => func
+    2. settings_page_for_choose_API => func
+    3. settings_page_for_ollama_and_other => func
+    4. settings_page_for_spark => func
+    5. settings_if_enter_isTTS => func
+    """
 
-	r"""
+    r"""
 	Workflow:
 			=> api => end(Choose application to use)
 	main =|
 			=> detail => api(Choose aplication to set conf)
-	"""		
+	"""
 
-	# TODO: Rewrite all func(dict) with "SettingsPart"
+    # TODO: Rewrite all func(dict) with "SettingsPart"
 
-	settings_page_main = r"""
+    settings_page_main = r"""
 	+--------+-----------+
 	| Choice |   Value   |
 	+--------+-----------+
@@ -109,16 +131,16 @@ class SettingsPart:
 	2. Detail is for you to set the detailed settings of these 3 options above.
 	"""
 
-	settings_page_main_avaliable_func = {
-		# The first element in the list is PageStatus, the second element is UserAction
-		"1": ["settings_page_for_choose_API", "Forward"],
-		"2": ["settings_page_for_choose_API", "Forward"],
-		"B": ["MainPart", "Backward"],
-	}
-	# TODO: First deal with entering the main part
-	# -------------------------------------------------------------------
+    settings_page_main_avaliable_func = {
+        # The first element in the list is PageStatus, the second element is UserAction
+        "1": (SETTINGSPART_FOR_CHOOSE_API, FORWARD),
+        "2": (SETTINGSPART_FOR_CHOOSE_API, FORWARD),
+        "B": (MAIN_PART, BACKWARD),
+    }
+    # TODO: First deal with entering the main part
+    # -------------------------------------------------------------------
 
-	settings_page_for_choose_API = r"""
+    settings_page_for_choose_API = r"""
 	+--------+-----------+
 	| Choice |   Value   |
 	+--------+-----------+
@@ -131,16 +153,16 @@ class SettingsPart:
 	Hey! Just choose one to enter the setting part!
 """
 
-	settings_page_for_choose_API_avaliable_func = {
-		# The first element in the list is PageStatus, the second element is UserAction
-		"1": ["settings_page_for_ollama_and_other", "Forward"],
-		"2": ["settings_page_for_spark", "Forward"],
-		"3": ["settings_page_for_ollama_and_other", "Forward"],
-		"B": ["settings_page_main", "Backward"],
-	}
+    settings_page_for_choose_API_avaliable_func = {
+        # The first element in the list is PageStatus, the second element is UserAction
+        "1": (SETTINGSPART_FOR_OLLAMA_AND_OTHER, FORWARD),
+        "2": (SETTINGSPART_FOR_SPARK, FORWARD),
+        "3": (SETTINGSPART_FOR_OLLAMA_AND_OTHER, FORWARD),
+        "B": (SETTINGSPART_FOR_MAIN, BACKWARD),
+    }
 
-# TODO: 看下能不能把spark的页面和ollama_and_others的页面合并一下
-	settings_page_for_spark = r"""
+    # TODO: 看下能不能把spark的页面和ollama_and_others的页面合并一下
+    settings_page_for_spark = r"""
 	+--------+------------+
 	| Choice |  Function  |
 	+--------+------------+
@@ -168,18 +190,18 @@ class SettingsPart:
 		ideas, the lower the better!
 	"""
 
-	settings_page_for_spark_avaliable_func = {
-		# The first element in the list is PageStatus, the second element is UserAction
-		"1": ["SettingsPart", "Forward"],
-		"2": ["SettingsPart", "Forward"],
-		"B": ["settings_page_for_choose_API", "Backward"],
-	}
+    settings_page_for_spark_avaliable_func = {
+        # The first element in the list is PageStatus, the second element is UserAction
+        "1": (INSETTING, FORWARD),
+        "2": (INSETTING, FORWARD),
+        "B": (SETTINGSPART_FOR_CHOOSE_API, BACKWARD),
+    }
 
-	settings_page_for_ollama_and_other = r"""
+    settings_page_for_ollama_and_other = r"""
 	+--------+---------------------+
 	| Choice |       Function      |
 	+--------+---------------------+
-	|    1  |   	  Model        |
+	|    1   |   	  Model        |
 	|    2   |   	  isTTS        |
 	|    3   |  	  Prompt       |
 	+--------+---------------------+
@@ -209,16 +231,16 @@ class SettingsPart:
 		if you enter the sentence like that, the Agent will think it as Neuro-sama.
 		Just let your ideas fly here! (@^_^@)
 	"""
-	# TODO: Finish it, though Model should let user enter words in the terminal
-	settings_page_for_ollama_and_other_avaliable_func = {
-		# The first element in the list is PageStatus, the second element is UserAction
-		"1": ["SettingsPart", "Forward"],
-		"2": ["settings_if_enter_isTTS", "Forward"],
-		"3": ["SettingsPart", "Forward"],
-		"B": ["settings_page_for_choose_API", "Backward"],
-	}
+    # TODO: Finish it, though Model should let user enter words in the terminal
+    settings_page_for_ollama_and_other_avaliable_func = {
+        # The first element in the list is PageStatus, the second element is UserAction
+        "1": (INSETTING, FORWARD),
+        "2": (SETTINGSPART_FOR_TTS, FORWARD),
+        "3": (INSETTING, FORWARD),
+        "B": (SETTINGSPART_FOR_CHOOSE_API, BACKWARD),
+    }
 
-	settings_if_enter_isTTS = r"""
+    settings_if_enter_isTTS = r"""
 	+--------+-----------+
 	| Choice |   Value   |
 	+--------+-----------+
@@ -228,51 +250,50 @@ class SettingsPart:
 	|    B   |  Backward |
 	+--------+-----------+
 	"""
-	# TODO: Finish it, later write a conf file for code to read
-	# And user enter keywords, change the value of the conf file
-	settings_if_enter_isTTS_avaliable_func = {
-		# The first element in the list is PageStatus, the second element is UserAction
-		"1": ["SettingsPart", "Forward"],
-		"2": ["SettingsPart", "Forward"],
-		"B": ["settings_page_for_ollama_and_other", "Backward"],
-	}
+    # TODO: Finish it, later write a conf file for code to read
+    # And user enter keywords, change the value of the conf file
+    settings_if_enter_isTTS_avaliable_func = {
+        # The first element in the list is PageStatus, the second element is UserAction
+        "1": (INSETTING, FORWARD),
+        "2": (INSETTING, FORWARD),
+        "B": (SETTINGSPART_FOR_OLLAMA_AND_OTHER, BACKWARD),
+    }
 
-	# TODO: 这里需要有关于进入到第几个页面的逻辑，方便转出和对应打印哪个页面
-	# TODO: 最好加入一个退出所有界面的选项
-	# FIXME: 嘶……感觉会相当难维护了……
-	Summary_ORM = {
-		"settings_page_main": (
-			settings_page_main,
-			settings_page_main_avaliable_func,
-		),
-		"settings_page_for_choose_API": (
-			settings_page_for_choose_API,
-			settings_page_for_choose_API_avaliable_func,
-		),
-		"settings_page_for_ollama_and_other": (
-			settings_page_for_ollama_and_other,
-			settings_page_for_ollama_and_other_avaliable_func,
-		),  # Parallel
-		"settings_page_for_spark": (
-			settings_page_for_spark,
-			settings_page_for_spark_avaliable_func,
-		),  # Parallel
-		"settings_if_enter_isTTS": (
-			settings_if_enter_isTTS,
-			settings_if_enter_isTTS_avaliable_func,
-		),
-	}
+    # TODO: 最好加入一个退出所有界面的选项
+    # FIXME: 嘶……感觉会相当难维护了……
+    Summary_ORM = {
+        "settings_page_main": (
+            settings_page_main,
+            settings_page_main_avaliable_func,
+        ),
+        "settings_page_for_choose_API": (
+            settings_page_for_choose_API,
+            settings_page_for_choose_API_avaliable_func,
+        ),
+        "settings_page_for_ollama_and_other": (
+            settings_page_for_ollama_and_other,
+            settings_page_for_ollama_and_other_avaliable_func,
+        ),  # Parallel
+        "settings_page_for_spark": (
+            settings_page_for_spark,
+            settings_page_for_spark_avaliable_func,
+        ),  # Parallel
+        "settings_if_enter_isTTS": (
+            settings_if_enter_isTTS,
+            settings_if_enter_isTTS_avaliable_func,
+        )
+    }
 
 
 class InfoPart:
-	r"""
-	Contains:
-	1. select_page
-	2. about_page
-	3. info_page_availale_func
-	"""
+    r"""
+    Contains:
+    1. select_page
+    2. about_page
+    3. info_page_availale_func
+    """
 
-	select_page = r"""
+    select_page = r"""
 	+--------+--------------+
 	| Choice |  Information |
 	+--------+--------------+
@@ -281,7 +302,7 @@ class InfoPart:
 	|    B   |   Backward   |
 	+--------+--------------+
 	"""
-	about_page = r"""
+    about_page = r"""
 (!@$ Hello~ I'm Ferne! The developer of this program $@!)
 {    Well as you see, this is a project about AI,       }
 /       I've been doing it for about 1/4 of a year        /
@@ -291,7 +312,7 @@ $                  Such as Enum, Finite Machines                        $
 [            !Welcome to share experience!            ]
 """
 
-	info_page_available_func = {
-		"1": ["InfoPart", "Maintain"],
-		"B": ["MainPart", "Backward"],
-	}
+    info_page_available_func = {
+        "1": (INFO_PART, MAINTAIN),
+        "B": (MAIN_PART, BACKWARD),
+    }

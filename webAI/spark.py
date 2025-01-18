@@ -22,37 +22,36 @@ class CallSparkAI:
     model: str = utils.dcl.field(default="lite")  # 如果有需要 请自行修改参数 默认为lite
 
     # XXX: 讯飞星火lite不支持角色扮演
-    def _write_cache(self, ID: str, content: str, role: str = "user") -> None:
+    def _write_cache(
+        self,
+        filename: str,
+        ID: str,
+        content: str,
+        role: str = "user",
+        isRolePlay: bool = False,
+    ) -> None:
         """
         写入缓存到.cache/chat.json文件中
         """
 
-        log = {
+        cache = self._load_data(filename, ID)["messages"]  # Append into the message.
+        log = {  # Ensure that log is list
             "role": role,
             "content": content,
             "content_type": "text",
         }
-
-        with open(f"./cache/chat{self.model}-{ID}.json", "a+", encoding="utf-8") as jf:
-
-            cache = utils.json_repair.load(jf)
-
-            if not isinstance(cache, list):
-                cache = [log]
-            else:
-                cache.append(log)
-
-        with open(f"./cache/chat{self.model}-{ID}.json", "w", encoding="utf-8") as jf:
+        cache.append(log)
+        with open(filename, "w", encoding="utf-8") as jf:
             utils.json.dump(cache, jf, indent=4, ensure_ascii=False)
 
-    def _load_data(self, ID: str) -> dict:
+    def _load_data(self, filename: str, ID: str) -> dict:
         """
         加载文字或图片。
         图片请传入二进制数据
         ## 小尴尬 LLM不支持图片输入:/
         """
 
-        with open(f"./cache/chat{self.model}-{ID}.json", "r", encoding="utf-8") as jf:
+        with open(filename, "r", encoding="utf-8") as jf:
             contents = utils.json.load(jf)
 
         data = {
@@ -98,16 +97,21 @@ class CallSparkAI:
         """
         BASE_URL, API_KEY = AI.start("1", self.model)
 
+        filename = f"./cache/chat{self.model}-{random_id}.json"
+        if not utils.os.path.exists(filename):
+            with open(filename, "w", encoding="utf-8") as jf:
+                utils.json.dump([], jf)  # Initialize the chatlog
+
         try:
             header = {
                 "Content-Type": "application/json",
                 "Authorization": API_KEY,
             }
 
-            self._write_cache(ID=random_id, content=content)
-            data = self._load_data(ID=random_id)
+            self._write_cache(filename=filename, ID=random_id, content=content)
+            data = self._load_data(filename=filename, ID=random_id)
             answer = await self._execute(url=BASE_URL, header=header, data=data)
-            self._write_cache(ID=random_id, content=answer, role="assistant")
+            self._write_cache(filename=filename, ID=random_id, content=answer, role="assistant")
 
         except Exception as e:
             raise e

@@ -3,10 +3,12 @@ import utils
 import ollama
 import base64
 
+# FIXME: In order to get the conf in real time, we need to insert these 4 lines into the Class
 OLLAMA_CONF = utils.settings.SetYaml.read_yaml("settings.yml")["ollama_conf"]
 PERSONA = OLLAMA_CONF[0]["PERSONA"]
 LANG = OLLAMA_CONF[1]["LANG"]
 isTTS = OLLAMA_CONF[2]["isTTS"]
+# -----------------------------------------These-Four-Lines------------------------------------ #
 color = utils.colorful.SetColor
 
 
@@ -24,33 +26,10 @@ class CallOllamaAI:
     # But this model is a little bit slow, not reccommed
     model: str = utils.dcl.field(default="llama3.1")
 
-    @utils.typing.overload
-    def _write_cache(self, *, ID: str, content: str, role: str = "user") -> None: ...
-
-    @utils.typing.overload
-    def _write_cache(
-        self, *, ID: str, content: str, role: str = "user", image: str | bytes
-    ) -> None: ...
-
-    @utils.typing.overload
-    def _write_cache(
-        self, *, ID: str, content: str, role: str = "user", isRolePlay: bool
-    ) -> None: ...
-
-    @utils.typing.overload
     def _write_cache(
         self,
         *,
-        ID: str,
-        content: str,
-        role: str = "user",
-        isRolePlay: bool,
-        image: str | bytes,
-    ) -> None: ...
-
-    def _write_cache(
-        self,
-        *,
+        filename: str,
         ID: str,
         content: str,
         role: str = "user",
@@ -61,58 +40,30 @@ class CallOllamaAI:
         Writing chatlogs in the cache file
         """
 
-        # XXX: 出于性能方面的考虑 暂时决定不添加多模态功能
-        if image and self.model == "llama3.2-vision":
-            # Ensure for list
-            if not isinstance(image, list):
-                image = [image]
-
-            log = {
-                "role": role,
-                "content": content,
-                "images": image,
-            }
-
-        else:
-            log = {
-                "role": role,
-                "content": content,
-            }
-
-        log = {
+        cache = self._load_data(filename, ID)
+        log = {  # Ensure that log is list
             "role": role,
             "content": content,
         }
 
-        with open(f"./cache/chat{self.model}-{ID}.json", "a+", encoding="utf-8") as jf:
-
-            cache = utils.json_repair.load(jf)
-
-            if not isinstance(cache, list):
-                if isRolePlay:
-                    log = [log] # Ensure the log is list
-                    log.insert( # Give prompts here
-                        0,
-                        {
-                            "role": "system",
-                            "content": PERSONA
-                            + f"Though you can speak other languages, you always speak {LANG}",  # 这一部分用于加上人格及设置语言
-                        },
-                    )
-                    print()
-                    cache = log
-            else:
-                cache.append(log)
-
-        with open(f"./cache/chat{self.model}-{ID}.json", "w", encoding="utf-8") as jf:
+        if isRolePlay and len(cache) == 0:  # Append prompt and ensure no repetitions
+            cache.append(
+                {
+                    "role": "system",
+                    "content": PERSONA
+                    + f"Though you can speak other languages, you always speak {LANG}",  # 这一部分用于加上人格及设置语言
+                },
+            )
+        cache.append(log)
+        with open(filename, "w", encoding="utf-8") as jf:
             utils.json.dump(cache, jf, indent=4, ensure_ascii=False)
 
     # XXX: 上传图片的计划只能先搁置了
-    def _load_data(self, ID: str) -> dict:
+    def _load_data(self, filename: str, ID: str) -> dict:
         r"""
         Load chatlog
         """
-        with open(f"./cache/chat{self.model}-{ID}.json", "r", encoding="utf-8") as jf:
+        with open(filename, "r", encoding="utf-8") as jf:
             contents = utils.json.load(jf)
 
         return contents
@@ -179,28 +130,37 @@ class CallOllamaAI:
         """
         utils.settings.logger.info(f"Invoking {self.model.upper()} API...")
 
-        # FIXME: DEBUG 有时能看到图片有时不能 并且不支持图片之后只有文字输入
+        filename = f"./cache/chat{self.model}-{random_id}.json"
+        if not utils.os.path.exists(filename):
+            with open(filename, "w", encoding="utf-8") as jf:
+                utils.json.dump([], jf)  # Initialize the chatlog
         try:
-            if self.model == "llama3.2-vision":
-                # TODO: 需要把这个做出来到Qt中，成为输入框
-                if content.find("->") != -1:
-                    ctn, IMG_PATH = content.split("->")
-                else:
-                    ctn = content
-                image = base64.b64encode(open(IMG_PATH, "rb").read()).decode()
-                self._write_cache(content=ctn, image=image)
+            # if self.model == "llama3.2-vision":
+            #     # TODO: 需要把这个做出来到Qt中，成为输入框
+            #     if content.find("->") != -1:
+            #         ctn, IMG_PATH = content.split("->")
+            #     else:
+            #         ctn = content
+            #     image = base64.b64encode(open(IMG_PATH, "rb").read()).decode()
+            #     self._write_cache(content=ctn, image=image)
 
-            else:
-                self._write_cache(ID=random_id, content=content, isRolePlay=True)
+            # else:
+            self._write_cache(
+                filename=filename, ID=random_id, content=content, isRolePlay=True
+            )
 
         except Exception:
             return
 
         try:
-            data = self._load_data(ID=random_id)
+            data = self._load_data(filename=filename, ID=random_id)
             answer = await self._execute(data=data, frcolor=frcolor)
             self._write_cache(
-                ID=random_id, content=answer, role="assistant", isRolePlay=True
+                filename=filename,
+                ID=random_id,
+                content=answer,
+                role="assistant",
+                isRolePlay=True,
             )
             # TODO: Give users a chance to choose for what TTS engine they want to use
             if isTTS:
