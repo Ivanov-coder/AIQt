@@ -6,8 +6,7 @@ import pyaudio
 # TODO: 可以开放这个API 但是不建议(太难听了)
 
 class pyTTS:
-    # 初始设定请做到settings.yaml文件中
-    """
+    r"""
     用于生成并播放音频
     """
 

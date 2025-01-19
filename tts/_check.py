@@ -1,8 +1,9 @@
 from utils import typing
 
+
 def check_if_need_tts(which: str = "coqui") -> typing.Optional[typing.Callable]:
     r"""
-    :param: which: str -> select one of the TTS engine, default to "coqui"
+    :param: which: str -> select one of the TTS engine, default to be "coqui"
     """
     if which == "coqui":
         from ._coquiTTS import coquiTTS
@@ -14,4 +15,4 @@ def check_if_need_tts(which: str = "coqui") -> typing.Optional[typing.Callable]:
 
         return pyTTS
     else:
-        raise ValueError("which must be one of 'coqui' or 'pyTTS'")
+        raise ValueError("The parameter `which` must be 'coqui' or 'pyTTS'")

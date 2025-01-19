@@ -12,7 +12,7 @@ frcolor = SetColor.set_frcolor
 class ChatWithAI:
     randID = GenerateID.get_id()
 
-    # 当生成wav时记录音频编号
+    # Record the id if generate .wav files
     count_other_wav = 0
     count_ollama_wav = 0
 
@@ -26,7 +26,8 @@ class ChatWithAI:
 
     def _switch(self, content: str):
         r"""
-        做选择用的，后面估计得做到Qt选择框里面。
+        For selecting models in the terminal,
+        see _pages.SettingsPart, there has a page for selecting the model
         """
         if self.choice == "1":
             import localAI
@@ -35,13 +36,11 @@ class ChatWithAI:
 
             self.count_ollama_wav += 1
 
-            # TODO: 这里的实例化需要做成选择框给用户选择模型
             return localAI.ollamallm.CallOllamaAI(model=self.model).callByOllama(
                 content=content,
                 random_id=self.randID,
-                isTTS=True,
                 count=self.count_ollama_wav,
-                frcolor="lightblue",  # TODO: isTTS frcolor做出来
+                frcolor="lightblue",  # TODO: frcolor做出来
             )
         # TODO: 这里的实例化需要做成选择框给用户选择模型
 
@@ -60,15 +59,12 @@ class ChatWithAI:
             return other.CallOtherAI(model=self.model).callByhttpx(
                 content=content,
                 random_id=self.randID,
-                isTTS=True,
                 count=self.count_other_wav,
-                frcolor="lightblue",  # TODO: isTTS frcolor做出来
+                frcolor="lightblue",  # TODO: frcolor做出来
             )
 
     async def _call(self):
-        content = input(
-            frcolor(text="\nPlease enter you questions: ") + "_____\b\b\b\b\b"
-        )
+        content = input(frcolor(text="\nPlease enter you questions") + ": ")
         await self._switch(content)
 
     async def _main(self):
@@ -82,20 +78,18 @@ class ChatWithAI:
         r"""
         Begin chatting
         """
-        while True:
-            try:
-                asyncio.run(self._main())
-            except KeyboardInterrupt:
-                raise KeyboardInterrupt
+        try:
+            asyncio.run(self._main())
+        except KeyboardInterrupt:
+            raise KeyboardInterrupt
 
-            # XXX: 这是本地情况
-            except ModuleNotFoundError as e:
-                logger.warning(e)
-                logger.info("Installing requirements...")
-                stdstatus = os.system("pip install -r requirements.txt")
+        # This is the possible bug if the local environment hasn't proper module
+        except ModuleNotFoundError as e:
+            logger.warning(e)
+            logger.info("Installing requirements...")
+            stdstatus = os.system("pip install -r requirements.txt")
 
-                if stdstatus == 0:
-                    logger.info("Requirements installed successfully.")
-                else:
-                    logger.error("Failed to install requirements.")
-                    break
+            if stdstatus == 0:
+                logger.info("Requirements installed successfully.")
+            else:
+                raise RuntimeError("Failed to install requirements.")

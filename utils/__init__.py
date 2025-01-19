@@ -1,6 +1,8 @@
+# TODO: Though, personally guess this won't be the best way to import all of packages
+# by `from utils import xxx`
+
 import random
 import dataclasses as dcl  # 用于数据类
-import json_repair  # 用于修复可能有错误的json
 import yaml
 import asyncio
 import json
@@ -16,7 +18,6 @@ __all__ = [
     "logs",
     "colorful",
     "dcl",
-    "json_repair",
     "yaml",
     "asyncio",
     "json",
@@ -27,6 +28,9 @@ __all__ = [
 # 初始化cache文件夹
 if not os.path.exists("./cache"):
     os.mkdir("./cache")
+if not os.path.exists("./config"):
+    os.mkdir("./config")
+
 
 available_encoding = {
     1: "A",
@@ -105,15 +109,15 @@ available_encoding = {
 
 
 class GenerateID:
-    """
-    用于生成ID
+    r"""
+    This is used to generate a random ID for chatlogs and audio waves.
     """
 
     @classmethod
     def _generate_id(cls, times: int = 10) -> str:
-        """
-        生成一个指定长度的随机字符串
-        :param times: 长度
+        r"""
+        Generate a random ID in particular length
+        :param times: loop times for generating length
         """
         randId = "!"
         for _ in range(times):
@@ -124,22 +128,21 @@ class GenerateID:
         return randId
 
     @classmethod
-    def get_id(cls, randKey: str = None) -> str:
-        """
-        当存在参数randKey使获取ID，
-        否则两个都生成并返回。
+    def get_id(cls) -> str:
+        r"""
+        Return random ID
         """
         ID = cls._generate_id()
         return ID
 
 
 def setup_ollama():
+    r"""
+    Check if exists Ollama
     """
-    安装ollama.
-    配Docker镜像的时候才发现原本代码有大问题，忘记支持linux了...
-    """
-    # TODO: 这里似乎可以根据输出情况提醒用户打开Ollama应用
-    if os.system("ollama --version") != 0:
+    if (
+        os.system("ollama --version") != 0
+    ):  # FIXME: However, if you don't setup ollama, it also returns 0.
         if os.name == "nt":
             settings.logger.warning(
                 "Ollama is not installed, please download it from https://ollama.com/download/OllamaSetup.exe"

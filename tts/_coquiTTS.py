@@ -1,17 +1,15 @@
-import os
+from utils import os
 import wave
 import pyaudio
 from TTS.api import TTS
 from torch.cuda import is_available
 
-# TODO: 要思考一下如何搞定False的问题
-# print(is_available())
 # FIXME: 对于单个模型的多个wav文件 需要开个文件夹 不然太乱了
 
+
 class coquiTTS:
-    # 初始设定请做到settings.yaml文件中
-    """
-    用于生成并播放音频
+    r"""
+    Generate wave and play it
     """
 
     def __init__(
@@ -34,10 +32,70 @@ class coquiTTS:
         self.EMOTION = emotion
         self.SPEED = speed
         self.CHUNK = 1024
+        # TODO: Open the API of it when doing Qt:
+        self.AVAILABLE_VOICES = (
+            "Claribel Dervla",
+            "Daisy Studious",
+            "Gracie Wise",
+            "Tammie Ema",
+            "Alison Dietlinde",
+            "Ana Florence",
+            "Annmarie Nele",
+            "Asya Anara",
+            "Brenda Stern",
+            "Gitta Nikolina",
+            "Henriette Usha",
+            "Sofia Hellen",
+            "Tammy Grit",
+            "Tanja Adelina",
+            "Vjollca Johnnie",
+            "Andrew Chipper",
+            "Badr Odhiambo",
+            "Dionisio Schuyler",
+            "Royston Min",
+            "Viktor Eka",
+            "Abrahan Mack",
+            "Adde Michal",
+            "Baldur Sanjin",
+            "Craig Gutsy",
+            "Damien Black",
+            "Gilberto Mathias",
+            "Ilkin Urbano",
+            "Kazuhiko Atallah",
+            "Ludvig Milivoj",
+            "Suad Qasim",
+            "Torcull Diarmuid",
+            "Viktor Menelaos",
+            "Zacharie Aimilios",
+            "Nova Hogarth",
+            "Maja Ruoho",
+            "Uta Obando",
+            "Lidiya Szekeres",
+            "Chandra MacFarland",
+            "Szofi Granger",
+            "Camilla Holmström",
+            "Lilya Stainthorpe",
+            "Zofija Kendrick",
+            "Narelle Moon",
+            "Barbora MacLean",
+            "Alexandra Hisakawa",
+            "Alma María",
+            "Rosemary Okafor",
+            "Ige Behringer",
+            "Filip Traverse",
+            "Damjan Chapman",
+            "Wulf Carlevaro",
+            "Aaron Dreschner",
+            "Kumar Dahl",
+            "Eugenio Mataracı",
+            "Ferran Simen",
+            "Xavier Hayasaka",
+            "Luis Moray",
+            "Marcos Rudaski",
+        )
 
     def _generate(self):
         try:
-            # TODO: 这里只做了一个模型的接口，后面看下其他模型是否可用
             model = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2").to(
                 self.DEVICE
             )
@@ -80,66 +138,3 @@ class coquiTTS:
             self._play()
         except Exception as e:
             raise e
-
-
-# available voices:
-# [
-#     "Claribel Dervla",
-#     "Daisy Studious",
-#     "Gracie Wise",
-#     "Tammie Ema",
-#     "Alison Dietlinde",
-#     "Ana Florence",
-#     "Annmarie Nele",
-#     "Asya Anara",
-#     "Brenda Stern",
-#     "Gitta Nikolina",
-#     "Henriette Usha",
-#     "Sofia Hellen",
-#     "Tammy Grit",
-#     "Tanja Adelina",
-#     "Vjollca Johnnie",
-#     "Andrew Chipper",
-#     "Badr Odhiambo",
-#     "Dionisio Schuyler",
-#     "Royston Min",
-#     "Viktor Eka",
-#     "Abrahan Mack",
-#     "Adde Michal",
-#     "Baldur Sanjin",
-#     "Craig Gutsy",
-#     "Damien Black",
-#     "Gilberto Mathias",
-#     "Ilkin Urbano",
-#     "Kazuhiko Atallah",
-#     "Ludvig Milivoj",
-#     "Suad Qasim",
-#     "Torcull Diarmuid",
-#     "Viktor Menelaos",
-#     "Zacharie Aimilios",
-#     "Nova Hogarth",
-#     "Maja Ruoho",
-#     "Uta Obando",
-#     "Lidiya Szekeres",
-#     "Chandra MacFarland",
-#     "Szofi Granger",
-#     "Camilla Holmström",
-#     "Lilya Stainthorpe",
-#     "Zofija Kendrick",
-#     "Narelle Moon",
-#     "Barbora MacLean",
-#     "Alexandra Hisakawa",
-#     "Alma María",
-#     "Rosemary Okafor",
-#     "Ige Behringer",
-#     "Filip Traverse",
-#     "Damjan Chapman",
-#     "Wulf Carlevaro",
-#     "Aaron Dreschner",
-#     "Kumar Dahl",
-#     "Eugenio Mataracı",
-#     "Ferran Simen",
-#     "Xavier Hayasaka",
-#     "Luis Moray",
-#     "Marcos Rudaski",
-# ]

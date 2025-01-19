@@ -1,126 +1,74 @@
 import tts
 import utils
 import ollama
-import base64
 
-# 读取人格设定
-conf = utils.settings.SetYaml.read_yaml("ollamapersona.yaml")
-# 导入颜色模块
+
+OLLAMA_CONF = utils.settings.SetYaml.read_yaml("settings.yml")["ollama_conf"]
+PERSONA = OLLAMA_CONF[0]["PERSONA"]
+LANG = OLLAMA_CONF[1]["LANG"]
+isTTS = OLLAMA_CONF[2]["isTTS"]
 color = utils.colorful.SetColor
 
 
-@utils.dcl.dataclass
 class CallOllamaAI:
-    """
-    这玩意需要你本地有ollama软件及其大模型。<br/>
-    理论上而言只要[ollama开源模型](https://ollama.com/library)有的，它都支持。<br/>
-    ### 在使用之前确保在命令行执行如下命令：
+    r"""
+    This model requires user to install Ollama and download local LLMs
+    Theoretically ,if those models exist in [ollama-library](https://ollama.com/library), the programme can run.
+    ### Before using, ensure you run this code in terminal:
     >>> ollama pull <the_model_you_want>
-
-    做成Qt之后想办法让这个命令自己执行(可能又要写.bat脚本了)
     """
 
-    # 默认是llama3.1
-    # 想要用图片的话请下载llama3.2-vision
-    # 但是这个版本比较卡，不建议
-    model: str = utils.dcl.field(default="llama3.1")
-
-    @utils.typing.overload
-    def _write_cache(self, *, ID: str, content: str, role: str = "user") -> None: ...
-
-    @utils.typing.overload
-    def _write_cache(
-        self, *, ID: str, content: str, role: str = "user", image: str | bytes
-    ) -> None: ...
-
-    @utils.typing.overload
-    def _write_cache(
-        self, *, ID: str, content: str, role: str = "user", isRolePlay: bool
-    ) -> None: ...
-
-    @utils.typing.overload
-    def _write_cache(
-        self,
-        *,
-        ID: str,
-        content: str,
-        role: str = "user",
-        isRolePlay: bool,
-        image: str | bytes,
-    ) -> None: ...
+    # Default to llama3.1
+    # if Pictures, get llama3.2-vision
+    # But this model is a little bit slow, not reccommed
+    def __init__(self, model="llama3.1"):
+        self.model: str = model
 
     def _write_cache(
         self,
         *,
+        filename: str,
         ID: str,
         content: str,
         role: str = "user",
         isRolePlay: bool = False,
         image: str | bytes = None,
     ) -> None:
+        r"""
+        Writing chatlogs in the cache file
         """
-        写入缓存到.cache/chat.json文件中
-        """
 
-        # XXX: 出于性能方面的考虑 暂时决定不添加多模态功能
-        if image and self.model == "llama3.2-vision":
-            # 确保必须是列表
-            if not isinstance(image, list):
-                image = [image]
-
-            log = {
-                "role": role,
-                "content": content,
-                "images": image,
-            }
-
-        else:
-            log = {
-                "role": role,
-                "content": content,
-            }
-
-        log = {
+        cache = self._load_data(filename, ID)
+        log = {  # Ensure that log is list
             "role": role,
             "content": content,
         }
 
-        with open(f"./cache/chat{self.model}-{ID}.json", "a+", encoding="utf-8") as jf:
-
-            cache = utils.json_repair.load(jf)
-
-            if not isinstance(cache, list):
-                if isRolePlay:
-                    log = [log]
-                    log.insert(
-                        0,
-                        {
-                            "role": "system",
-                            "content": conf["PERSONA"]
-                            + f"Though you can speak other languages, you always speak {conf['LANG']}",  # 这一部分用于加上人格及设置语言
-                        },
-                    )
-                    print()
-                    cache = log
-            else:
-                cache.append(log)
-
-        with open(f"./cache/chat{self.model}-{ID}.json", "w", encoding="utf-8") as jf:
+        if isRolePlay and len(cache) == 0:  # Append prompt and ensure no repetitions
+            cache.append(
+                {
+                    "role": "system",
+                    "content": PERSONA
+                    + f"Though you can speak other languages, you always speak {LANG}",  # 这一部分用于加上人格及设置语言
+                },
+            )
+        cache.append(log)
+        with open(filename, "w", encoding="utf-8") as jf:
             utils.json.dump(cache, jf, indent=4, ensure_ascii=False)
 
     # XXX: 上传图片的计划只能先搁置了
-    def _load_data(self, ID: str) -> dict:
+    def _load_data(self, filename: str, ID: str) -> dict:
+        r"""
+        Load chatlog
         """
-        加载文字或图片。
-        """
-        with open(f"./cache/chat{self.model}-{ID}.json", "r", encoding="utf-8") as jf:
+        with open(filename, "r", encoding="utf-8") as jf:
             contents = utils.json.load(jf)
 
         return contents
 
     def _select_tts(self, *items: tuple[str]) -> None:
-        """
-        选择TTS引擎，默认是coquiTTS
+        r"""
+        Select TTS engine, default to CoquiTTS
         """
         # TODO: 做出来给人选
         match items:
@@ -133,7 +81,7 @@ class CallOllamaAI:
                 raise ValueError("Please Check your parameters!")
 
     async def _execute(self, data: list[dict], frcolor: str) -> str:
-        """
+        r"""
         内部逻辑
         """
 
@@ -169,47 +117,54 @@ class CallOllamaAI:
         content: str,
         random_id: str,
         frcolor: str,
-        isTTS: bool = False,
         count: int = 1,
     ) -> None:
-        """
-        调用ollama软件进行对话
-        :param random_id: 随机生成的id.
-        主要用途是用于对每个用户生成独一无二的id，以便在缓存中区分不同用户的对话记录。
-        :param isTTS: 检测是否需要TTS。
-        :param count: 用于给wav文件编辑顺序
+        r"""
+        Invoking the model in ollama to chat
+        :param random_id: randomly generated id.
+        The main function of it is to distinguish users by different id, in order to classfiy the chatlog of users.
+        :param isTTS: Check if users need TTS.
+        :param count: Used to sort the order of each .wav file.
         """
         utils.settings.logger.info(f"Invoking {self.model.upper()} API...")
-        # root = f"chat{self.model}-{random_id}"  # 删除的聊天记录的根命名
 
-        # FIXME: DEBUG 有时能看到图片有时不能 并且不支持图片之后只有文字输入
+        filename = f"./cache/chat{self.model}-{random_id}.json"
+        if not utils.os.path.exists(filename):
+            with open(filename, "w", encoding="utf-8") as jf:
+                utils.json.dump([], jf)  # Initialize the chatlog
         try:
-            if self.model == "llama3.2-vision":
-                # TODO: 需要把这个做出来到Qt中，成为输入框
-                if content.find("->") != -1:
-                    ctn, IMG_PATH = content.split("->")
-                else:
-                    ctn = content
-                image = base64.b64encode(open(IMG_PATH, "rb").read()).decode()
-                self._write_cache(content=ctn, image=image)
+            # if self.model == "llama3.2-vision":
+            #     # TODO: 需要把这个做出来到Qt中，成为输入框
+            #     if content.find("->") != -1:
+            #         ctn, IMG_PATH = content.split("->")
+            #     else:
+            #         ctn = content
+            #     image = base64.b64encode(open(IMG_PATH, "rb").read()).decode()
+            #     self._write_cache(content=ctn, image=image)
 
-            else:
-                self._write_cache(ID=random_id, content=content, isRolePlay=True)
+            # else:
+            self._write_cache(
+                filename=filename, ID=random_id, content=content, isRolePlay=True
+            )
 
-        except Exception:  # 由于Python多协程的特性，ctrl+c就直接不打印日志了
-            return  # 直接终止程序
+        except Exception:
+            return
 
         try:
-            data = self._load_data(ID=random_id)
+            data = self._load_data(filename=filename, ID=random_id)
             answer = await self._execute(data=data, frcolor=frcolor)
             self._write_cache(
-                ID=random_id, content=answer, role="assistant", isRolePlay=True
+                filename=filename,
+                ID=random_id,
+                content=answer,
+                role="assistant",
+                isRolePlay=True,
             )
-            # TODO: 需要做出来给人选择用什么TTS
+            # TODO: Give users a chance to choose for what TTS engine they want to use
             if isTTS:
                 self._select_tts(
                     "coqui",
-                    conf["LANG"],
+                    LANG,
                     answer,
                     f"./audio/chat{self.model}-{count}-{random_id}.wav",
                 )

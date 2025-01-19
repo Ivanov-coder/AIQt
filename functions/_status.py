@@ -3,18 +3,28 @@ from enum import Enum
 
 class PageStatus(Enum):
     r"""
-    Just for recording the PageStatus
+    For recording the PageStatus
 
     MAINPART: main page, the default value should be this
     CHAT: chat page
-    SETTINGSPART: settings page
+    INSETTING: This state occurs when user writing something they need into the conf file
+    SETTINGSPART_FOR_MAIN: "settings_page_main"
+    SETTINGSPART_FOR_CHOOSE_API: "settings_page_for_choose_API"
+    SETTINGSPART_FOR_OLLAMA_AND_OTHER: "settings_page_for_ollama_and_other"
+    SETTINGSPART_FOR_SPARK: "settings_page_for_spark"
+    SETTINGSPART_FOR_TTS: "settings_if_enter_isTTS"
     INFOPART: info page
     EXIT: Exit the program
     """
 
     MAINPART = "MainPart"
     CHAT = "Chat"
-    SETTINGSPART = "SettingsPart"
+    INSETTING = "SettingsPart"  # This state occurs when user writing something they need into the conf file
+    SETTINGSPART_FOR_MAIN = "settings_page_main"
+    SETTINGSPART_FOR_CHOOSE_API = "settings_page_for_choose_API"
+    SETTINGSPART_FOR_OLLAMA_AND_OTHER = "settings_page_for_ollama_and_other"
+    SETTINGSPART_FOR_SPARK = "settings_page_for_spark"
+    SETTINGSPART_FOR_TTS = "settings_if_enter_isTTS"
     INFOPART = "InfoPart"
     EXIT = "Exit"
 
@@ -51,6 +61,7 @@ class PageStatusTransite:
         self._transite_rules: dict[
             PageStatus : list[dict[UserAction : list[PageStatus]]]
         ] = {
+            # MAINPART
             PageStatus.MAINPART: [
                 {
                     UserAction.MAINTAIN: [
@@ -60,7 +71,7 @@ class PageStatusTransite:
                 {
                     UserAction.FORWARD: [
                         PageStatus.CHAT,
-                        PageStatus.SETTINGSPART,
+                        PageStatus.SETTINGSPART_FOR_MAIN,
                         PageStatus.INFOPART,
                     ]
                 },
@@ -73,6 +84,7 @@ class PageStatusTransite:
                     ]
                 },
             ],
+            # CHAT
             PageStatus.CHAT: [
                 {
                     UserAction.MAINTAIN: [
@@ -91,27 +103,106 @@ class PageStatusTransite:
                     UserAction.EXIT: [],
                 },
             ],
-            PageStatus.SETTINGSPART: [
+            # SETTINGSPART
+            PageStatus.SETTINGSPART_FOR_MAIN: [
                 {
                     UserAction.MAINTAIN: [
-                        PageStatus.SETTINGSPART,
+                        PageStatus.SETTINGSPART_FOR_MAIN,
                     ]
                 },
                 {
                     UserAction.FORWARD: [
-                        PageStatus.SETTINGSPART,
+                        PageStatus.SETTINGSPART_FOR_CHOOSE_API,
+                        PageStatus.SETTINGSPART_FOR_OLLAMA_AND_OTHER,
+                        PageStatus.SETTINGSPART_FOR_SPARK,
                     ]
                 },
+                {UserAction.BACKWARD: [PageStatus.MAINPART]},
+                {UserAction.EXIT: []},
+            ],
+            PageStatus.SETTINGSPART_FOR_CHOOSE_API: [
+                {
+                    UserAction.MAINTAIN: [
+                        PageStatus.SETTINGSPART_FOR_CHOOSE_API,
+                    ]
+                },
+                {
+                    UserAction.FORWARD: [
+                        PageStatus.SETTINGSPART_FOR_OLLAMA_AND_OTHER,
+                        PageStatus.SETTINGSPART_FOR_SPARK,
+                        # HERE FOR NOTHING, SINCE CHOOSING API TO CHAT
+                    ]
+                },
+                {UserAction.BACKWARD: [PageStatus.SETTINGSPART_FOR_MAIN]},
+                {UserAction.EXIT: []},
+            ],
+            PageStatus.SETTINGSPART_FOR_OLLAMA_AND_OTHER: [
+                {
+                    UserAction.MAINTAIN: [
+                        PageStatus.SETTINGSPART_FOR_OLLAMA_AND_OTHER,
+                    ]
+                },
+                {
+                    UserAction.FORWARD: [
+                        PageStatus.INSETTING,
+                        PageStatus.SETTINGSPART_FOR_TTS,
+                    ]
+                },  # TODO: Here may need something
                 {
                     UserAction.BACKWARD: [
-                        PageStatus.MAINPART,
-                        PageStatus.SETTINGSPART,
+                        PageStatus.SETTINGSPART_FOR_MAIN,
+                        PageStatus.SETTINGSPART_FOR_CHOOSE_API,
+                    ]
+                },
+                {UserAction.EXIT: []},
+            ],
+            PageStatus.SETTINGSPART_FOR_SPARK: [
+                {
+                    UserAction.MAINTAIN: [
+                        PageStatus.SETTINGSPART_FOR_SPARK,
                     ]
                 },
                 {
-                    UserAction.EXIT: [],
+                    UserAction.FORWARD: [
+                        PageStatus.INSETTING,
+                    ]
+                },  # TODO: Here may need something
+                {
+                    UserAction.BACKWARD: [
+                        PageStatus.SETTINGSPART_FOR_MAIN,
+                        PageStatus.SETTINGSPART_FOR_CHOOSE_API,
+                    ]
                 },
+                {UserAction.EXIT: []},
             ],
+            PageStatus.SETTINGSPART_FOR_TTS: [
+                {UserAction.MAINTAIN: [PageStatus.SETTINGSPART_FOR_TTS]},
+                {
+                    UserAction.FORWARD: [
+                        PageStatus.INSETTING,
+                    ]
+                },  # TODO: Here may need something
+                {
+                    UserAction.BACKWARD: [
+                        PageStatus.SETTINGSPART_FOR_OLLAMA_AND_OTHER,
+                    ]
+                },
+                {UserAction.EXIT: []},
+            ],
+            # INSETTING
+            PageStatus.INSETTING: [
+                {UserAction.MAINTAIN: [PageStatus.INSETTING]},
+                {
+                    UserAction.BACKWARD: [
+                        PageStatus.SETTINGSPART_FOR_OLLAMA_AND_OTHER,
+                        PageStatus.SETTINGSPART_FOR_SPARK,
+                        PageStatus.SETTINGSPART_FOR_TTS,
+                        PageStatus.SETTINGSPART_FOR_MAIN # Directly to the initial page
+                    ]
+                },
+                {UserAction.EXIT: []},
+            ],
+            # INFOPART
             PageStatus.INFOPART: [
                 {
                     UserAction.MAINTAIN: [
@@ -137,6 +228,7 @@ class PageStatusTransite:
                 UserAction.MAINTAIN: [],
             },
         }
+
         self._user_action_to_num_orm: dict[PageStatus:int] = {
             # It is used to be the index of the list in self._transite_rules
             # And if you add a new UserAction, you should add it here
@@ -148,7 +240,7 @@ class PageStatusTransite:
             UserAction.EXIT: 3,
         }
 
-    def _can_transite_to(self, new_page_status: str, user_action: str):
+    def _can_transite_to(self, new_page_status: str, user_action: str) -> bool:
         r"""
         Check if you can transite to that status
         :param: new_status: You just need to give the name of those Page Classes
@@ -187,15 +279,11 @@ class PageStatusTransite:
     def transite_to(self, new_page: str, user_action: str) -> str | None:
         r"""
         If can, transite, return the latest value of the Status for you to go ahead.
-
-
         If can't, raise InvalidTransition Error.
         """
-        if self._can_transite_to(new_page, user_action):
-            self.current_PageStatus = PageStatus(new_page)
-            return self.current_PageStatus.value
-
-        else:
+        if not self._can_transite_to(new_page, user_action):
             raise InvalidTransition(
                 f"Cannot transite from {self.current_PageStatus.value} to {new_page} By {user_action}"
             )
+        self.current_PageStatus = PageStatus(new_page)
+        return self.current_PageStatus.value

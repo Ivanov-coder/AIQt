@@ -1,38 +1,28 @@
 import logging
 import colorlog
-import dataclasses as dcl
 
 
-# 定义与日志有关的类
-@dcl.dataclass(frozen=True)
 class Logger:
-    """
-    这是一个关于日志的类。
-    你可以根据需要更改日志级别和日志格式。
-    - level: 日志级别
-    - format_type: 日志格式
+    r"""
+    A class of Logger
+    - level: the level of Logs, default to be Logger.INFO
+    - format_type: the format of Logs, default to be 'asctime' | 'levelname' | 'name' | 'message'
     """
 
-    level: int = dcl.field(default=logging.INFO)
-    format_type: str = dcl.field(
-        default="%(asctime)s %(log_color)s| [%(levelname)s] | %(message)s"
-    )
+    level: int = logging.INFO
+    format_type: str = "%(asctime)s %(log_color)s| [%(levelname)s] | %(message)s"
 
     @classmethod
     def setup_logger(cls) -> logging.Logger:
+        r"""
+        Set level and format_type by `Logger().setup_logger()`
+        :params:
+        - level: default to be Logger.INFO
+        - format_type: default to be 'asctime' | 'levelname' | 'name' | 'message'，定义在Logger中。
+        :return:
+        logging.Logger
         """
-        定义为类方法，
-        可以通过Logger().setup_logger()来设置日志等级和输出格式。
-        - level: 日志等级，默认为INFO， 定义在Logger中
-        - format_type: 日志格式，默认为'asctime' | 'levelname' | 'name' | 'message'，定义在Logger中。
-        - fileposition: 日志文件位置，定义在setup_logger中。
-        返回logger对象。
-        """
-        # 感觉没有必要把日志写入文件中，不做了
-
-        # 设置日志等级和格式
-        logger = logging.getLogger()
-        # 设置日志颜色
+        logger = logging.getLogger()  # 设置日志等级和格式
         handler = logging.StreamHandler()  # 初始化handler 并且加入自己的设置
         logger.setLevel(cls.level)  # 必须设置等级 否则不会输出日志信息
         # 自定义格式
@@ -50,12 +40,8 @@ class Logger:
             style="%",
         )
         handler.setFormatter(formatter)
-        # 去除原本的handler
         for h in logger.handlers:
+            # 去除原本的handler
             logger.removeHandler(h)
-
-        # 添加自己的handler
-        logger.addHandler(handler)
-
-        # 返回logger对象
+        logger.addHandler(handler)  # 添加自己的handler
         return logger

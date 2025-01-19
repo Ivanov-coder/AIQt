@@ -3,62 +3,60 @@ import httpx
 import utils
 import data.aiData as AI
 
-# 读取人格设定
-conf = utils.settings.SetYaml.read_yaml("otherpersona.yaml")
-# 导入颜色模块
+
+OTHER_CONF = utils.settings.SetYaml.read_yaml("settings.yml")["other_conf"]
+PERSONA = OTHER_CONF[2]["PERSONA"]
+LANG = OTHER_CONF[3]["LANG"]
+isTTS = OTHER_CONF[4]["isTTS"]
 color = utils.colorful.SetColor
 
 
-@utils.dcl.dataclass
 class CallOtherAI:
-    """
+    r"""
     用于调用其他AI.
     """
 
-    model: str = "gpt-3.5-turbo"  # 如果有需要 请自行修改参数 默认为gpt-3.5-turbo
+    def __init__(self, model: str = "gpt-3.5-turbo"):
+        self.model = model  # 如果有需要 请自行修改参数 默认为gpt-3.5-turbo
 
     def _write_cache(
-        self, ID: str, content: str, role: str = "user", isRolePlay: bool = False
+        self,
+        filename: str,
+        ID: str,
+        content: str,
+        role: str = "user",
+        isRolePlay: bool = False,
     ) -> None:
         """
         写入缓存到.cache/chat.json文件中
         """
-
-        log = {
+        cache = self._load_data(filename, ID)["messages"]  # Append into the message.
+        log = {  # Ensure that log is list
             "role": role,
             "content": content,
             "content_type": "text",
         }
 
-        with open(f"./cache/chat{self.model}-{ID}.json", "a+", encoding="utf-8") as jf:
-
-            cache = utils.json_repair.load(jf)
-
-            if not isinstance(cache, list):
-                if isRolePlay:
-                    log = [log]
-                    log.insert(
-                        0,
-                        {
-                            "role": "system",
-                            "content": conf["PERSONA"],
-                            "content_type": "text",
-                        },
-                    )
-                    cache = log
-            else:
-                cache.append(log)
-
-        with open(f"./cache/chat{self.model}-{ID}.json", "w", encoding="utf-8") as jf:
+        if isRolePlay and len(cache) == 0:  # Append prompt and ensure no repetitions
+            cache.append(
+                {
+                    "role": "system",
+                    "content": PERSONA
+                    + f"Though you can speak other languages, you always speak {LANG}",  # 这一部分用于加上人格及设置语言
+                    "content_type": "text",
+                },
+            )
+        cache.append(log)
+        with open(filename, "w", encoding="utf-8") as jf:
             utils.json.dump(cache, jf, indent=4, ensure_ascii=False)
 
     # TODO: 上传图片的计划只能先搁置了
-    def _load_data(self, ID: str) -> dict:
+    def _load_data(self, filename: str, ID: str) -> dict:
         """
         加载文字或图片。
         图片请传入二进制数据
         """
-        with open(f"./cache/chat{self.model}-{ID}.json", "r", encoding="utf-8") as jf:
+        with open(filename, "r", encoding="utf-8") as jf:
             contents = utils.json.load(jf)
 
         data = {
@@ -112,9 +110,7 @@ class CallOtherAI:
             try:
                 response = await aclient.post(url, headers=header, json=data)
                 if response.status_code == 200:
-                    answer = utils.json_repair.loads(response.text)["choices"][0][
-                        "message"
-                    ][
+                    answer = utils.json.loads(response.text)["choices"][0]["message"][
                         "content"
                     ]  # 获取回答 请自行查阅API文档
                     print(f"{color.set_frcolor(text=answer,color=frcolor)}")
@@ -132,20 +128,19 @@ class CallOtherAI:
         content: str,
         random_id: str,
         frcolor: str,
-        isTTS: bool = False,
         count: int = 1,
     ) -> None:
         """
         调用其他的AI
         """
 
-        try:
-            # TODO: 需要把这个做出来到Qt中，成为滚动条去选择
-            BASE_URL, API_KEY = AI.start("2", self.model)
-            # 这里只支持调用Spark AI 请不要在这里调用其他AI
+        # TODO: 需要把这个做出来到Qt中，成为滚动条去选择
+        BASE_URL, API_KEY = AI.start("2", self.model)
 
-        except Exception:  # 由于Python多协程的特性，ctrl+c就直接不打印日志了
-            return
+        filename = f"./cache/chat{self.model}-{random_id}.json"
+        if not utils.os.path.exists(filename):
+            with open(filename, "w", encoding="utf-8") as jf:
+                utils.json.dump([], jf)  # Initialize the chatlog
 
         try:
             header = {
@@ -153,18 +148,24 @@ class CallOtherAI:
                 "Authorization": API_KEY,
             }
 
-            self._write_cache(ID=random_id, content=content, isRolePlay=True)
-            data = self._load_data(ID=random_id)
+            self._write_cache(
+                filename=filename, ID=random_id, content=content, isRolePlay=True
+            )
+            data = self._load_data(filename=filename, ID=random_id)
             answer = await self._execute(
                 url=BASE_URL, header=header, data=data, frcolor=frcolor
             )
             self._write_cache(
-                ID=random_id, content=answer, role="assistant", isRolePlay=True
+                filename=filename,
+                ID=random_id,
+                content=answer,
+                role="assistant",
+                isRolePlay=True,
             )
             if isTTS:
                 self._select_tts(
                     "coqui",
-                    conf["LANG"],
+                    LANG,
                     answer,
                     f"./audio/chat{self.model}-{count}-{random_id}.wav",
                 )
