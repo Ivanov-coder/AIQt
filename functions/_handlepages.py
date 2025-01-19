@@ -59,32 +59,44 @@ class ForMainPart(ForPages):
 class ForChatPart(ForPages):
     def for_self_part(self):
         r"""Return the current PageStatus [CHAT]"""
-        try:
-            num, model = self._read_conf()
-        except:
-            print(Chat.chat_page_for_the_first_time)
-            num, model = input(
-                "Please enter your choice here(Use space to split 2 values): "
-            ).split(" ")
-            self._write_into_conf(choice=num, model=model)
+        num, model = self._get_num_and_model()
 
         try:
             ChatWithAI(num, model).chat()
             current_page_status = self.update_status(
                 current_page="Chat",
                 available_dict=Chat.chat_page_avaliable_func,
-                choice=choice,
+                choice=num,
             )
 
         except KeyboardInterrupt:
             choice = "B"
             current_page_status = self.update_status(
                 current_page="Chat",
-                available_dict=Chat.chat_page_for_backward_func,
+                available_dict=Chat.chat_page_avaliable_func,
                 choice=choice,
             )
 
         return current_page_status
+
+    def _get_num_and_model(self):
+        try:
+            num, model = self._read_conf()
+        except:
+            print(Chat.chat_page)
+            num, model = input(
+                "Please enter your choice here(Use space to split 2 values): "
+            ).split(" ")
+            self._write_into_conf(choice=num, model=model)
+        return num, model
+
+    def _read_conf(self) -> dict:
+        with open("./config/settings.yml") as f:
+            conf = yaml.safe_load(f)
+            return (
+                conf["using_chat_model"][0]["choice"],
+                conf["using_chat_model"][1]["model"],
+            )
 
     def _write_into_conf(self, **kwargs) -> None:
         r"""
@@ -94,15 +106,6 @@ class ForChatPart(ForPages):
         """
         key = "using_chat_model"  # This is the key in configuration
         SetYaml.rewrite_yaml(key, kwargs)
-
-    def _read_conf(self) -> dict:
-        with open("./config/settings.yml") as f:
-            conf = yaml.safe_load(f)
-
-            return (
-                conf["using_chat_model"][0]["choice"],
-                conf["using_chat_model"][1]["model"],
-            )
 
 
 class ForSettingsPart(ForPages):
@@ -123,13 +126,11 @@ class ForSettingsPart(ForPages):
             ],
         )
 
-        if (
-            current_page_status != "SettingsPart"
-        ):  # FIXME: 晚点完成这里的设置TTS和Prompt等逻辑
+        if current_page_status != "SettingsPart":
             print(page_detail)
             choice = input(frcolor(text="\nPlease Enter the Key you want: "))
 
-        else:
+        else:  # FIXME: 晚点完成这里的设置TTS和Prompt等逻辑
             print("Please enter the content you want to change", end=" ")
             content = input(frcolor(text="(Split by space!):\n", color="red")).split(
                 " "

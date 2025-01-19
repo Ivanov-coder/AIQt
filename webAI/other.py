@@ -3,22 +3,21 @@ import httpx
 import utils
 import data.aiData as AI
 
-# FIXME: In order to get the conf in real time, we need to insert these 4 lines into the Class
+
 OTHER_CONF = utils.settings.SetYaml.read_yaml("settings.yml")["other_conf"]
 PERSONA = OTHER_CONF[2]["PERSONA"]
 LANG = OTHER_CONF[3]["LANG"]
 isTTS = OTHER_CONF[4]["isTTS"]
-# -----------------------------------------These-Four-Lines------------------------------------ #
 color = utils.colorful.SetColor
 
 
-@utils.dcl.dataclass
 class CallOtherAI:
     r"""
     用于调用其他AI.
     """
 
-    model: str = "gpt-3.5-turbo"  # 如果有需要 请自行修改参数 默认为gpt-3.5-turbo
+    def __init__(self, model: str = "gpt-3.5-turbo"):
+        self.model = model  # 如果有需要 请自行修改参数 默认为gpt-3.5-turbo
 
     def _write_cache(
         self,
@@ -111,9 +110,7 @@ class CallOtherAI:
             try:
                 response = await aclient.post(url, headers=header, json=data)
                 if response.status_code == 200:
-                    answer = utils.json_repair.loads(response.text)["choices"][0][
-                        "message"
-                    ][
+                    answer = utils.json.loads(response.text)["choices"][0]["message"][
                         "content"
                     ]  # 获取回答 请自行查阅API文档
                     print(f"{color.set_frcolor(text=answer,color=frcolor)}")

@@ -26,7 +26,8 @@ class ChatWithAI:
 
     def _switch(self, content: str):
         r"""
-        For selecting models in the terminal, see _pages.SettingsPart, there has a page for selecting the model
+        For selecting models in the terminal,
+        see _pages.SettingsPart, there has a page for selecting the model
         """
         if self.choice == "1":
             import localAI
@@ -77,20 +78,18 @@ class ChatWithAI:
         r"""
         Begin chatting
         """
-        while True:
-            try:
-                asyncio.run(self._main())
-            except KeyboardInterrupt:
-                raise KeyboardInterrupt
+        try:
+            asyncio.run(self._main())
+        except KeyboardInterrupt:
+            raise KeyboardInterrupt
 
-            # This is the possible bug if the local environment hasn't proper module
-            except ModuleNotFoundError as e:
-                logger.warning(e)
-                logger.info("Installing requirements...")
-                stdstatus = os.system("pip install -r requirements.txt")
+        # This is the possible bug if the local environment hasn't proper module
+        except ModuleNotFoundError as e:
+            logger.warning(e)
+            logger.info("Installing requirements...")
+            stdstatus = os.system("pip install -r requirements.txt")
 
-                if stdstatus == 0:
-                    logger.info("Requirements installed successfully.")
-                else:
-                    logger.error("Failed to install requirements.")
-                    break
+            if stdstatus == 0:
+                logger.info("Requirements installed successfully.")
+            else:
+                raise RuntimeError("Failed to install requirements.")

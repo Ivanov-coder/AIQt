@@ -3,7 +3,6 @@ import utils
 import data.aiData as AI
 
 
-@utils.dcl.dataclass
 class CallSparkAI:
     """
     SparkAI类.
@@ -19,7 +18,8 @@ class CallSparkAI:
     - 4.0Ultra
     """
 
-    model: str = utils.dcl.field(default="lite")  # 如果有需要 请自行修改参数 默认为lite
+    def __init__(self, model: str = "lite"):
+        self.model: str = model  # 如果有需要 请自行修改参数 默认为lite
 
     # XXX: 讯飞星火lite不支持角色扮演
     def _write_cache(
@@ -75,9 +75,7 @@ class CallSparkAI:
             try:
                 response = await aclient.post(url, headers=header, json=data)
                 if response.status_code == 200:
-                    answer = utils.json_repair.loads(response.text)["choices"][0][
-                        "message"
-                    ][
+                    answer = utils.json.loads(response.text)["choices"][0]["message"][
                         "content"
                     ]  # 获取回答 请自行查阅API文档
                     print(f"{self.model.upper()}: {answer}")
@@ -111,7 +109,9 @@ class CallSparkAI:
             self._write_cache(filename=filename, ID=random_id, content=content)
             data = self._load_data(filename=filename, ID=random_id)
             answer = await self._execute(url=BASE_URL, header=header, data=data)
-            self._write_cache(filename=filename, ID=random_id, content=answer, role="assistant")
+            self._write_cache(
+                filename=filename, ID=random_id, content=answer, role="assistant"
+            )
 
         except Exception as e:
             raise e

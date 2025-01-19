@@ -1,18 +1,15 @@
 import tts
 import utils
 import ollama
-import base64
 
-# FIXME: In order to get the conf in real time, we need to insert these 4 lines into the Class
+
 OLLAMA_CONF = utils.settings.SetYaml.read_yaml("settings.yml")["ollama_conf"]
 PERSONA = OLLAMA_CONF[0]["PERSONA"]
 LANG = OLLAMA_CONF[1]["LANG"]
 isTTS = OLLAMA_CONF[2]["isTTS"]
-# -----------------------------------------These-Four-Lines------------------------------------ #
 color = utils.colorful.SetColor
 
 
-@utils.dcl.dataclass
 class CallOllamaAI:
     r"""
     This model requires user to install Ollama and download local LLMs
@@ -24,7 +21,8 @@ class CallOllamaAI:
     # Default to llama3.1
     # if Pictures, get llama3.2-vision
     # But this model is a little bit slow, not reccommed
-    model: str = utils.dcl.field(default="llama3.1")
+    def __init__(self, model="llama3.1"):
+        self.model: str = model
 
     def _write_cache(
         self,

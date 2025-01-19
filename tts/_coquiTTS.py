@@ -1,17 +1,15 @@
-import os
+from utils import os
 import wave
 import pyaudio
 from TTS.api import TTS
 from torch.cuda import is_available
 
-# TODO: 要思考一下如何搞定False的问题
-# print(is_available())
 # FIXME: 对于单个模型的多个wav文件 需要开个文件夹 不然太乱了
 
 
 class coquiTTS:
     r"""
-    用于生成并播放音频
+    Generate wave and play it
     """
 
     def __init__(
@@ -34,7 +32,7 @@ class coquiTTS:
         self.EMOTION = emotion
         self.SPEED = speed
         self.CHUNK = 1024
-        # TODO: Open the API of it:
+        # TODO: Open the API of it when doing Qt:
         self.AVAILABLE_VOICES = (
             "Claribel Dervla",
             "Daisy Studious",

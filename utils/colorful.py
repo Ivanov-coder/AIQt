@@ -3,8 +3,8 @@ from colorama import init, Fore, Back
 
 # 背景和文字的颜色设置只能二选一，比较尴尬
 class SetColor:
-    """
-    设置在控制台中的颜色 ，也许有用。
+    r"""
+    Set the color in the terminal
     """
 
     def __init__(self):
@@ -12,7 +12,7 @@ class SetColor:
 
     @classmethod
     def set_frcolor(cls, *, text: str, color: str = "green") -> str:
-        """
+        r"""
         Default is green
         """
         if color == "red":
@@ -34,7 +34,7 @@ class SetColor:
 
     @classmethod
     def set_bgcolor(cls, *, text: str, color: str) -> str:
-        """
+        r"""
         Maybe not useful
         """
         if color == "red":
