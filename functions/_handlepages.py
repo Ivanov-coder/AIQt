@@ -12,6 +12,8 @@ page_status_transite = PageStatusTransite()
 
 
 class ForPages:
+    CONF_FILE = "./config/settings.yml"
+
     def for_self_part(self):
         raise NotImplementedError(
             # Avoiding not rewriting since each subclass needs to handle different conditions
@@ -80,6 +82,7 @@ class ForChatPart(ForPages):
         return current_page_status
 
     def _get_num_and_model(self):
+        r"""Get the choice and model, if not, write into conf."""
         try:
             num, model = self._read_conf()
         except:
@@ -91,11 +94,20 @@ class ForChatPart(ForPages):
         return num, model
 
     def _read_conf(self) -> dict:
-        with open("./config/settings.yml") as f:
+        r"""
+        Though no params here,
+        It's neccessary to write down the relationship between choice and model
+
+        :choices:
+            "1" : "ollama",
+            "2" : "spark",
+            "3" : "other"
+        """
+        with open(self.CONF_FILE) as f:
             conf = yaml.safe_load(f)
             return (
-                conf["using_chat_model"][0]["choice"],
-                conf["using_chat_model"][1]["model"],
+                conf["using_chat_model"]["choice"],
+                conf["using_chat_model"]["model"],
             )
 
     def _write_into_conf(self, **kwargs) -> None:
@@ -103,7 +115,16 @@ class ForChatPart(ForPages):
         kwargs: Give Params with the formation:
         choice : str
         model : str
+
+        :choices:
+            "1" : "ollama",
+            "2" : "spark",
+            "3" : "other"
+
+        See those AI files to get the informations of supported models.
         """
+        # TODO: However, the key should be updated by parameters
+        # This function will be the inner interface of SettingsPart.
         key = "using_chat_model"  # This is the key in configuration
         SetYaml.rewrite_yaml(key, kwargs)
 
@@ -113,7 +134,9 @@ class ForSettingsPart(ForPages):
         r"""
         Return the current PageStatus [SETTINGS]
         :params:
-        - new_page_status: (str) This is for the whole program can change to the proper pages the user needs
+        - new_page_status: (str) This is for the whole program
+            can change to the proper pages the user needs,
+            default to be settings_page_main
         """
         summary_orm = SettingsPart.Summary_ORM
 
@@ -122,7 +145,7 @@ class ForSettingsPart(ForPages):
             current_page_status,
             [
                 SettingsPart.settings_page_main,
-                {"B": ("settings_page_main", "Backward")},
+                    {"B": ("settings_page_main", "Backward")},
             ],
         )
 
@@ -130,11 +153,11 @@ class ForSettingsPart(ForPages):
             print(page_detail)
             choice = input(frcolor(text="\nPlease Enter the Key you want: "))
 
-        else:  # FIXME: 晚点完成这里的设置TTS和Prompt等逻辑
+        else:  # TODO: 晚点完成这里的设置TTS和Prompt等逻辑
             print("Please enter the content you want to change", end=" ")
-            content = input(frcolor(text="(Split by space!):\n", color="red")).split(
-                " "
-            )
+            content_input = input(frcolor(text="Please enter the content you want to change (Split by space!):\n", color="red"))
+            if content_input.strip():  # Check if input is not empty
+                content = content_input.split(" ")
             if self._check_if_need_rewrite(current_page_status):
                 print(content)
 
@@ -153,10 +176,9 @@ class ForSettingsPart(ForPages):
         r"""Check if the current page allow user to write into the yaml file"""
         if current_page == "SettingsPart":  # See _status.py, the class PageStatus
             return True
-
         return False
 
-    def _rewrite_into_conf(self, **kwargs):
+    def _rewrite_into_conf(self, key: str, **kwargs):
         r"""Write the params into the yaml file"""
         # SetYaml.rewrite_yaml(**kwargs)
         pass
@@ -182,7 +204,7 @@ class ForInfoPart(ForPages):
 class ForExit(ForPages):
     def for_self_part(self):
         r"""Since exited, we don't need PageStatus here"""
-        logger.info("Off the program")
+        # logger.info("Off the program")
         exit()
 
 
@@ -206,7 +228,7 @@ class HandlePages:
                     current_page_status = page_status_to_func_orm.get(
                         current_page_status
                     )()
-                else:  # Since some setting pages haven't defined here, we just use this way to call ForSettingsPart
+                else:  # Since We ONLY defined MAIN PAGE FOR SettingsPart here, we just use this way to call ForSettingsPart
                     current_page_status = page_status_to_func_orm.get(
                         "settings_page_main"
                     )(

@@ -90,29 +90,20 @@ def start(*choice: str) -> tuple[str, str]:
     >>> "link", "pwd"
     """
     api = utils.settings.SetYaml.read_yaml(filename="settings.yml")
-    SPARK_LINK = api["spark_conf"][0]["Spark_Link"]
-    SPARK_MODEL_KEYS = api["spark_conf"][1]["model_key"]
-    OTHER_LINK = api["other_conf"][1]["Link"]
-    OTHER_KEY = api["other_conf"][0]["Key"]
-    match_idx_dict_for_spark = {
-        "lite_Key": 0,
-        "generalv3_Key": 1,
-        "pro-128k_Key": 2,
-        "max-32k_Key": 3,
-        "4.0Ultra_Key": 4,
-        "generalv3.5_Key": 5,
-    }
+    SPARK_LINK = api["spark_conf"]["Spark_Link"]
+    SPARK_MODEL_KEYS = api["spark_conf"]["model_key"]
+    OTHER_LINK = api["other_conf"]["Link"]
+    OTHER_KEY = api["other_conf"]["Key"]
     try:
         match choice:
             case ["1", str(model)]:  # Invoke Spark API
                 utils.settings.logger.info(msg=f"Invoking Spark {model.upper()} API...")
-                model_key = f"{model}_Key"
-                model_idx = match_idx_dict_for_spark[model_key]
+                specific_model_key = f"{model}_Key"
                 spark = _Spark(
                     model=model,
                     api=api,
                     link=SPARK_LINK,
-                    apiKey=SPARK_MODEL_KEYS[model_idx][model_key],
+                    apiKey=SPARK_MODEL_KEYS[specific_model_key],
                 )
                 return spark.link, spark.apiKey
 

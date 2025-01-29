@@ -2,11 +2,6 @@ import tts
 import utils
 import ollama
 
-
-OLLAMA_CONF = utils.settings.SetYaml.read_yaml("settings.yml")["ollama_conf"]
-PERSONA = OLLAMA_CONF[0]["PERSONA"]
-LANG = OLLAMA_CONF[1]["LANG"]
-isTTS = OLLAMA_CONF[2]["isTTS"]
 color = utils.colorful.SetColor
 
 
@@ -22,6 +17,12 @@ class CallOllamaAI:
     # if Pictures, get llama3.2-vision
     # But this model is a little bit slow, not reccommed
     def __init__(self, model="llama3.1"):
+        self.OLLAMA_CONF: dict = utils.settings.SetYaml.read_yaml("settings.yml")[
+            "ollama_conf"
+        ]
+        self.PERSONA: str = self.OLLAMA_CONF["PERSONA"]
+        self.LANG: str = self.OLLAMA_CONF["LANG"]
+        self.isTTS: str = self.OLLAMA_CONF["isTTS"]
         self.model: str = model
 
     def _write_cache(
@@ -39,6 +40,7 @@ class CallOllamaAI:
         """
 
         cache = self._load_data(filename, ID)
+        # cache = []
         log = {  # Ensure that log is list
             "role": role,
             "content": content,
@@ -48,11 +50,12 @@ class CallOllamaAI:
             cache.append(
                 {
                     "role": "system",
-                    "content": PERSONA
-                    + f"Though you can speak other languages, you always speak {LANG}",  # 这一部分用于加上人格及设置语言
+                    "content": self.PERSONA
+                    + f"Though you can speak other languages, you always speak {self.LANG}",  # 这一部分用于加上人格及设置语言
                 },
             )
         cache.append(log)
+        # print(cache)
         with open(filename, "w", encoding="utf-8") as jf:
             utils.json.dump(cache, jf, indent=4, ensure_ascii=False)
 
@@ -70,21 +73,18 @@ class CallOllamaAI:
         r"""
         Select TTS engine, default to CoquiTTS
         """
-        # TODO: 做出来给人选
         match items:
             case ["coqui", str(lang), str(content), str(path)]:
                 tts.check_if_need_tts()(lang=lang, text=content, output_path=path).get()
-            # TODO: 看下pytts怎么修：
-            case ["pytts", str(content), str(path)]:
+            case ["pytts", str(content), str(path)]:  # 可以考虑放弃pytts？太难听了
                 tts.check_if_need_tts("pytts")(text=content, output_path=path).get()
             case _:
                 raise ValueError("Please Check your parameters!")
 
     async def _execute(self, data: list[dict], frcolor: str) -> str:
         r"""
-        内部逻辑
+        Inner logic
         """
-
         try:
             output = ""
             async for part in await ollama.AsyncClient().chat(
@@ -96,8 +96,7 @@ class CallOllamaAI:
                 )
                 print(content, end="", flush=True)
                 output += part["message"]["content"]
-
-            print()
+            print()  # Used to print '\n'
             return output
 
         # 本地没大模型就下载一个
@@ -105,7 +104,8 @@ class CallOllamaAI:
             utils.settings.logger.warning(f"ollama API error: {re}")
             utils.settings.logger.info("Now Downloading...")
 
-            # TODO: 可能需要考虑把它可视化到Qt中, 毕竟这是控制台输出
+            # FIXME: Here we'd better avoid blocking MainThread, by `subprocess.run` may be good
+            # While downloading the model, use other model to chat.
             utils.os.system(f"ollama pull {self.model}")
             # TODO: 是否还需要考虑添加删除大模型的功能？
 
@@ -133,16 +133,6 @@ class CallOllamaAI:
             with open(filename, "w", encoding="utf-8") as jf:
                 utils.json.dump([], jf)  # Initialize the chatlog
         try:
-            # if self.model == "llama3.2-vision":
-            #     # TODO: 需要把这个做出来到Qt中，成为输入框
-            #     if content.find("->") != -1:
-            #         ctn, IMG_PATH = content.split("->")
-            #     else:
-            #         ctn = content
-            #     image = base64.b64encode(open(IMG_PATH, "rb").read()).decode()
-            #     self._write_cache(content=ctn, image=image)
-
-            # else:
             self._write_cache(
                 filename=filename, ID=random_id, content=content, isRolePlay=True
             )
@@ -160,11 +150,10 @@ class CallOllamaAI:
                 role="assistant",
                 isRolePlay=True,
             )
-            # TODO: Give users a chance to choose for what TTS engine they want to use
-            if isTTS:
+            if self.isTTS:
                 self._select_tts(
                     "coqui",
-                    LANG,
+                    self.LANG,
                     answer,
                     f"./audio/chat{self.model}-{count}-{random_id}.wav",
                 )

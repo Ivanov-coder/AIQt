@@ -15,13 +15,14 @@ class coquiTTS:
     def __init__(
         self,
         *,
-        lang: str,  # WARN: Supported languages are ['en', 'es', 'fr', 'de', 'it', 'pt', 'pl', 'tr', 'ru', 'nl', 'cs', 'ar', 'zh-cn', 'hu', 'ko', 'ja', 'hi']
-        device: str = (
-            "cuda" if is_available() else "cpu"
-        ),  # FIXME: 草 这里也有大问题 如果只下载torch，包是"cpu"的，但是cpu太慢了 需要想想怎么样在requirements.txt里面插入cuda版本
+        # TODO: Add API for user to choose languages.
+        # Supported languages are ['en', 'es', 'fr', 'de', 'it', 'pt', 'pl', 'tr', 'ru', 'nl', 'cs', 'ar', 'zh-cn', 'hu', 'ko', 'ja', 'hi']
+        lang: str,
+        # HERE: IF only install the requirement `torch`, the device will only be cpu:/
+        device: str = "cuda" if is_available() else "cpu",
         output_path: str = "./audio/audio.wav",
         text: str = None,
-        emotion: str = "Neutral",
+        emotion: str = "Neutral",   # This... may be useless I guess :/
         speed: float = 1,
     ) -> None:
 
@@ -103,7 +104,7 @@ class coquiTTS:
             model.tts_to_file(
                 text=self.TEXT,
                 language=self.LANG,
-                speaker="Daisy Studious",  # TODO 开放API
+                speaker="Daisy Studious",   # HERE
                 file_path=self.OUTPUT_PATH,
                 emotion=self.EMOTION,
                 speed=self.SPEED,

@@ -3,7 +3,8 @@ import wave
 import pyaudio
 
 
-# TODO: 可以开放这个API 但是不建议(太难听了)
+# 可以开放这个API 但是不建议(太难听了)
+
 
 class pyTTS:
     r"""

@@ -134,18 +134,3 @@ class GenerateID:
         """
         ID = cls._generate_id()
         return ID
-
-
-def setup_ollama():
-    r"""
-    Check if exists Ollama
-    """
-    if (
-        os.system("ollama --version") != 0
-    ):  # FIXME: However, if you don't setup ollama, it also returns 0.
-        if os.name == "nt":
-            settings.logger.warning(
-                "Ollama is not installed, please download it from https://ollama.com/download/OllamaSetup.exe"
-            )
-        # elif os.name == "posix":  # 针对Linux
-        #     os.system("snap install ollama")

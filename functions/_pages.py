@@ -28,11 +28,12 @@ class MainPart:
     (The first element in the list is PageStatus, the second element is UserAction)
     """
 
-    welcome_page = r"""
-  (!@$ Hello~ I'm Ferne! The developer of this program $@!)
-[^_^$           Please Press Any Key to Start         $^_^]
-  {%$                  Have Fun here!                 $%}
-	"""
+# XXX: When debugger, Close it
+#     welcome_page = r"""
+#   (!@$ Hello~ I'm Ferne! The developer of this program $@!)
+# [^_^$           Please Press Any Key to Start         $^_^]
+#   {%$                  Have Fun here!                 $%}
+# 	"""
 
     main_page = r"""
 	+--------+--------------+
@@ -131,8 +132,6 @@ class SettingsPart:
         "2": (SETTINGSPART_FOR_CHOOSE_API, FORWARD),
         "B": (MAIN_PART, BACKWARD),
     }
-    # TODO: First deal with entering the main part
-    # -------------------------------------------------------------------
 
     settings_page_for_choose_API = r"""
 	+--------+-----------+
@@ -253,8 +252,7 @@ class SettingsPart:
         "B": (SETTINGSPART_FOR_OLLAMA_AND_OTHER, BACKWARD),
     }
 
-    # TODO: 最好加入一个退出所有界面的选项
-    # FIXME: 嘶……感觉会相当难维护了……
+    # FIXME: 嘶……感觉会相当难维护了…… 想办法优化
     Summary_ORM = {
         "settings_page_main": (
             settings_page_main,
@@ -267,15 +265,15 @@ class SettingsPart:
         "settings_page_for_ollama_and_other": (
             settings_page_for_ollama_and_other,
             settings_page_for_ollama_and_other_avaliable_func,
-        ),  # Parallel
+        ),
         "settings_page_for_spark": (
             settings_page_for_spark,
             settings_page_for_spark_avaliable_func,
-        ),  # Parallel
+        ),
         "settings_if_enter_isTTS": (
             settings_if_enter_isTTS,
             settings_if_enter_isTTS_avaliable_func,
-        )
+        ),
     }
 
 

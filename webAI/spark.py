@@ -4,7 +4,7 @@ import data.aiData as AI
 
 
 class CallSparkAI:
-    """
+    r"""
     SparkAI类.
     通过实例化时传入参数来改变model。
     例如
@@ -67,7 +67,7 @@ class CallSparkAI:
 
     # 调用的内部逻辑
     async def _execute(self, *, url: str, header: dict, data: dict) -> str:
-        """
+        r"""
         调用Spark AI.
 
         """

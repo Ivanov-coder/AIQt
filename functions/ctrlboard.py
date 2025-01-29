@@ -14,19 +14,16 @@ class CtrlBoard:
     """
 
     def run(self):
+        # key = input(
+        #     frcolor(text="\nPress Any Key here")
+        #     + frcolor(text="(E to exit): ", color="red")
+        # )
         try:
-            if (
-                not input(
-                    frcolor(text="\nPress Any Key here")
-                    + frcolor(text="(E to exit): ", color="red")
-                ).upper()
-                == "E"
-            ):
-                HandlePages().start_handle()
-            else:
-                logger.info("Off the program")
-                exit()
-
+            # if not key.upper() == "E":
+            HandlePages().start_handle()
+            # else:
+            #     logger.info("Off the program")
+            #     exit()
         except KeyboardInterrupt:
-            logger.info("Off the program")
+            # logger.info("Off the program")
             exit()

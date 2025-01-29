@@ -1,11 +1,10 @@
 from utils import os
 from utils import asyncio
 from utils import GenerateID
-from utils import setup_ollama
 from utils.settings import logger
 from utils.colorful import SetColor
 
-
+# TODO: frcolor的选择做出来
 frcolor = SetColor.set_frcolor
 
 
@@ -29,20 +28,18 @@ class ChatWithAI:
         For selecting models in the terminal,
         see _pages.SettingsPart, there has a page for selecting the model
         """
+        # TODO: Hmm Can we just give the choice to a function in __init__.py? Just put those AI together I think
+        # Though Spark AI don't support PERSONA, it'd be great if it can also support TTS.
         if self.choice == "1":
             import localAI
 
-            setup_ollama()
-
             self.count_ollama_wav += 1
-
             return localAI.ollamallm.CallOllamaAI(model=self.model).callByOllama(
                 content=content,
                 random_id=self.randID,
                 count=self.count_ollama_wav,
-                frcolor="lightblue",  # TODO: frcolor做出来
+                frcolor="lightblue",  # HERE
             )
-        # TODO: 这里的实例化需要做成选择框给用户选择模型
 
         elif self.choice == "2":
             from webAI import spark
@@ -60,7 +57,7 @@ class ChatWithAI:
                 content=content,
                 random_id=self.randID,
                 count=self.count_other_wav,
-                frcolor="lightblue",  # TODO: frcolor做出来
+                frcolor="lightblue",  # HERE
             )
 
     async def _call(self):

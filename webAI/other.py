@@ -5,9 +5,9 @@ import data.aiData as AI
 
 
 OTHER_CONF = utils.settings.SetYaml.read_yaml("settings.yml")["other_conf"]
-PERSONA = OTHER_CONF[2]["PERSONA"]
-LANG = OTHER_CONF[3]["LANG"]
-isTTS = OTHER_CONF[4]["isTTS"]
+PERSONA = OTHER_CONF["PERSONA"]
+LANG = OTHER_CONF["LANG"]
+isTTS = OTHER_CONF["isTTS"]
 color = utils.colorful.SetColor
 
 

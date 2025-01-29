@@ -1,3 +1,4 @@
-/config/
-/cache/
-/audio/
+/config
+/cache
+/audio
+./data/__pycache__

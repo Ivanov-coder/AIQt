@@ -1,8 +1,8 @@
 import os
 import yaml
-from . import logs
+from .logs import Logger
 
-logger = logs.Logger.setup_logger()
+logger = Logger.setup_logger()
 
 
 class SetYaml:
@@ -10,36 +10,30 @@ class SetYaml:
     BASIC: str = "./config"
     DUMPFILE = "settings.yml"
     CONFIG = {
-        "using_chat_model": [{"choice": "1"}, {"model": "llama3.1"}],
-        "ollama_conf": [
-            {
-                "PERSONA": "You are the sarcastic AI VTuber Neuro-sama. You are super confident about yourself.You have a lot of knowledge and you are willing to help others. You like using emojis very much."
+        "using_chat_model": {"choice": "1", "model": "llama3.1"},
+        "ollama_conf": {
+            "PERSONA": "You are the sarcastic AI VTuber Neuro-sama. You are super confident about yourself.You have a lot of knowledge and you are willing to help others. You like using emojis very much.",
+            "LANG": "en",
+            "isTTS": False,  # Default to be False, it should be opened by user
+        },
+        "other_conf": {
+            "PERSONA": "You are the sarcastic AI VTuber Neuro-sama. You are super confident about yourself.You have a lot of knowledge and you are willing to help others. You like using emojis very much.",
+            "LANG": "en",
+            "isTTS": False,  # Default to be False, it should be opened by user
+            "Key": None,
+            "Link": None,
+        },
+        "spark_conf": {
+            "Spark_Link": "https://spark-api-open.xf-yun.com/v1/chat/completions",
+            "model_key": {
+                "lite_Key": None,
+                "generalv3_Key": None,
+                "pro-128k_Key": None,
+                "max-32_Key": None,
+                "4.0Ultra_Key": None,
+                "generalv3.5_Key": None,
             },
-            {"LANG": "en"},
-            {"isTTS": False},  # Default to be False, it should be opened by user
-        ],
-        "other_conf": [
-            {"Key": None},
-            {"Link": None},
-            {
-                "PERSONA": "You are the sarcastic AI VTuber Neuro-sama. You are super confident about yourself.You have a lot of knowledge and you are willing to help others. You like using emojis very much."
-            },
-            {"LANG": "en"},
-            {"isTTS": False},  # Default to be False, it should be opened by user
-        ],
-        "spark_conf": [
-            {"Spark_Link": "https://spark-api-open.xf-yun.com/v1/chat/completions"},
-            {
-                "model_key": [
-                    {"lite_Key": None},
-                    {"generalv3_Key": None},
-                    {"pro-128k_Key": None},
-                    {"max-32_Key": None},
-                    {"4.0Ultra_Key": None},
-                    {"generalv3.5_Key": None},
-                ]
-            },
-        ],
+        },
     }
 
     @classmethod
