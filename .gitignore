@@ -1,4 +1,5 @@
-/config
-/cache
-/audio
-./data/__pycache__
+/.vscode/
+/config/
+/cache/
+/audio/
+__pycache__/

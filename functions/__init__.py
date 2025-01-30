@@ -1,5 +1,5 @@
-from ._pages import MainPart
-from .ctrlboard import CtrlBoard
+from .pages.pages import MainPart
+from .controller import CtrlBoard
 
 
 __all__ = ["CtrlBoard"]
