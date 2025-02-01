@@ -1,9 +1,10 @@
 import json
 import os
 import httpx
+from tts import get_tts_socket
 from utils import logger
 from utils import set_frcolor
-from app.properties_handler import GetSparkProperties
+from ...properties.detailed.spark_property_handler import GetSparkProperties
 
 
 class CallSparkAI:
@@ -21,6 +22,10 @@ class CallSparkAI:
 
     def __init__(self, model: str = "lite"):
         self.model: str = model
+        self.CONF = GetSparkProperties().get_properties()
+        self.LANG = self.CONF["LANG"]
+        self.isTTS = self.CONF["isTTS"]
+        self.BASE_URL, self.API_KEY = self.CONF["link"], self.CONF["key"][self.model]
 
     # XXX: 讯飞星火lite不支持角色扮演
     def _write_cache(
@@ -66,9 +71,26 @@ class CallSparkAI:
 
         return data
 
-    async def _execute(
-        self, *, url: str, header: dict, data: dict, frcolor: str
-    ) -> str:
+    def _select_tts(
+        self, model: str, filename: str, answer: str, lang: str = "en"
+    ) -> None:
+        r"""
+        Select TTS engine
+        """
+        # FIXME: The parameters for TTS depends on the type the function returns...
+        engine = get_tts_socket(model)(
+            answer,
+            output_path=filename,
+            lang=lang,
+            # TODO: Before a good solution, stop those API
+            # rate=150,
+            # volume=1.0,
+            # emotion="Neutral",
+            # speed=1.0,
+        )
+        engine.get()
+
+    def _execute(self, *, url: str, header: dict, data: dict, frcolor: str) -> str:
         r"""
         The inner logic for invoking Spark AI
         :param:
@@ -81,14 +103,14 @@ class CallSparkAI:
             frcolor (str):
                 The color for the response
         """
-        async with httpx.AsyncClient(timeout=60) as aclient:
+        with httpx.Client(timeout=60) as client:
             try:
-                response = await aclient.post(url, headers=header, json=data)
+                response = client.post(url, headers=header, json=data)
                 if response.status_code == 200:
                     answer = json.loads(response.text)["choices"][0]["message"][
                         "content"
                     ]  # 获取回答 请自行查阅API文档
-                    print(f"{set_frcolor(text=answer,color=frcolor)}", flush=True)
+                    print(f"{set_frcolor(text=answer,color=frcolor)}")
                     return answer
                 else:
                     logger.warning(
@@ -98,7 +120,7 @@ class CallSparkAI:
             except Exception as e:
                 logger.error(e)
 
-    async def call(
+    def call(
         self,
         content: str,
         random_id: str,
@@ -123,9 +145,6 @@ class CallSparkAI:
                 Used to sort the order of each .wav file.
         """
 
-        CONF = GetSparkProperties().get_properties()
-        BASE_URL, API_KEY = CONF["link"], CONF["key"][self.model]
-
         filename = f"./cache/chat{self.model}-{random_id}.json"
         if not os.path.exists(filename):
             with open(filename, "w", encoding="utf-8") as jf:
@@ -134,17 +153,25 @@ class CallSparkAI:
         try:
             header = {
                 "Content-Type": "application/json",
-                "Authorization": API_KEY,
+                "Authorization": self.API_KEY,
             }
 
             self._write_cache(filename=filename, ID=random_id, content=content)
             data = self._load_data(filename=filename, ID=random_id)
-            answer = await self._execute(
-                url=BASE_URL, header=header, data=data, frcolor=frcolor
+            answer = self._execute(
+                url=self.BASE_URL, header=header, data=data, frcolor=frcolor
             )
             self._write_cache(
                 filename=filename, ID=random_id, content=answer, role="assistant"
             )
+
+            if self.isTTS:
+                self._select_tts(
+                    model="coqui",
+                    lang=self.LANG,
+                    answer=answer,
+                    filename=f"./audio/chat{self.model}/chat{self.model}-{count}-{random_id}.wav",
+                )
 
         except Exception as e:
             raise e

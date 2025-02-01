@@ -1,14 +1,13 @@
-from utils import logger
 from utils import handle_yaml
 
 
 # TODO: 以后试试注册表模式
-class GetProperties:
+class PropertiesHandler:
     r"""
     Get Properties for AI
     This is the base class, used to register the factory pattern
     """
-
+    # Place it in get_properties if possible
     application: str  # The app to be used, please assign it in the subclass
 
     # FIXME: Due to the inf loop, the _cache_pool seems to be useless
@@ -39,38 +38,3 @@ class GetProperties:
             f"Subclass <{cls.__class__.__name__}> must override the method <get_properties>"
         )
 
-
-class GetSparkProperties(GetProperties):
-    r"""
-    Get Spark Properties
-    """
-
-    application = "spark"
-
-    @classmethod
-    def get_properties(cls) -> dict:
-        return cls._store_property()
-
-
-class GetOtherProperties(GetProperties):
-    r"""
-    Get Other Properties
-    """
-
-    application = "other"
-
-    @classmethod
-    def get_properties(cls) -> dict:
-        return cls._store_property()
-
-
-class GetOllamaProperties(GetProperties):
-    r"""
-    Get Ollama Properties
-    """
-
-    application = "ollama"
-
-    @classmethod
-    def get_properties(cls) -> dict:
-        return cls._store_property()

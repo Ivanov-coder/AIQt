@@ -1,3 +1,4 @@
+# XXX: Give up, later pick it up
 import json
 
 
@@ -52,8 +53,8 @@ class CacheWriter(CacheHandler):
         Writing chatlogs in the cache file
         """
 
-        cache = self._load_data(self.filename, self.ID)
-        # cache = []
+        cache = CacheReader(self.filename, self.ID).load_data()
+
         log = {  # Ensure that log is list
             "role": self.role,
             "content": self.content,
@@ -69,9 +70,6 @@ class CacheWriter(CacheHandler):
                 },
             )
         cache.append(log)
-        # print(cache)
+
         with open(self.filename, "w", encoding="utf-8") as jf:
             json.dump(cache, jf, indent=4, ensure_ascii=False)
-
-def handle_cache():
-    

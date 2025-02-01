@@ -1,9 +1,9 @@
 import json
 import os
 import httpx
-from tts import check_if_need_tts
+from tts import get_tts_socket
 from utils import logger, set_frcolor
-from app.properties_handler import GetOtherProperties
+from ...properties.detailed.other_property_handler import GetOtherProperties
 
 
 class CallOtherAI:
@@ -70,33 +70,35 @@ class CallOtherAI:
 
         return data
 
-    def _select_tts(self, *items: tuple[str]) -> None:
+    def _select_tts(
+        self, model: str, filename: str, answer: str, lang: str = "en"
+    ) -> None:
         r"""
         选择TTS引擎，默认是coquiTTS
         """
-        # TODO: 做出来给人选
-        # TODO: 配置一下如何搞定路径和语速
-        match items:
-            case ["coqui", str(lang), str(content), str(path)]:
-                tts.check_if_need_tts()(lang=lang, text=content, output_path=path).get()
-            # TODO: 看下pytts怎么修：
-            case ["pytts", str(content), str(path)]:
-                tts.check_if_need_tts("pytts")(text=content, output_path=path).get()
-            case _:
-                raise ValueError("Please Check your parameters!")
+        # FIXME: The parameters for TTS depends on the type the function returns...
+        engine = get_tts_socket(model)(
+            answer,
+            output_path=filename,
+            lang=lang,
+            # TODO: Before a good solution, stop those API
+            # rate=150,
+            # volume=1.0,
+            # emotion="Neutral",
+            # speed=1.0,
+        )
+        engine.get()
 
     # XXX: 上传图片的计划只能先搁置了
 
     # 调用的内部逻辑
-    async def _execute(
-        self, *, url: str, header: dict, data: dict, frcolor: str
-    ) -> str:
+    def _execute(self, *, url: str, header: dict, data: dict, frcolor: str) -> str:
         r"""
         调用Spark AI.
         """
-        async with httpx.AsyncClient(timeout=60) as aclient:
+        with httpx.Client(timeout=60) as client:
             try:
-                response = await aclient.post(url, headers=header, json=data)
+                response = client.post(url, headers=header, json=data)
                 if response.status_code == 200:
                     answer = json.loads(response.text)["choices"][0]["message"][
                         "content"
@@ -111,7 +113,7 @@ class CallOtherAI:
             except Exception as e:
                 logger.error(e)
 
-    async def call(
+    def call(
         self,
         content: str,
         random_id: str,
@@ -151,7 +153,7 @@ class CallOtherAI:
                 filename=filename, ID=random_id, content=content, isRolePlay=True
             )
             data = self._load_data(filename=filename, ID=random_id)
-            answer = await self._execute(
+            answer = self._execute(
                 url=self.BASE_URL, header=header, data=data, frcolor=frcolor
             )
             self._write_cache(
@@ -161,12 +163,13 @@ class CallOtherAI:
                 role="assistant",
                 isRolePlay=True,
             )
+
             if self.isTTS:
                 self._select_tts(
-                    "coqui",
-                    self.LANG,
-                    answer,
-                    f"./audio/chat{self.model}-{count}-{random_id}.wav",
+                    model="coqui",
+                    lang=self.LANG,
+                    answer=answer,
+                    filename=f"./audio/chat{self.model}/chat{self.model}-{count}-{random_id}.wav",
                 )
 
         # TODO: Qt信号槽事件 需要更改模型之后重新生成聊天记录文件 => 也就是当选择框改变字段时，重新调用get_id()方法

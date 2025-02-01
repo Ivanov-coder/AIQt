@@ -30,7 +30,7 @@ class PagesHandler:
                     )(
                         current_page_status
                     )  # Give the current_pages it is now, in order to let FSM check if can transite to other pages
-            except KeyboardInterrupt:
+            except KeyboardInterrupt or EOFError:
                 current_page_status = page_status_to_func_orm.get("Exit")()
 
             except Exception as e:

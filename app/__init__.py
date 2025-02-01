@@ -1,20 +1,30 @@
-def get_socket(choice: str = "ollama"):
+# from .properties_handler import *
+
+# __all__ = [
+#     "get_socket",
+#     "GetOllamaProperties",
+#     "GetSparkProperties",
+#     "GetOtherProperties",
+# ]
+
+
+def get_app_socket(choice: str = "ollama"):
     r"""
     The function of it is to get the socket of AI applications
     :param choice: the choice of socket
     """
     if choice == "ollama":
-        from .ollamallm import CallOllamaAI
+        from .llms.detailed.ollama_handler import CallOllamaAI
 
         return CallOllamaAI
 
     elif choice == "other":
-        from .other import CallOtherAI
+        from .llms.detailed.other_handler import CallOtherAI
 
         return CallOtherAI
 
     elif choice == "spark":
-        from .spark import CallSparkAI
+        from .llms.detailed.spark_handler import CallSparkAI
 
         return CallSparkAI
 

@@ -57,6 +57,7 @@ class YamlWriter(YamlConf):
         with open(f"{cls.BASIC}/{cls.DUMPFILE}", "w", encoding="utf-8") as f:
             yaml.safe_dump(cls.CONFIG, f)
 
+
 class YamlChecker(YamlConf):
     # TODO: Write this method in /app/properties_handler and delete it
     # Saved in /pic/check_if_none.png
@@ -66,7 +67,9 @@ class YamlChecker(YamlConf):
 def handle_yaml():
     r"""
     This is just the simplest version of yaml handler
+
     When has the conf file, return
+    
     When not, create one and return YamlConf.CONFIG
     """
     try:

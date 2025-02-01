@@ -1,12 +1,20 @@
-import os
-from .tts_registor import TTSRegister
+from .detailed.pytts import PyTTS
+from .detailed.coqui import CoquiTTS
+
+__all__ = ["get_tts_socket"]
 
 
-__all__ = []
+def get_tts_socket(choice: str):
+    r"""
+    Get the socket of TTS
 
-# 初始化一下储存.wav的文件夹
-if not os.path.exists("./audio"):
-    os.mkdir("./audio")
-
-
-# TODO: Use tts_register to get the tts models
+    :param:
+        choice: "pytts" or "coqui" # XXX: till now, later we will add more.
+    """
+    # If possible, optimize the code, without using if...else...
+    if choice == "pytts":
+        return PyTTS
+    elif choice == "coqui":
+        return CoquiTTS
+    else:
+        raise ValueError("Invalid TTS choice")

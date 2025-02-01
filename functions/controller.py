@@ -9,6 +9,6 @@ class CtrlBoard:
     def run(self):
         try:
             PagesHandler().start_handle()
-
+        # FIXME: EOFError also happens when KeyboardInterrupt...
         except KeyboardInterrupt:
             exit()

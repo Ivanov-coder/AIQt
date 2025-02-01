@@ -1,10 +1,9 @@
-import json
 import os
-import subprocess
-import tts
+import json
 import ollama
+from tts import get_tts_socket
 from utils import logger, set_frcolor
-from .properties_handler import GetOllamaProperties
+from ...properties.detailed.ollama_property_handler import GetOllamaProperties
 
 
 class CallOllamaAI:
@@ -16,7 +15,7 @@ class CallOllamaAI:
     >>> ollama pull <the_model_you_want>
     """
 
-    # Default to llama3.1
+    # Defaults to llama3.1
     # if Pictures, get llama3.2-vision
     # But this model is a little bit slow, not reccommed
     def __init__(self, model="llama3.1"):
@@ -70,25 +69,32 @@ class CallOllamaAI:
 
         return contents
 
-    def _select_tts(self, *items: tuple[str]) -> None:
+    def _select_tts(
+        self, model: str, filename: str, answer: str, lang: str = "en"
+    ) -> None:
         r"""
         Select TTS engine, default to CoquiTTS
         """
-        match items:
-            case ["coqui", str(lang), str(content), str(path)]:
-                tts.check_if_need_tts()(lang=lang, text=content, output_path=path).get()
-            case ["pytts", str(content), str(path)]:  # 可以考虑放弃pytts？太难听了
-                tts.check_if_need_tts("pytts")(text=content, output_path=path).get()
-            case _:
-                raise ValueError("Please Check your parameters!")
+        # FIXME: The parameters for TTS depends on the type the function returns...
+        engine = get_tts_socket(model)(
+            answer,
+            output_path=filename,
+            lang=lang,
+            # TODO: Before a good solution, stop those API
+            # rate=150,
+            # volume=1.0,
+            # emotion="Neutral",
+            # speed=1.0,
+        )
+        engine.get()
 
-    async def _execute(self, data: list[dict], frcolor: str) -> str:
+    def _execute(self, data: list[dict], frcolor: str) -> str:
         r"""
         Inner logic
         """
         try:
             output = ""
-            async for part in await ollama.AsyncClient().chat(
+            for part in ollama.Client(timeout=60).chat(
                 model=self.model, messages=data, stream=True
             ):
 
@@ -98,21 +104,15 @@ class CallOllamaAI:
             print()  # Used to print '\n'
             return output
 
-        # TODO: Later solve it
-        # 本地没大模型就下载一个
-        # except ollama.ResponseError as re:
-        #     logger.warning(f"ollama API error: {re}")
-        #     logger.info("Now Downloading...")
-
+        # TODO: If no LLM models, download
         # FIXME: Here we'd better avoid blocking MainThread, by `subprocess.run` may be good
         # While downloading the model, use other model to chat.
-        # subprocess.run(f"ollama pull {self.model}")
-        # TODO: 是否还需要考虑添加删除大模型的功能？
+        # TODO: Do we need add the logic(del llm)
 
         except Exception as e:
             raise e
 
-    async def call(
+    def call(
         self,
         content: str,
         random_id: str,
@@ -141,17 +141,14 @@ class CallOllamaAI:
         if not os.path.exists(filename):
             with open(filename, "w", encoding="utf-8") as jf:
                 json.dump([], jf)  # Initialize the chatlog
-        try:
-            self._write_cache(
-                filename=filename, ID=random_id, content=content, isRolePlay=True
-            )
 
-        except Exception:
-            return
+        self._write_cache(
+            filename=filename, ID=random_id, content=content, isRolePlay=True
+        )
 
         try:
             data = self._load_data(filename=filename, ID=random_id)
-            answer = await self._execute(data=data, frcolor=frcolor)
+            answer = self._execute(data=data, frcolor=frcolor)
             self._write_cache(
                 filename=filename,
                 ID=random_id,
@@ -161,10 +158,11 @@ class CallOllamaAI:
             )
             if self.isTTS:
                 self._select_tts(
-                    "coqui",
-                    self.LANG,
-                    answer,
-                    f"./audio/chat{self.model}-{count}-{random_id}.wav",
+                    model="pytts",
+                    lang=self.LANG,
+                    answer=answer,
+                    # FIXME: The step filename seems to be useless... The count is stuck at 1
+                    filename=f"./audio/chat{self.model}/chat{self.model}-{count}-{random_id}.wav",
                 )
 
         except Exception as e:
