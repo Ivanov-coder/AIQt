@@ -22,7 +22,7 @@ class CallSparkAI:
 
     def __init__(self, model: str = "lite"):
         self.model: str = model
-        self.CONF = GetSparkProperties().get_properties()
+        self.CONF = GetSparkProperties.get_properties(self.model)
         self.LANG = self.CONF["LANG"]
         self.isTTS = self.CONF["isTTS"]
         self.BASE_URL, self.API_KEY = self.CONF["link"], self.CONF["key"][self.model]
@@ -122,7 +122,6 @@ class CallSparkAI:
 
     def call(
         self,
-        content: str,
         random_id: str,
         frcolor: str,
         count: int = 1,
@@ -131,8 +130,6 @@ class CallSparkAI:
         The socket for invoking Spark AI
         [Doc](https://www.xfyun.cn/doc/spark/HTTP%E8%B0%83%E7%94%A8%E6%96%87%E6%A1%A3.html#_1-%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E)
         :param:
-            content (str):
-                The content of the chat.
             random_id (str):
                 Randomly generated id.
                 The main function of it is to distinguish users by different id, in order to classfiy the chatlog of users.
@@ -151,11 +148,11 @@ class CallSparkAI:
                 json.dump([], jf)  # Initialize the chatlog
 
         try:
+            content = input(set_frcolor(text="\nPlease enter you questions") + ": ")
             header = {
                 "Content-Type": "application/json",
                 "Authorization": self.API_KEY,
             }
-
             self._write_cache(filename=filename, ID=random_id, content=content)
             data = self._load_data(filename=filename, ID=random_id)
             answer = self._execute(

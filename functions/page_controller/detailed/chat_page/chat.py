@@ -1,7 +1,8 @@
 import os
 from app import get_app_socket
 from utils import generate_id
-from utils import logger
+
+# from utils import logger
 from utils import set_frcolor
 
 
@@ -11,13 +12,8 @@ class ChatWithAI:
     # count_ollama_wav = 0
     count_wav = 0
     randID = generate_id()
-    num_to_app_orm = {
-        "1": "ollama",
-        "2": "spark",
-        "3": "other",
-    }
 
-    def __init__(self, choice: str = "1", model: str = "llama3.1"):
+    def __init__(self, choice: str = "ollama", model: str = "llama3.1"):
         r"""
         :param: choice: str -> Select the APP you want to use
         :param: model: str -> Select the model you want to use
@@ -25,53 +21,41 @@ class ChatWithAI:
         self.choice = choice
         self.model = model
 
-    def _switch(self, content: str):
+    def _call(self):
         r"""
         For selecting models in the terminal,
         see _pages.SettingsPart, there has a page for selecting the model
         """
         # TODO: Hmm Can we just give the choice to a function in __init__.py? Just put those AI together I think
         # Though Spark AI don't support PERSONA, it'd be great if it can also support TTS.
-        print("Here: ",self.count_wav)
+
+        # TODO: After key, url validation, throw questions.
         self.count_wav += 1
-        print("Here: ",self.count_wav)
-        CallAI = get_app_socket(
-            self.num_to_app_orm.get(self.choice, "ollama"),
-        )
+        CallAI = get_app_socket(self.choice)
         return CallAI(model=self.model).call(
-            content=content,
             random_id=self.randID,
             count=self.count_wav,
             frcolor="lightblue",  # HERE
         )
-
-    def _call(self):
-        content = input(set_frcolor(text="\nPlease enter you questions") + ": ")
-        self._switch(content)
-
-    def _main(self):
-        try:
-            self._call()
-        except EOFError:
-            print(set_frcolor(text="Hey! Please Enter Something!\n", color="red"))
-            self._call()
 
     def chat(self):
         r"""
         Begin chatting
         """
         try:
-            self._main()
-        except KeyboardInterrupt:
-            raise KeyboardInterrupt
+            self._call()
+
+        except EOFError:
+            print(set_frcolor(text="Hey! Please Enter Something!\n", color="red"))
+            self._call()
 
         # This is the possible bug if the local environment hasn't proper module
-        except ModuleNotFoundError as e:
-            logger.warning(e)
-            logger.info("Installing requirements...")
-            stdstatus = os.system("pip install -r requirements.txt")
+        # except ModuleNotFoundError as e:
+        #     logger.warning(e)
+        #     logger.info("Installing requirements...")
+        #     stdstatus = os.system("pip install -r requirements.txt")
 
-            if stdstatus == 0:
-                logger.info("Requirements installed successfully.")
-            else:
-                raise RuntimeError("Failed to install requirements.")
+        #     if stdstatus == 0:
+        #         logger.info("Requirements installed successfully.")
+        #     else:
+        #         raise RuntimeError("Failed to install requirements.")

@@ -1,4 +1,3 @@
-# XXX: Give up, later pick it up
 from tts import get_tts_socket
 
 
@@ -12,6 +11,7 @@ class AICaller:
         raise NotImplementedError(
             f"Subclass {self.__class__.__name__} must implement abstract method _execute"
         )
+
 
     def _load_data(self, filename: str, ID: str) -> dict:
         raise NotImplementedError(
@@ -61,18 +61,18 @@ class AICaller:
         r"""
         Invoking the model in ollama to chat.
         :param:
-            content (str):
-                The content of the chat.
-            random_id (str):
-                Randomly generated id.
-                The main function of it is to distinguish users by different id, in order to classfiy the chatlog of users.
-            isTTS (bool):
-                Check if users need TTS.
-                When first call the function, it'll check what TTS the user needs, and then mainly by this TTS.
-            frcolor (str):
-                Used to control the color of the output in the terminal.
-            count (int, default is 1):
-                Used to sort the order of each .wav file.
+                content (str):
+                        The content of the chat.
+                random_id (str):
+                        Randomly generated id.
+                        The main function of it is to distinguish users by different id, in order to classfiy the chatlog of users.
+                isTTS (bool):
+                        Check if users need TTS.
+                        When first call the function, it'll check what TTS the user needs, and then mainly by this TTS.
+                frcolor (str):
+                        Used to control the color of the output in the terminal.
+                count (int, default is 1):
+                        Used to sort the order of each .wav file.
         """
         raise NotImplementedError(
             f"Subclass {self.__class__.__name__} must implement abstract method call"

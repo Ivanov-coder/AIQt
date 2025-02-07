@@ -80,9 +80,7 @@ class Chat:
 		"""
     chat_page_avaliable_func: dict[str : list[str, str]] = {
         # The first element in the list is PageStatus, the second element is UserAction
-        "1": (CHAT_PART, MAINTAIN),
-        "2": (CHAT_PART, MAINTAIN),
-        "3": (CHAT_PART, MAINTAIN),
+        "M": (CHAT_PART, MAINTAIN),
         "B": (MAIN_PART, BACKWARD),
     }
 

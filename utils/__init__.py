@@ -2,7 +2,7 @@ import os
 import random
 from .logs import Logger
 from .set_color import SetColor
-from .yaml_handler import handle_yaml
+from .conf_handler.yaml_handler import read_properties_from_yaml
 
 logger = Logger.setup_logger()
 set_frcolor = SetColor.set_frcolor
@@ -11,7 +11,7 @@ set_bgcolor = SetColor.set_bgcolor
 __all__ = [
     "logger",
     "generate_id",
-    "handle_yaml",
+    "read_properties_from_yaml",
     "set_frcolor",
     "set_bgcolor",
 ]

@@ -1,31 +1,25 @@
-from utils import handle_yaml
+from utils import read_properties_from_yaml
 
 
-# TODO: 以后试试注册表模式
 class PropertiesHandler:
     r"""
     Get Properties for AI
     This is the base class, used to register the factory pattern
     """
+
     # Place it in get_properties if possible
     application: str  # The app to be used, please assign it in the subclass
+    step_in: str
 
-    # FIXME: Due to the inf loop, the _cache_pool seems to be useless
     @classmethod
-    def _store_property(cls) -> dict:
+    def get_chat_model(cls) -> dict:
         r"""
-        Get Properties in configuration
+        Get chat model from conf file.
+        :returns:
+            dict: Selected APP and chat model
         """
-        _cache_pool = {}  # Store properties that have been requested.
-
-        # TODO: If users changed the conf, we need to update.
-        if not _cache_pool:
-            # This step will directly load the whole configurations
-            _cache_pool.update(handle_yaml())
-            # print("Executed!")    # Each loop executed this part :/
-
-        properties = _cache_pool.get(f"{cls.application}_conf", None)
-        return properties
+        properties = read_properties_from_yaml()
+        return properties.get("using_chat_model", None)
 
     @classmethod
     def get_properties(cls) -> dict:
@@ -34,7 +28,41 @@ class PropertiesHandler:
         :returns:
             dict: Properties
         """
-        raise NotImplementedError(
-            f"Subclass <{cls.__class__.__name__}> must override the method <get_properties>"
-        )
+        # TODO: Here actually need validation, to check if BASE_URL and API_KEY exists.
+        properties = read_properties_from_yaml()
+        return properties.get(f"{cls.application}_conf", None)
 
+    @classmethod
+    def write_properties(cls, properties: dict) -> None:
+        r"""
+        Write properties to conf file.
+        :param properties:
+            dict: Properties
+        """
+        
+        
+    
+    def _write_url(cls, properties: dict) -> dict:
+        r"""
+        When url doesn't exist, write url to properties
+        :param properties:
+            dict: Properties
+        
+        :returns:
+            dict: Properties
+        """
+        pass
+
+    def _write_key(cls, properties: dict, model: str) -> dict:
+        r"""
+        When key doesn't exist, write key to properties
+
+        :param properties:
+            dict: Properties
+        :param model:
+            str: Model
+        
+        :returns:
+            dict: Properties
+        """
+        pass

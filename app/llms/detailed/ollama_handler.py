@@ -114,7 +114,6 @@ class CallOllamaAI:
 
     def call(
         self,
-        content: str,
         random_id: str,
         frcolor: str,
         count: int = 1,
@@ -122,8 +121,6 @@ class CallOllamaAI:
         r"""
         Invoking the model in ollama to chat.
         :param:
-            content (str):
-                The content of the chat.
             random_id (str):
                 Randomly generated id.
                 The main function of it is to distinguish users by different id, in order to classfiy the chatlog of users.
@@ -142,6 +139,7 @@ class CallOllamaAI:
             with open(filename, "w", encoding="utf-8") as jf:
                 json.dump([], jf)  # Initialize the chatlog
 
+        content = input(set_frcolor(text="\nPlease enter you questions") + ": ")
         self._write_cache(
             filename=filename, ID=random_id, content=content, isRolePlay=True
         )

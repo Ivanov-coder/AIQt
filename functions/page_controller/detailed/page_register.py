@@ -21,6 +21,7 @@ class PageRegister:
             The choice of the user
         - current_page: (str)
             The current page status
+
         :return:
         - current_page_status: (str)
         """

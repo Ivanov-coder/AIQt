@@ -1,3 +1,4 @@
+*.yml
 /.vscode/
 /config/
 /cache/

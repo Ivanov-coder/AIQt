@@ -8,6 +8,5 @@ class GetOllamaProperties(PropertiesHandler):
 
     application = "ollama"
 
-    @classmethod
-    def get_properties(cls) -> dict:
-        return cls._store_property()
+    def get_property(self):
+        return super().get_properties()

@@ -115,15 +115,12 @@ class CallOtherAI:
 
     def call(
         self,
-        content: str,
         random_id: str,
         frcolor: str,
         count: int = 1,
     ) -> None:
         r"""
         :param:
-            content (str):
-                The content of the chat.
             random_id (str):
                 Randomly generated id.
                 The main function of it is to distinguish users by different id, in order to classfiy the chatlog of users.
@@ -148,7 +145,7 @@ class CallOtherAI:
                 "Content-Type": "application/json",
                 "Authorization": self.API_KEY,
             }
-
+            content = input(set_frcolor(text="\nPlease enter you questions") + ": ")
             self._write_cache(
                 filename=filename, ID=random_id, content=content, isRolePlay=True
             )
