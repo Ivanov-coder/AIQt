@@ -1,3 +1,6 @@
+*.yml
+/.vscode/
 /config/
 /cache/
 /audio/
+__pycache__/
