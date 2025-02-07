@@ -15,6 +15,16 @@ class CallOllamaAI:
     >>> ollama pull <the_model_you_want>
     """
 
+    _instance = None
+
+    def __new__(cls, model):
+        # XXX: Hmm there's no evidence prove that Sigleton Pattern does a good deal to the speed, but left here
+        r"""Overloaded for Sigleton"""
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+
+        return cls._instance
+
     # Defaults to llama3.1
     # if Pictures, get llama3.2-vision
     # But this model is a little bit slow, not reccommed
@@ -134,7 +144,11 @@ class CallOllamaAI:
         """
         logger.info(f"Invoking {self.model.upper()} API...")
 
-        filename = f"./cache/chat{self.model}-{random_id}.json"
+        pathdir = f"./cache/chat{self.model}"
+        if not os.path.exists(pathdir):
+            os.mkdir(pathdir)
+
+        filename = os.path.join(pathdir, f"chat{self.model}-{random_id}.json")
         if not os.path.exists(filename):
             with open(filename, "w", encoding="utf-8") as jf:
                 json.dump([], jf)  # Initialize the chatlog

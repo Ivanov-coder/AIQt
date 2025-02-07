@@ -48,34 +48,25 @@ class ForChatPart(PageRegister):
                     "An error number entered, the value should be 1, 2 or 3"
                 )
 
-            self._write_into_conf(choice=choice, model=model)
+            self._write_using_chat_model(choice=choice, model=model)
 
         return choice, model
 
     def _read_conf(self) -> tuple[str, str]:
         r"""
-        :choices:
-            "1" : "ollama",
-            "2" : "spark",
-            "3" : "other"
         :returns:
             choice, model
         """
         data = PropertiesHandler.get_chat_model()
         return data["choice"], data["model"]
 
-    def _write_into_conf(self, choice: str, model: str) -> None:
+    def _write_using_chat_model(self, choice: str, model: str) -> None:
         r"""
         kwargs: Give Params with the formation:
         choice : str
         model : str
 
-        :choices:
-            "1" : "ollama",
-            "2" : "spark",
-            "3" : "other"
-
         See those AI files to get the informations of supported models.
         """
         key = "using_chat_model"  # This is the key in configuration
-        YamlWriter.write_yaml(key)(choice, model)
+        YamlWriter().write_yaml(key)(choice, model)

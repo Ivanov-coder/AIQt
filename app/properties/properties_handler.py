@@ -1,4 +1,5 @@
-from utils import read_properties_from_yaml
+from utils import read_properties_from_yaml, set_frcolor
+from utils.conf_handler.yaml_handler import YamlWriter
 
 
 class PropertiesHandler:
@@ -16,7 +17,7 @@ class PropertiesHandler:
         r"""
         Get chat model from conf file.
         :returns:
-            dict: Selected APP and chat model
+        dict: Selected APP and chat model
         """
         properties = read_properties_from_yaml()
         return properties.get("using_chat_model", None)
@@ -26,43 +27,25 @@ class PropertiesHandler:
         r"""
         Get properties from conf file.
         :returns:
-            dict: Properties
+        dict: Properties
         """
-        # TODO: Here actually need validation, to check if BASE_URL and API_KEY exists.
+        # Default is without checking URL and API Key, but subclass should better overload this method
         properties = read_properties_from_yaml()
         return properties.get(f"{cls.application}_conf", None)
 
     @classmethod
-    def write_properties(cls, properties: dict) -> None:
+    def write_properties(
+        cls, properties: dict, key: str, text: str, color: str = "yellow"
+    ) -> dict:
         r"""
-        Write properties to conf file.
-        :param properties:
-            dict: Properties
+        This method is for writing the properties of settings
+        :params:
+        properties (dict): the properties of whole settings
+        key (str): the key of property dict
+        text (str): the parameter for set_frcolor to handle, finally shows in the terminal
+        color (str): the color of the text finally shows
         """
-        
-        
-    
-    def _write_url(cls, properties: dict) -> dict:
-        r"""
-        When url doesn't exist, write url to properties
-        :param properties:
-            dict: Properties
-        
-        :returns:
-            dict: Properties
-        """
-        pass
+        assert key in properties[cls.step_in].keys(), KeyError("Key not in properties")
 
-    def _write_key(cls, properties: dict, model: str) -> dict:
-        r"""
-        When key doesn't exist, write key to properties
-
-        :param properties:
-            dict: Properties
-        :param model:
-            str: Model
-        
-        :returns:
-            dict: Properties
-        """
-        pass
+        value = input(set_frcolor(text=text, color=color))
+        return YamlWriter().write_yaml(cls.step_in)(properties, key, value)

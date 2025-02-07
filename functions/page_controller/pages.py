@@ -74,7 +74,7 @@ class Chat:
 		Hey! I guess you are using the program for the first time.
 		It doesn't matter, let me guide you!
 		Please enter the app you want to use, and then enter the model you want to use.
-		User Space to split:
+		Use Space to split:
 		For example:
 		1 llama3.1
 		"""
@@ -141,14 +141,17 @@ class SettingsPart:
 	+--------+-----------+
 	|    B   |  Backward |
 	+--------+-----------+
-	Hey! Just choose one to enter the setting part!
+	Please enter the app you want to use, and then enter the model you want to use.
+	Use Space to split:
+	For example:
+	1 llama3.1
 """
 
     settings_page_for_choose_API_avaliable_func = {
         # The first element in the list is PageStatus, the second element is UserAction
-        "1": (SETTINGSPART_FOR_OLLAMA_AND_OTHER, FORWARD),
-        "2": (SETTINGSPART_FOR_SPARK, FORWARD),
-        "3": (SETTINGSPART_FOR_OLLAMA_AND_OTHER, FORWARD),
+        "1": (INSETTING, FORWARD),
+        "2": (INSETTING, FORWARD),
+        "3": (INSETTING, FORWARD),
         "B": (SETTINGSPART_FOR_MAIN, BACKWARD),
     }
 

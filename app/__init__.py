@@ -1,13 +1,3 @@
-# from .properties_handler import *
-
-# __all__ = [
-#     "get_socket",
-#     "GetOllamaProperties",
-#     "GetSparkProperties",
-#     "GetOtherProperties",
-# ]
-
-
 def get_app_socket(choice: str = "ollama"):
     r"""
     The function of it is to get the socket of AI applications

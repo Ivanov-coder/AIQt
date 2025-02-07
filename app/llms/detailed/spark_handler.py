@@ -20,6 +20,15 @@ class CallSparkAI:
     - 4.0Ultra
     """
 
+    _instance = None
+
+    def __new__(cls, model):
+        r"""Overloaded for Sigleton"""
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+
+        return cls._instance
+
     def __init__(self, model: str = "lite"):
         self.model: str = model
         self.CONF = GetSparkProperties.get_properties(self.model)
@@ -141,8 +150,11 @@ class CallSparkAI:
             count (int, default is 1):
                 Used to sort the order of each .wav file.
         """
+        pathdir = f"./cache/chat{self.model}"
+        if not os.path.exists(pathdir):
+            os.mkdir(pathdir)
 
-        filename = f"./cache/chat{self.model}-{random_id}.json"
+        filename = os.path.join(pathdir, f"chat{self.model}-{random_id}.json")
         if not os.path.exists(filename):
             with open(filename, "w", encoding="utf-8") as jf:
                 json.dump([], jf)  # Initialize the chatlog

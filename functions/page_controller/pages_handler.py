@@ -3,6 +3,7 @@ from functions.page_controller.detailed.info_page_handler import InfoPageHandler
 from functions.page_controller.detailed.main_page_handler import MainPageHandler
 from functions.page_controller.detailed.settings_page_handler import SettingsPageHandler
 from functions.page_controller.detailed.chat_page.chat_page_handler import ForChatPart
+from timeit import default_timer
 
 
 class PagesHandler:
@@ -19,6 +20,7 @@ class PagesHandler:
             "Exit": ExitHandler().for_self_part,
         }
         while True:
+            s = default_timer()
             try:
                 if current_page_status in page_status_to_func_orm.keys():
                     current_page_status = page_status_to_func_orm.get(
@@ -35,3 +37,5 @@ class PagesHandler:
 
             except Exception as e:
                 raise e
+
+            print(f"RUNNING TIME: {default_timer() - s}")

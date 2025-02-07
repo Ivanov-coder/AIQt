@@ -11,6 +11,15 @@ class CallOtherAI:
     用于调用其他AI.
     """
 
+    _instance = None
+
+    def __new__(cls, model):
+        r"""Overloaded for Sigleton"""
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+
+        return cls._instance
+
     def __init__(self, model: str = "gpt-3.5-turbo") -> None:
         self.model = model
         self.CONF = GetOtherProperties().get_properties()  # Get the Properties
@@ -135,11 +144,14 @@ class CallOtherAI:
 
         # TODO: 需要把这个做出来到Qt中，成为滚动条去选择
 
-        filename = f"./cache/chat{self.model}-{random_id}.json"
+        pathdir = f"./cache/chat{self.model}"
+        if not os.path.exists(pathdir):
+            os.mkdir(pathdir)
+
+        filename = os.path.join(pathdir, f"chat{self.model}-{random_id}.json")
         if not os.path.exists(filename):
             with open(filename, "w", encoding="utf-8") as jf:
                 json.dump([], jf)  # Initialize the chatlog
-
         try:
             header = {
                 "Content-Type": "application/json",

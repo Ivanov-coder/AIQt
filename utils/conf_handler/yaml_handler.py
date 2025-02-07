@@ -8,7 +8,19 @@ class YamlConf:
     Storing the basic configurations of yaml file
     """
 
+    # FIXME: But creating an instance usually takes much more space
+    # Especially when running in an Infinity loop, with creating and destroying all the time
+    # Can we only create once?
+
+    _instance = None
     CONF_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "init.yml")
+
+    def __new__(cls):
+        r"""Overloaded for Sigleton"""
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+
+        return cls._instance
 
     def __init__(self):
         self.data = self._read_conf()
@@ -17,14 +29,23 @@ class YamlConf:
         self.CONFIG = self.data["CONFIG"]
 
     def _read_conf(self) -> dict:
-        with open(self.CONF_ROOT, "r", encoding="utf-8"):
-            return yaml.safe_load(self.CONF_ROOT)
+        with open(self.CONF_ROOT, "r", encoding="utf-8") as conf_data:
+            return yaml.safe_load(conf_data)
 
 
 class YamlReader(YamlConf):
     r"""
     Read settings.yml
     """
+
+    _instance = None
+
+    def __new__(cls):
+        r"""Overloaded for Sigleton"""
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+
+        return cls._instance
 
     def read_yaml(self) -> dict:
         r"""
@@ -40,8 +61,14 @@ class YamlWriter(YamlConf):
     Offer methods of some specific configurations of yaml file
     """
 
-    # TODO: Think about the achieving methods
-    # FOR WRITING A PART AS WELL AS REWRITING A PART
+    _instance = None
+
+    def __new__(cls):
+        r"""Overloaded for Sigleton"""
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+
+        return cls._instance
 
     def init_yaml(self) -> None:
         r"""

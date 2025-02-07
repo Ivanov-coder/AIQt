@@ -1,3 +1,4 @@
+from utils import logger, set_frcolor
 from app.properties.properties_handler import PropertiesHandler
 from utils.conf_handler.yaml_handler import YamlWriter, read_properties_from_yaml
 
@@ -27,12 +28,25 @@ class GetSparkProperties(PropertiesHandler):
         When key doesn't exist, write key to properties
 
         :param properties:
-            dict: Properties
+                dict: Properties
         :param model:
-            str: Model
+                str: Model
         """
-        value = input("Please enter your API KEY here: ")
+        logger.warning("No API KEY detected!")
+        value = input(
+            set_frcolor(text="Please enter your API KEY here: ", color="yellow")
+        )
+        # Specified since Spark shares a different key with other applications
         if "Bearer " not in value:
             value = "Bearer " + value
 
         return YamlWriter().write_yaml(cls.step_in)(properties, "key", value, model)
+
+    @classmethod
+    def write_properties(
+        cls, properties: dict, key: str, text: str, color: str = "yellow"
+    ) -> dict:
+        assert key != "key", ValueError(
+            "This method isn't for setting API Key, go use <cls._write_key>"
+        )
+        return super().write_properties(properties, key, text, color)

@@ -1,6 +1,9 @@
 from utils import set_frcolor
 from functions.page_controller.pages import SettingsPart
 from functions.page_controller.detailed.page_register import PageRegister
+from app.properties.detailed.other_property_handler import GetOtherProperties
+from app.properties.detailed.spark_property_handler import GetSparkProperties
+from app.properties.detailed.ollama_property_handler import GetOllamaProperties
 
 
 class SettingsPageHandler(PageRegister):
@@ -37,10 +40,7 @@ class SettingsPageHandler(PageRegister):
             )
             if content_input.strip():  # Check if input is not empty
                 content = content_input.split(" ")
-            if self._check_if_need_rewrite(current_page_status):
-                print(content)
 
-                # self._rewrite_into_conf()
             print("Finished!")
             choice = "B"
 
@@ -51,13 +51,3 @@ class SettingsPageHandler(PageRegister):
         )
         return current_page_status
 
-    def _check_if_need_rewrite(self, current_page: str):
-        r"""Check if the current page allow user to write into the yaml file"""
-        if current_page == "SettingsPart":  # See _status.py, the class PageStatus
-            return True
-        return False
-
-    def _rewrite_into_conf(self, key: str, **kwargs):
-        r"""Write the params into the yaml file"""
-        # SetYaml.rewrite_yaml(**kwargs)
-        pass
